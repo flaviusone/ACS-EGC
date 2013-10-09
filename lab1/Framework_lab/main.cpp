@@ -14,13 +14,13 @@ float pas = 0;
 Line2D *line = new Line2D(Point2D(0, 0), Point2D(0, 9), Color(1, 0, 1));
 
 // se adauga un patrat
-Rectangle2D *rectangle = new Rectangle2D(Point2D(5, 5), 6, 6);
+Rectangle2D *rectangle = new Rectangle2D(Point2D(5, 5), 6, 6, Color(0, 0, 0),false);
 
 // se adauga un cerc
-Circle2D *circle = new Circle2D(Point2D(-5, -5), 10);
+Circle2D *circle = new Circle2D(Point2D(-5, -5), 10, Color(0, 0, 0), false);
 
 // se adauga un poligon
-Polygon2D *polygon = new Polygon2D();
+Polygon2D *polygon = new Polygon2D(Color(10, 0, 10), false);
 
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
@@ -85,12 +85,20 @@ void DrawingWindow::onIdle()
 	if (line->transf_points[0]->x > 10 || line->transf_points[0]->x < -10) value = -value;
 	
 
-	// Scaleaza poligonul
-	/*Transform2D::loadIdentityMatrix();
-	Transform2D::scaleMatrix(polygon->transf_points[0]->x + value2, polygon->transf_points[0]->y + value2);
-	Transform2D::applyTransform(polygon);
+	//// Scaleaza poligonul
+	//Transform2D::loadIdentityMatrix();
+	//Transform2D::scaleMatrix(value2, value2);
+	//Transform2D::applyTransform(polygon);
 
-	if (polygon->transf_points[0]->x > 10 || polygon->transf_points[0]->x < -10) value = -value;*/
+	//if ((polygon->transf_points[1]->x - polygon->transf_points[0]->x) > 10 || (polygon->transf_points[1]->x - polygon->transf_points[0]->x) < -10) value = -value;
+}
+
+//Functia care face fill
+void fill_all()
+{
+	circle->fill = !circle->fill;
+	rectangle->fill = !rectangle->fill;
+	polygon->fill = !polygon->fill;
 }
 
 //functia care defineste ce se intampla cand se apasa pe tastatura
@@ -98,6 +106,8 @@ void DrawingWindow::onKey(unsigned char key)
 {
 	switch (key)
 	{
+	case 102:fill_all();
+		break;
 	case 27: exit(0);
 	}
 
