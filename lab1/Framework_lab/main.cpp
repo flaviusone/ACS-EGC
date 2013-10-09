@@ -7,14 +7,14 @@
 #include <iostream>
 
 using namespace std;
-float pas=0;
+float pas = 0;
 
 //Declarari globale
 //se adauga o linie la obiectele din scena
 Line2D *line = new Line2D(Point2D(0, 0), Point2D(0, 9), Color(1, 0, 1));
 
 // se adauga un patrat
-Rectangle2D *rectangle = new Rectangle2D(Point2D(2, 1), 10, 10);
+Rectangle2D *rectangle = new Rectangle2D(Point2D(5, 5), 6, 6);
 
 // se adauga un cerc
 Circle2D *circle = new Circle2D(Point2D(-5, -5), 10);
@@ -26,123 +26,112 @@ Polygon2D *polygon = new Polygon2D();
 void DrawingWindow::init()
 {
 
-	
-	addObject2D(line);	
-	
+
+	addObject2D(line);
+
 	addObject2D(rectangle);
-		
+
 	addObject2D(circle);
 
 	polygon->addPoint(Point2D(2, -2));
 	/*polygon->addPoint(Point2D(2,  2));*/
-	polygon->addPoint(Point2D(-2,  2));
+	polygon->addPoint(Point2D(-2, 2));
 	polygon->addPoint(Point2D(-2, -2));
-	
+
 	addObject2D(polygon);
-
-	
-
-	
 
 }
 
-float counter = 0;
 
-void Rotestepatratul(Rectangle2D *ob, float i){
+
+//Roteste patratul in jurul centrului
+void RotestePatratul(Rectangle2D *ob, float i){
+	float centru_x, centru_y;
+	centru_x = (ob->points[1]->x - ob->points[0]->x) / 2 + ob->points[0]->x;
+	centru_y = (ob->points[2]->y - ob->points[1]->y) / 2 + ob->points[0]->y;
 
 	//mut obiecct in origine
 	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(-10,-10);
-	Transform2D::applyTransform(ob);
-
+	Transform2D::translateMatrix(-centru_x, -centru_y);
 	//rotesc obiectu
-	Transform2D::loadIdentityMatrix();
 	Transform2D::rotateMatrix(i);
-	Transform2D::applyTransform(ob);
-
 	//mut inapoi
-	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(10,10);
+	Transform2D::translateMatrix(centru_x, centru_y);
 	Transform2D::applyTransform(ob);
 }
 
-//functia care permite animatia
+
 double counterlinie = 0;
 double counterpoly = 0;
 bool ok = true;
 bool ok2 = true;
+float pi = 3.141592;
+float counter = 0;
+
 void DrawingWindow::onIdle()
 {
-		//mut obiecct in origine
-		Transform2D::loadIdentityMatrix();
-		Transform2D::translateMatrix(-10, -10);
-		//rotesc obiectu
-		Transform2D::rotateMatrix(counter);
-		//mut inapoi
-		Transform2D::translateMatrix(10, 10);
-		Transform2D::applyTransform(rectangle);
+	//Roteste patratul in jurul centrului
+	RotestePatratul(rectangle, counter);
+	counter += 0.1;
+	if (counter >= pi * 2) counter -= pi * 2;
 
-		counter = counter + 0.1;
-		if (counter >= 3.14 * 2) counter -= 3.14 * 2;
+	Transform2D::loadIdentityMatrix();
+	Transform2D::translateMatrix(-10, 0);
+	Transform2D::applyTransform(line);
 
-////////////////////////////////////////////////////////////////
-		Transform2D::loadIdentityMatrix();
-		Transform2D::translateMatrix(-10, 0);
-		Transform2D::applyTransform(line);
+	//if (counterlinie < 10 && ok)
+	//	counterlinie += 0.1;
 
-		//if (counterlinie < 10 && ok)
-		//	counterlinie += 0.1;
+	//if (counterlinie == 10) {
+	//	ok = false;
+	//	counterlinie = 0;
+	//}
 
-		//if (counterlinie == 10) {
-		//	ok = false;
-		//	counterlinie = 0;
-		//}
+	//if (counterlinie > -10 && !ok)
+	//	counterlinie -= 0.1;
 
-		//if (counterlinie > -10 && !ok)
-		//	counterlinie -= 0.1;
-
-		//if (counterlinie == -10){
-		//	ok = true;
-		//	counterlinie = 0;
-		//}
-////////////////////////////////////////////////////////////////
-		//Transform2D::loadIdentityMatrix();
-		//Transform2D::scaleMatrix(counterpoly, counterpoly);
-		//Transform2D::applyTransform(polygon);
+	//if (counterlinie == -10){
+	//	ok = true;
+	//	counterlinie = 0;
+	//}
+	////////////////////////////////////////////////////////////////
+	//Transform2D::loadIdentityMatrix();
+	//Transform2D::scaleMatrix(counterpoly, counterpoly);
+	//Transform2D::applyTransform(polygon);
 
 
-		//if (counterpoly < 10 && ok)
-		//	counterpoly += 0.1;
+	//if (counterpoly < 10 && ok)
+	//	counterpoly += 0.1;
 
-		//if (counterpoly == 10) {
-		//	ok = false;
-		//	counterpoly = 0;
-		//}
+	//if (counterpoly == 10) {
+	//	ok = false;
+	//	counterpoly = 0;
+	//}
 
-		//if (counterpoly > -10 && !ok)
-		//	counterpoly -= 0.1;
+	//if (counterpoly > -10 && !ok)
+	//	counterpoly -= 0.1;
 
-		//if (counterpoly == -10){
-		//	ok = true;
-		//	counterpoly = 0;
-		//}
+	//if (counterpoly == -10){
+	//	ok = true;
+	//	counterpoly = 0;
+	//}
 
 }
 
 //functia care defineste ce se intampla cand se apasa pe tastatura
 void DrawingWindow::onKey(unsigned char key)
 {
-	switch(key)
+	switch (key)
 	{
-		case 27 : exit(0);
+	case 27: exit(0);
 	}
 
 }
 
 //functia care defineste ce se intampla cand se da click pe mouse
-void DrawingWindow::onMouse(int button,int state,int x, int y)
+void DrawingWindow::onMouse(int button, int state, int x, int y)
 {
-	
+
 }
 
 
