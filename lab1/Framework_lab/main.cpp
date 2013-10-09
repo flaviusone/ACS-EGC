@@ -67,6 +67,8 @@ bool ok = true;
 bool ok2 = true;
 float pi = 3.141592;
 float counter = 0;
+float value = 0.1;
+float value2 = 0.1;
 
 void DrawingWindow::onIdle()
 {
@@ -75,47 +77,20 @@ void DrawingWindow::onIdle()
 	counter += 0.1;
 	if (counter >= pi * 2) counter -= pi * 2;
 
+	//Translateaza linia stanga-dreapta
 	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(-10, 0);
+	Transform2D::translateMatrix(line->transf_points[0]->x + value, 0);
 	Transform2D::applyTransform(line);
 
-	//if (counterlinie < 10 && ok)
-	//	counterlinie += 0.1;
+	if (line->transf_points[0]->x > 10 || line->transf_points[0]->x < -10) value = -value;
+	
 
-	//if (counterlinie == 10) {
-	//	ok = false;
-	//	counterlinie = 0;
-	//}
+	// Scaleaza poligonul
+	/*Transform2D::loadIdentityMatrix();
+	Transform2D::scaleMatrix(polygon->transf_points[0]->x + value2, polygon->transf_points[0]->y + value2);
+	Transform2D::applyTransform(polygon);
 
-	//if (counterlinie > -10 && !ok)
-	//	counterlinie -= 0.1;
-
-	//if (counterlinie == -10){
-	//	ok = true;
-	//	counterlinie = 0;
-	//}
-	////////////////////////////////////////////////////////////////
-	//Transform2D::loadIdentityMatrix();
-	//Transform2D::scaleMatrix(counterpoly, counterpoly);
-	//Transform2D::applyTransform(polygon);
-
-
-	//if (counterpoly < 10 && ok)
-	//	counterpoly += 0.1;
-
-	//if (counterpoly == 10) {
-	//	ok = false;
-	//	counterpoly = 0;
-	//}
-
-	//if (counterpoly > -10 && !ok)
-	//	counterpoly -= 0.1;
-
-	//if (counterpoly == -10){
-	//	ok = true;
-	//	counterpoly = 0;
-	//}
-
+	if (polygon->transf_points[0]->x > 10 || polygon->transf_points[0]->x < -10) value = -value;*/
 }
 
 //functia care defineste ce se intampla cand se apasa pe tastatura
