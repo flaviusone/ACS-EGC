@@ -72,6 +72,7 @@ float value2 = 0.1;
 
 void DrawingWindow::onIdle()
 {
+	//Sleep(500);
 	//Roteste patratul in jurul centrului
 	RotestePatratul(rectangle, counter);
 	counter += 0.1;
@@ -85,12 +86,12 @@ void DrawingWindow::onIdle()
 	if (line->transf_points[0]->x > 10 || line->transf_points[0]->x < -10) value = -value;
 	
 
-	//// Scaleaza poligonul
-	//Transform2D::loadIdentityMatrix();
-	//Transform2D::scaleMatrix(value2, value2);
-	//Transform2D::applyTransform(polygon);
+	// Scaleaza poligonul
+	Transform2D::loadIdentityMatrix();
+	Transform2D::scaleMatrix(line->transf_points[0]->x, line->transf_points[0]->x);
+	Transform2D::applyTransform(polygon);
 
-	//if ((polygon->transf_points[1]->x - polygon->transf_points[0]->x) > 10 || (polygon->transf_points[1]->x - polygon->transf_points[0]->x) < -10) value = -value;
+	
 }
 
 //Functia care face fill
