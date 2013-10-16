@@ -15,7 +15,7 @@
 using namespace std;
 
 Visual2D *v2d;
-Object3D *cube1,*piramida;
+Object3D *cube1,*piramida,*cube2,*cube3;
 float n=1;
 
 //functia care permite adaugarea de obiecte
@@ -91,68 +91,65 @@ void DrawingWindow::init()
 	
 	cube1 = new Object3D(vertices,faces,Color(1,0,0),false);
 	addObject3D(cube1);
-///////////////////////////////PIRAMIDA/////////////////////	
-	vertices.clear();
-	faces.clear();
-	vertices.push_back(new Point3D(0, 0, 0));
-	vertices.push_back(new Point3D(n, 0, 0));
-	vertices.push_back(new Point3D(n, 0, n));
-	vertices.push_back(new Point3D(0, 0, n));
-	vertices.push_back(new Point3D(n/2, 2*n, n/2));
 
-	//fata cu baza piramidei
-	contour.clear();
-	contour.push_back(0);
-	contour.push_back(1);
-	contour.push_back(2);
-	contour.push_back(3);
-	faces.push_back(new Face(contour));
-	
-	//o laterala
-	contour.clear();
-	contour.push_back(0);
-	contour.push_back(1);
-	contour.push_back(4);
-	faces.push_back(new Face(contour));
-
-	//o laterala
-	contour.clear();
-	contour.push_back(1);
-	contour.push_back(2);
-	contour.push_back(4);
-	faces.push_back(new Face(contour));
-
-	//o laterala
-	contour.clear();
-	contour.push_back(2);
-	contour.push_back(3);
-	contour.push_back(4);
-	faces.push_back(new Face(contour));
-
-	//o laterala
-	contour.clear();
-	contour.push_back(3);
-	contour.push_back(0);
-	contour.push_back(4);
-	faces.push_back(new Face(contour));
-
-	piramida = new Object3D(vertices, faces, Color(1, 0, 0), false);
-	addObject3D(piramida);
+	cube2 = new Object3D(vertices, faces, Color(0, 1, 0), false);
+	addObject3D(cube2);
 
 	Transform3D::loadIdentityModelMatrix();
-	Transform3D::translateMatrix(3 * n, 0, 0);
-	Transform3D::rotateMatrixOx(PI);
-	Transform3D::applyTransform(piramida);
+	Transform3D::translateMatrix(3 * n, 3 * n, 10);
+	Transform3D::applyTransform(cube2);
+
+	cube3 = new Object3D(vertices, faces, Color(1, 1, 0), false);
+	addObject3D(cube3);
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(3 * n, - 3 * n, 0);
+	Transform3D::applyTransform(cube3);
 
 }
 
+void RotesteCubulOY(Object3D *cub, float i){
+	float centru_x, centru_y, centru_z;
+
+	centru_x = (cub->vertices[1]->x - cub->vertices[0]->x) / 2 + cub->vertices[0]->x;
+	centru_y = (cub->vertices[4]->y - cub->vertices[0]->y) / 2 + cub->vertices[0]->y;
+	centru_z = (cub->vertices[3]->z - cub->vertices[0]->z) / 2 + cub->vertices[0]->z;
+
+	//centru_x = (cub->transf_vertices[1]->x - cub->transf_vertices[0]->x) / 2 + cub->transf_vertices[0]->x;
+	//centru_y = (cub->transf_vertices[4]->y - cub->transf_vertices[0]->y) / 2 + cub->transf_vertices[0]->y;
+	//centru_z = (cub->transf_vertices[3]->z - cub->transf_vertices[0]->z) / 2 + cub->transf_vertices[0]->z;
 
 
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(-centru_x, -centru_y, -centru_z);
+	Transform3D::rotateMatrixOy(i);
+	Transform3D::translateMatrix(centru_x, centru_y, centru_z);
+	Transform3D::applyTransform(cub);
+
+
+
+}
+
+float counter = 0;
+float value = 0.001;
+float value2 = 0.1;
+float centru_x, centru_y, centru_z;
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {
-
+	RotesteCubulOY(cube1, counter);
+	counter += 0.01;
+	if (counter >= PI * 2) counter -= PI * 2;
 	
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(3 * n, cube2->transf_vertices[0]->y + value , 0);
+	Transform3D::applyTransform(cube2);
+
+	if (cube2->transf_vertices[0]->y > 5 || cube2->transf_vertices[0]->y < -5) value = -value;
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::scaleMatrix(cube2->transf_vertices[0]->y, cube2->transf_vertices[0]->y, cube2->transf_vertices[0]->y);
+	Transform3D::applyTransform(cube3);
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
