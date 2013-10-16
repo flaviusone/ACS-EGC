@@ -130,8 +130,26 @@ void RotesteCubulOY(Object3D *cub, float i){
 
 }
 
+void Scaleazacub(Object3D *cub, float i){
+	float centru_x = 0, centru_y = 0, centru_z = 0;
+
+	centru_x = (cub->vertices[1]->x - cub->vertices[0]->x) / 2 + cub->vertices[0]->x;
+	centru_y = (cub->vertices[4]->y - cub->vertices[0]->y) / 2 + cub->vertices[0]->y;
+	centru_z = (cub->vertices[3]->z - cub->vertices[0]->z) / 2 + cub->vertices[0]->z;
+
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(-centru_x, -centru_y, -centru_z);
+	Transform3D::scaleMatrix(i,i,i);
+	Transform3D::translateMatrix(centru_x, centru_y, centru_z);
+	Transform3D::applyTransform(cub);
+
+
+
+}
+
 float counter = 0;
-float value = 0.001;
+float value = 0.005;
 float value2 = 0.1;
 float centru_x, centru_y, centru_z;
 //functia care permite animatia
@@ -147,9 +165,9 @@ void DrawingWindow::onIdle()
 
 	if (cube2->transf_vertices[0]->y > 5 || cube2->transf_vertices[0]->y < -5) value = -value;
 
-	Transform3D::loadIdentityModelMatrix();
-	Transform3D::scaleMatrix(cube2->transf_vertices[0]->y, cube2->transf_vertices[0]->y, cube2->transf_vertices[0]->y);
-	Transform3D::applyTransform(cube3);
+	Scaleazacub(cube3, cube2->transf_vertices[0]->y);
+
+	
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
