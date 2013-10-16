@@ -15,7 +15,7 @@
 using namespace std;
 
 Visual2D *v2d;
-Object3D *cube1;
+Object3D *cube1,*piramida;
 float n=1;
 
 //functia care permite adaugarea de obiecte
@@ -91,9 +91,61 @@ void DrawingWindow::init()
 	
 	cube1 = new Object3D(vertices,faces,Color(1,0,0),false);
 	addObject3D(cube1);
+///////////////////////////////PIRAMIDA/////////////////////	
+	vertices.clear();
+	faces.clear();
+	vertices.push_back(new Point3D(0, 0, 0));
+	vertices.push_back(new Point3D(n, 0, 0));
+	vertices.push_back(new Point3D(n, 0, n));
+	vertices.push_back(new Point3D(0, 0, n));
+	vertices.push_back(new Point3D(n/2, 2*n, n/2));
+
+	//fata cu baza piramidei
+	contour.clear();
+	contour.push_back(0);
+	contour.push_back(1);
+	contour.push_back(2);
+	contour.push_back(3);
+	faces.push_back(new Face(contour));
 	
+	//o laterala
+	contour.clear();
+	contour.push_back(0);
+	contour.push_back(1);
+	contour.push_back(4);
+	faces.push_back(new Face(contour));
+
+	//o laterala
+	contour.clear();
+	contour.push_back(1);
+	contour.push_back(2);
+	contour.push_back(4);
+	faces.push_back(new Face(contour));
+
+	//o laterala
+	contour.clear();
+	contour.push_back(2);
+	contour.push_back(3);
+	contour.push_back(4);
+	faces.push_back(new Face(contour));
+
+	//o laterala
+	contour.clear();
+	contour.push_back(3);
+	contour.push_back(0);
+	contour.push_back(4);
+	faces.push_back(new Face(contour));
+
+	piramida = new Object3D(vertices, faces, Color(1, 0, 0), false);
+	addObject3D(piramida);
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(3 * n, 0, 0);
+	Transform3D::rotateMatrixOx(PI);
+	Transform3D::applyTransform(piramida);
 
 }
+
 
 
 //functia care permite animatia
