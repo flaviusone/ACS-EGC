@@ -14,27 +14,33 @@
 using namespace std;
 
 Visual2D *visual;
-Rectangle2D *rect;
-Circle2D *cercverde, *cercrosu, *cercgalben;
-Text *text;
+Rectangle2D *chenar_alb;
+Circle2D *cercverde;
+Text *score,*modifying_score,*nolives;
+Object2D *obiect;
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
 {
-
+	//creeam context vizual
 	visual = new Visual2D(0, 0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
 	addVisual2D(visual);
 
-	rect = new Rectangle2D(Point2D(1, 1), 300, 300);
-	addObject2D(rect);
+	//creeam chenar alb
+	chenar_alb = new Rectangle2D(Point2D(5, 5), DrawingWindow::width - 20 , DrawingWindow::height - 20,Color(1,1,1),false);
+	addObject2D(chenar_alb);
 
-	text = new Text("dreptunghi", Point2D(200, 250), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
-	addText(text);
+	//adaugam text SCORE
+	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 50 ), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	addText(score);
 
-	cercverde = new Circle2D(Point2D(683, 384), 100, Color(255, 0, 0), false);
-	addObject2D_to_Visual2D(cercverde, visual);
+	//adaugam modifying score
+	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 80), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	addText(modifying_score);
 	
-	visual->cadruFereastra(Color(0, 0, 0));
-	visual->cadruPoarta(Color(100, 0, 0));
+	
+	//cercverde = new Circle2D(Point2D(683, 384), 100, Color(255, 0, 0), false);
+	//addObject2D_to_Visual2D(cercverde, visual);
+	
 }
 
 
@@ -71,7 +77,7 @@ void DrawingWindow::onMouse(int button, int state, int x, int y)
 int main(int argc, char** argv)
 {
 	//creare fereastra
-	DrawingWindow dw(argc, argv, 1366, 768, 0, 0, "Laborator EGC");
+	DrawingWindow dw(argc, argv, 1280, 720, 40, 0, "Laborator EGC");
 	//se apeleaza functia init() - in care s-au adaugat obiecte
 	dw.init();
 	//se intra in bucla principala de desenare - care face posibila desenarea, animatia si procesarea evenimentelor

@@ -17,7 +17,7 @@ DrawingWindow::DrawingWindow(int argc, char** argv,int _width, int _height, int 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
 	glutInitWindowSize(width,height);
-	glutInitWindowPosition(startX,startY);
+	glutInitWindowPosition(startX,startY); 
 	glutCreateWindow(name.c_str());
 	
 	//Sunt definite functiile care vor fi apelate direct de sistemul Windows:
@@ -28,7 +28,7 @@ DrawingWindow::DrawingWindow(int argc, char** argv,int _width, int _height, int 
 	glutSpecialFunc(specialFunction); //functia apelata la apasarea unei taste speciale
 	glutMouseFunc(mouseFunction); //functia apelata la click de mouse
 
-	glClearColor(1,1,1,1);  //afiseaza fondul ferestrei aplicatiei in alb
+	glClearColor(0.2,0.2,0.2,1);  //afiseaza fondul ferestrei aplicatiei in alb
 
 	//activeaza testul de adancime pentru eliminarea partilor nevizibile in imagini
 	glEnable(GL_DEPTH_TEST); 
