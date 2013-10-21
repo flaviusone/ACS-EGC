@@ -15,31 +15,64 @@ using namespace std;
 
 Visual2D *visual;
 Rectangle2D *chenar_alb;
-Circle2D *cercverde;
+Circle2D *cerc_naveta;
+Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
-Object2D *obiect;
 //functia care permite adaugarea de obiecte
-void DrawingWindow::init()
-{
+
+//Constructie naveta
+void init_naveta_spatiala(){
+	int centru_x = DrawingWindow::width / 2;
+	int centru_y = DrawingWindow::height / 2;
+
+	//adaug cercul
+	cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);
+	
+	//adaug naveta
+	poly_naveta = new Polygon2D(Color(255, 0, 0), false);
+	poly_naveta->addPoint(Point2D(centru_x - 20, centru_y));
+	poly_naveta->addPoint(Point2D(centru_x, centru_y + 25));
+	poly_naveta->addPoint(Point2D(centru_x + 20, centru_y + 5));
+	poly_naveta->addPoint(Point2D(centru_x , centru_y + 15));
+	poly_naveta->addPoint(Point2D(centru_x - 10, centru_y));
+	poly_naveta->addPoint(Point2D(centru_x , centru_y - 15));
+	poly_naveta->addPoint(Point2D(centru_x + 20, centru_y - 5));
+	poly_naveta->addPoint(Point2D(centru_x, centru_y - 25));
+
+	DrawingWindow::addObject2D(poly_naveta);
+	DrawingWindow::addObject2D(cerc_naveta);
+
+	return;
+}
+
+//Initializari principale
+void init_principale(){
 	//creeam context vizual
 	visual = new Visual2D(0, 0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
-	addVisual2D(visual);
+	DrawingWindow::addVisual2D(visual);
 
 	//creeam chenar alb
-	chenar_alb = new Rectangle2D(Point2D(5, 5), DrawingWindow::width - 20 , DrawingWindow::height - 20,Color(1,1,1),false);
-	addObject2D(chenar_alb);
+	chenar_alb = new Rectangle2D(Point2D(5, 5), DrawingWindow::width - 20, DrawingWindow::height - 20, Color(1, 1, 1), false);
+	DrawingWindow::addObject2D(chenar_alb);
 
 	//adaugam text SCORE
-	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 50 ), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
-	addText(score);
+	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 50), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(score);
 
 	//adaugam modifying score
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 80), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
-	addText(modifying_score);
+	DrawingWindow::addText(modifying_score);
+
+}
+
+void DrawingWindow::init()
+{
+	//init chenar, scor, visual2d
+	init_principale();
+
+	//creeam naveta spatiala si o adaugam la centru
+	init_naveta_spatiala();
 	
-	
-	//cercverde = new Circle2D(Point2D(683, 384), 100, Color(255, 0, 0), false);
-	//addObject2D_to_Visual2D(cercverde, visual);
 	
 }
 
