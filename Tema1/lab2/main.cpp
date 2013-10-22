@@ -19,6 +19,8 @@ Rectangle2D *chenar_alb;
 Circle2D *cerc_naveta;
 Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
+float directie = 0;
+int viteza = 5;	
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -67,14 +69,12 @@ void init_principale(){
 	DrawingWindow::addText(modifying_score);
 
 }
-float dx = 10, counter = 0;;
-void move_straight(){
 
+void move_straight(){
 	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(dx, 0);
+	Transform2D::translateMatrix(viteza*cos(directie),viteza*sin(directie));
 	Transform2D::applyTransform_o(poly_naveta);
 	Transform2D::applyTransform_o(cerc_naveta);
-	counter+=dx;
 	return;
 }
 
@@ -86,6 +86,13 @@ void rotate(int param){
 	float unghi = PI / 12;
 	if (param != 0) unghi = -unghi;
 
+	//updatam directia actuala a navei
+	directie += unghi;
+	if (directie >= PI * 2) directie -= PI * 2;
+	if (directie <= -PI * 2) directie += PI * 2;
+	if (directie <= 0) directie = 2*PI - directie;
+	
+	
 	//calcul centru poligon
 	for (int i = 0; i < poly_naveta->points.size(); i++)
 	{
@@ -95,14 +102,12 @@ void rotate(int param){
 	centru_x = centru_x / 8;
 	centru_y = centru_y / 8;
 
+	//rotirea navei
 	Transform2D::loadIdentityMatrix();
 	Transform2D::translateMatrix(-centru_x, -centru_y);
 	Transform2D::rotateMatrix(unghi);
 	Transform2D::translateMatrix(centru_x, centru_y);
 	Transform2D::applyTransform_o(poly_naveta);
-
-
-	printf("Am facut rotatie\n");
 }
 
 void DrawingWindow::init()
@@ -120,7 +125,12 @@ void DrawingWindow::init()
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {
-
+	char buffer[50];
+	sprintf(buffer, "Directie %f", directie);
+	//adaugam modifying score
+	DrawingWindow::removeText(modifying_score);
+	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(modifying_score);
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
@@ -166,7 +176,7 @@ void DrawingWindow::onMouse(int button, int state, int x, int y)
 int main(int argc, char** argv)
 {
 	//creare fereastra
-	DrawingWindow dw(argc, argv, 1280, 720, 40, 0, "Laborator EGC");
+	DrawingWindow dw(argc, argv, 1280, 720, 40, 0, "Tema1");
 	//se apeleaza functia init() - in care s-au adaugat obiecte
 	dw.init();
 	//se intra in bucla principala de desenare - care face posibila desenarea, animatia si procesarea evenimentelor
