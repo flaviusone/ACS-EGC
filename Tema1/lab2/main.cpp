@@ -19,7 +19,6 @@ Rectangle2D *chenar_alb;
 Circle2D *cerc_naveta;
 Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
-//functia care permite adaugarea de obiecte
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -68,6 +67,43 @@ void init_principale(){
 	DrawingWindow::addText(modifying_score);
 
 }
+float dx = 10, counter = 0;;
+void move_straight(){
+
+	Transform2D::loadIdentityMatrix();
+	Transform2D::translateMatrix(dx, 0);
+	Transform2D::applyTransform_o(poly_naveta);
+	Transform2D::applyTransform_o(cerc_naveta);
+	counter+=dx;
+	return;
+}
+
+void rotate(int param){
+	float centru_x = 0, centru_y = 0;
+
+	//if param 0 -> rotate_right
+	//else -> rotate_left
+	float unghi = PI / 12;
+	if (param != 0) unghi = -unghi;
+
+	//calcul centru poligon
+	for (int i = 0; i < poly_naveta->points.size(); i++)
+	{
+		centru_x = centru_x + poly_naveta->transf_points[i]->x;
+		centru_y = centru_y + poly_naveta->transf_points[i]->y;
+	}
+	centru_x = centru_x / 8;
+	centru_y = centru_y / 8;
+
+	Transform2D::loadIdentityMatrix();
+	Transform2D::translateMatrix(-centru_x, -centru_y);
+	Transform2D::rotateMatrix(unghi);
+	Transform2D::translateMatrix(centru_x, centru_y);
+	Transform2D::applyTransform_o(poly_naveta);
+
+
+	printf("Am facut rotatie\n");
+}
 
 void DrawingWindow::init()
 {
@@ -101,15 +137,15 @@ void DrawingWindow::onKey(unsigned char key)
 	switch (key)
 	{
 	case GLUT_KEY_LEFT:
-		//rotate_left();
+		rotate(0);
 		printf("Am apasat sageata stanga\n");
 		break;
 	case GLUT_KEY_RIGHT:
-		//rotate_right();
+		rotate(1);
 		printf("Am apasat sageata dreapta\n");
 		break;
 	case GLUT_KEY_UP:
-		//move_straight();
+		move_straight();
 		printf("Am apasat sageata up\n");
 		break;
 	case 32:
