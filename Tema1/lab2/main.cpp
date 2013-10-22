@@ -13,6 +13,7 @@
 
 using namespace std;
 
+int chenar_x, chenar_y;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
 Circle2D *cerc_naveta;
@@ -22,8 +23,8 @@ Text *score,*modifying_score,*nolives;
 
 //Constructie naveta
 void init_naveta_spatiala(){
-	int centru_x = DrawingWindow::width / 2;
-	int centru_y = DrawingWindow::height / 2;
+	float centru_x = DrawingWindow::width / 2;
+	float centru_y = DrawingWindow::height / 2;
 
 	//adaug cercul
 	cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);
@@ -47,20 +48,23 @@ void init_naveta_spatiala(){
 
 //Initializari principale
 void init_principale(){
+	chenar_x = DrawingWindow::width - 20;
+	chenar_y = DrawingWindow::height - 20;
+
 	//creeam context vizual
 	visual = new Visual2D(0, 0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
 	DrawingWindow::addVisual2D(visual);
 
 	//creeam chenar alb
-	chenar_alb = new Rectangle2D(Point2D(5, 5), DrawingWindow::width - 20, DrawingWindow::height - 20, Color(1, 1, 1), false);
+	chenar_alb = new Rectangle2D(Point2D(5, 5), chenar_x, chenar_y, Color(1, 1, 1), false);
 	DrawingWindow::addObject2D(chenar_alb);
 
 	//adaugam text SCORE
-	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 50), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(score);
 
 	//adaugam modifying score
-	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40, DrawingWindow::height - 80), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
 
 }
@@ -96,6 +100,22 @@ void DrawingWindow::onKey(unsigned char key)
 {
 	switch (key)
 	{
+	case GLUT_KEY_LEFT:
+		//rotate_left();
+		printf("Am apasat sageata stanga\n");
+		break;
+	case GLUT_KEY_RIGHT:
+		//rotate_right();
+		printf("Am apasat sageata dreapta\n");
+		break;
+	case GLUT_KEY_UP:
+		//move_straight();
+		printf("Am apasat sageata up\n");
+		break;
+	case 32:
+		//drill(param);
+		printf("Am apasat space\n");
+		break;
 	case 27: exit(0);
 	}
 }
