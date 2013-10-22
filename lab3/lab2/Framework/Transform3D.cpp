@@ -234,12 +234,17 @@ void Transform3D::parallelProjectionMatrix(float a, float b, float c)
 
 	proj_type=false;
 
+	ParallProjectionMatrix[0][0] = 1; ParallProjectionMatrix[1][0] = 0; ParallProjectionMatrix[2][0] = -(a/c);	ParallProjectionMatrix[3][0] = 0;
+	ParallProjectionMatrix[0][1] = 0; ParallProjectionMatrix[1][1] = 1; ParallProjectionMatrix[2][1] = -(b/c);	ParallProjectionMatrix[3][1] = 0;
+	ParallProjectionMatrix[0][2] = 0; ParallProjectionMatrix[1][2] = 0; ParallProjectionMatrix[2][2] = 0;			ParallProjectionMatrix[3][2] = 0;
+	ParallProjectionMatrix[0][3] = 0; ParallProjectionMatrix[1][3] = 0; ParallProjectionMatrix[2][3] = 0;	ParallProjectionMatrix[3][3] = 1;
+
 	//TODO
 	
 	//se inmulteste matricea de proiectie ParallProjectionMatrix  cu matricea curenta de proiectie
 	//folosim scrierea vectori coloana
 	
-	//multiplyProjectionMatrix(ParallProjectionMatrix);
+	multiplyProjectionMatrix(ParallProjectionMatrix);
 
 }
 
@@ -252,12 +257,15 @@ void Transform3D::perspectiveProjectionMatrix(float xc, float yc, float zc)
 	proj_type=true;
 
 	//TODO	
-	
+	PerspProjectionMatrix[0][0] = 1; PerspProjectionMatrix[1][0] = 0; PerspProjectionMatrix[2][0] = -(xc/zc);	PerspProjectionMatrix[3][0] = 0;
+	PerspProjectionMatrix[0][1] = 0; PerspProjectionMatrix[1][1] = 1; PerspProjectionMatrix[2][1] = -(yc/zc);	PerspProjectionMatrix[3][1] = 0;
+	PerspProjectionMatrix[0][2] = 0; PerspProjectionMatrix[1][2] = 0; PerspProjectionMatrix[2][2] = 0;			PerspProjectionMatrix[3][2] = 0;
+	PerspProjectionMatrix[0][3] = 0; PerspProjectionMatrix[1][3] = 0; PerspProjectionMatrix[2][3] = -(1/zc);	PerspProjectionMatrix[3][3] = 1;
 	
 	//se inmulteste matricea de proiectie PerspProjectionMatrix  cu matricea curenta de proiectie
 	//folosim scrierea vectori coloana
 
-	//multiplyProjectionMatrix(PerspProjectionMatrix);
+	multiplyProjectionMatrix(PerspProjectionMatrix);
 	
 	
 	//salvam coordonata z a centrului de proie
