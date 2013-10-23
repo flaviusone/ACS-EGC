@@ -14,8 +14,9 @@
 #define inf 1000000
 using namespace std;
 
-Visual2D *v2d1;
+Visual2D *v2d1, *v2d2;
 Object3D *cube11,*cube21,*cube31;
+Object3D *cube12, *cube22, *cube32;
 
 float n=1;
 
@@ -25,9 +26,14 @@ float n=1;
 void DrawingWindow::init()
 {
 	
-	v2d1 = new Visual2D(-3,-6,3,6,0,0,DrawingWindow::width,DrawingWindow::height); 
+	v2d1 = new Visual2D(-3,-6,3,6,0,0,DrawingWindow::width/2,DrawingWindow::height); 
 	v2d1->tipTran(true);
 	addVisual2D(v2d1);
+
+	v2d2 = new Visual2D(-3, -6, 3, 6, DrawingWindow::width / 2, 0 , DrawingWindow::width, DrawingWindow::height);
+//	v2d2->tipTran(true);
+	addVisual2D(v2d2);
+
 	
 	//se deseneaza un cub
 	
@@ -98,6 +104,15 @@ void DrawingWindow::init()
 	
 	cube31 = new Object3D(vertices,faces,Color(0,0,1),false);
 	addObject3D_to_Visual2D(cube31,v2d1);
+
+	cube12 = new Object3D(vertices, faces, Color(1, 0, 0), false);
+	addObject3D_to_Visual2D(cube12, v2d2);
+
+	cube22 = new Object3D(vertices, faces, Color(0, 1, 0), false);
+	addObject3D_to_Visual2D(cube22, v2d2);
+
+	cube32 = new Object3D(vertices, faces, Color(0, 0, 1), false);
+	addObject3D_to_Visual2D(cube32, v2d2);
 	
 
 }
@@ -136,6 +151,9 @@ void DrawingWindow::onIdle()
 	Transform3D::rotateMatrixOy(pas);
 	Transform3D::translateMatrix(n/2,n/2,n/2);
 	Transform3D::translateMatrix(0,3,0);
+
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::parallelProjectionMatrix(1, 1, 1.2);
 	
 	Transform3D::applyTransform(cube11);
 	
@@ -145,13 +163,52 @@ void DrawingWindow::onIdle()
 	Transform3D::translateMatrix(n/2,n/2,n/2);
 	Transform3D::translateMatrix(0,-3,0);
 	
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::parallelProjectionMatrix(1, 1, 1.2);
+
 	Transform3D::applyTransform(cube31);
 	
 	
 	Transform3D::loadIdentityModelMatrix();
 	Transform3D::translateMatrix(0,ty,0);
+
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::parallelProjectionMatrix(1, 1, 1.2);
 	
 	Transform3D::applyTransform(cube21);
+
+
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(-n / 2, -n / 2, -n / 2);
+	Transform3D::rotateMatrixOy(pas);
+	Transform3D::translateMatrix(n / 2, n / 2, n / 2);
+	Transform3D::translateMatrix(0, 3, 0);
+
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::perspectiveProjectionMatrix(5, 2, 8);
+
+	Transform3D::applyTransform(cube12);
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(-n / 2, -n / 2, -n / 2);
+	Transform3D::scaleMatrix(scale, scale, scale);
+	Transform3D::translateMatrix(n / 2, n / 2, n / 2);
+	Transform3D::translateMatrix(0, -3, 0);
+
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::perspectiveProjectionMatrix(5, 2, 8);
+
+	Transform3D::applyTransform(cube32);
+
+
+	Transform3D::loadIdentityModelMatrix();
+	Transform3D::translateMatrix(0, ty, 0);
+
+	Transform3D::loadIdentityProjectionMatrix();
+	Transform3D::perspectiveProjectionMatrix(5, 2, 8);
+
+	Transform3D::applyTransform(cube22);
 	
 }
 
@@ -159,7 +216,8 @@ void DrawingWindow::onIdle()
 void DrawingWindow::onReshape(int width,int height)
 {
 	
-	v2d1->poarta(0,0,width,height); 
+	v2d1->poarta(0,0,width/2,height); 
+	v2d2->poarta(width / 2, 0, width, height);
 	
 
 }
