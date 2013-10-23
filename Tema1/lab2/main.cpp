@@ -20,7 +20,7 @@ Circle2D *cerc_naveta;
 Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
 float directie = 0;
-float viteza = 10;	
+float viteza = 20;	
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -76,23 +76,36 @@ void translate_object_o(float x, float y,Object2D *ob){
 	Transform2D::applyTransform_o(ob);
 }
 
+void translate_naveta(float x, float y){
+	translate_object_o(x, y, poly_naveta);
+	translate_object_o(x, y, cerc_naveta);
+}
+
 void verifica_ecran(){
 	while (true){
 		if ((cerc_naveta->transf_points[0]->x - 60) < 6){
-			translate_object_o(1, 0, poly_naveta);
-			translate_object_o(1, 0, cerc_naveta);
+			//mut inapoi unde era inainte de mutare
+			translate_naveta(-viteza*cos(directie), 0); 
+			//mut fix pe margine
+			translate_naveta(- (cerc_naveta->transf_points[0]->x - 60 - 6), 0); 
 		}else
 		if ((cerc_naveta->transf_points[0]->x) > chenar_x+4){
-			translate_object_o(-1, 0, poly_naveta);
-			translate_object_o(-1, 0, cerc_naveta);
+			//mut inapoi unde era inainte de mutare
+			translate_naveta(-viteza*cos(directie), 0);
+			//mut fix pe margine
+			translate_naveta(chenar_x - cerc_naveta->transf_points[0]->x+4, 0);
 		}else
 		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
-			translate_object_o(0, 1, poly_naveta);
-			translate_object_o(0, 1, cerc_naveta);
-			}else
+			//mut inapoi unde era inainte de mutare
+			translate_naveta(0, -viteza*sin(directie));
+			//mut fix pe margine
+			translate_naveta(0, -(cerc_naveta->transf_points[0]->y -30 - 6));
+		}else
 		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y+3){
-			translate_object_o(0, -1, poly_naveta);
-			translate_object_o(0, -1, cerc_naveta);
+			//mut inapoi unde era inainte de mutare
+			translate_naveta(0, -viteza*sin(directie));
+			//mut fix pe margine
+			translate_naveta(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
 		}else break;
 	}
 }
@@ -102,15 +115,12 @@ void move_straight(){
 	DrawingWindow::removeObject2D(poly_naveta);
 	DrawingWindow::removeObject2D(cerc_naveta);
 
-	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(viteza*cos(directie),viteza*sin(directie));
-	Transform2D::applyTransform_o(poly_naveta);
-	Transform2D::applyTransform_o(cerc_naveta);
+	translate_naveta(viteza*cos(directie), viteza*sin(directie));
 	
 	verifica_ecran();
+
 	DrawingWindow::addObject2D(poly_naveta);
 	DrawingWindow::addObject2D(cerc_naveta);
-	return;
 }
 
 void rotate(int param){
@@ -158,7 +168,7 @@ void DrawingWindow::onIdle()
 	//verifica_ecran();
 	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "Tema1 v1.0 alpha Directie %f", directie);
+	sprintf(buffer, "Tema1 v1.0 alpha");
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
