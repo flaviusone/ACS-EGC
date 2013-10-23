@@ -20,7 +20,7 @@ Circle2D *cerc_naveta;
 Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
 float directie = 0;
-int viteza = 5;	
+float viteza = 10;	
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -70,11 +70,46 @@ void init_principale(){
 
 }
 
+void translate_object_o(float x, float y,Object2D *ob){
+	Transform2D::loadIdentityMatrix();
+	Transform2D::translateMatrix(x, y);
+	Transform2D::applyTransform_o(ob);
+}
+
+void verifica_ecran(){
+	while (true){
+		if ((cerc_naveta->transf_points[0]->x - 60) < 6){
+			translate_object_o(1, 0, poly_naveta);
+			translate_object_o(1, 0, cerc_naveta);
+		}else
+		if ((cerc_naveta->transf_points[0]->x) > chenar_x+4){
+			translate_object_o(-1, 0, poly_naveta);
+			translate_object_o(-1, 0, cerc_naveta);
+		}else
+		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
+			translate_object_o(0, 1, poly_naveta);
+			translate_object_o(0, 1, cerc_naveta);
+			}else
+		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y+3){
+			translate_object_o(0, -1, poly_naveta);
+			translate_object_o(0, -1, cerc_naveta);
+		}else break;
+	}
+}
+
+
 void move_straight(){
+	DrawingWindow::removeObject2D(poly_naveta);
+	DrawingWindow::removeObject2D(cerc_naveta);
+
 	Transform2D::loadIdentityMatrix();
 	Transform2D::translateMatrix(viteza*cos(directie),viteza*sin(directie));
 	Transform2D::applyTransform_o(poly_naveta);
 	Transform2D::applyTransform_o(cerc_naveta);
+	
+	verifica_ecran();
+	DrawingWindow::addObject2D(poly_naveta);
+	DrawingWindow::addObject2D(cerc_naveta);
 	return;
 }
 
@@ -84,14 +119,11 @@ void rotate(int param){
 	//if param 0 -> rotate_right
 	//else -> rotate_left
 	float unghi = PI / 12;
+	//float unghi = 0.1;
 	if (param != 0) unghi = -unghi;
 
 	//updatam directia actuala a navei
 	directie += unghi;
-	if (directie >= PI * 2) directie -= PI * 2;
-	if (directie <= -PI * 2) directie += PI * 2;
-	if (directie <= 0) directie = 2*PI - directie;
-	
 	
 	//calcul centru poligon
 	for (int i = 0; i < poly_naveta->points.size(); i++)
@@ -110,27 +142,28 @@ void rotate(int param){
 	Transform2D::applyTransform_o(poly_naveta);
 }
 
-void DrawingWindow::init()
+void DrawingWindow::init()	
 {
 	//init chenar, scor, visual2d
 	init_principale();
 
 	//creeam naveta spatiala si o adaugam la centru
-	init_naveta_spatiala();
-	
-	
+	init_naveta_spatiala();	
 }
 
 
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {
+	//verifica_ecran();
+	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "Directie %f", directie);
+	sprintf(buffer, "Tema1 v1.0 alpha Directie %f", directie);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
+	//For debug purposes
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
@@ -148,15 +181,12 @@ void DrawingWindow::onKey(unsigned char key)
 	{
 	case GLUT_KEY_LEFT:
 		rotate(0);
-		printf("Am apasat sageata stanga\n");
 		break;
 	case GLUT_KEY_RIGHT:
 		rotate(1);
-		printf("Am apasat sageata dreapta\n");
 		break;
 	case GLUT_KEY_UP:
 		move_straight();
-		printf("Am apasat sageata up\n");
 		break;
 	case 32:
 		//drill(param);
