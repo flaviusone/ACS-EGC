@@ -8,7 +8,6 @@
 #include <iostream>
 #include <windows.h>
 
-
 #define PI 3.14159265358979323846
 
 using namespace std;
@@ -71,11 +70,13 @@ void init_principale(){
 
 }
 
-void translate_object_o(float x, float y,Object2D *ob){
+void translate_object_o(float x, float y, Object2D *ob){
 	Transform2D::loadIdentityMatrix();
 	Transform2D::translateMatrix(x, y);
 	Transform2D::applyTransform_o(ob);
+	
 }
+
 
 void translate_naveta(float x, float y){
 	translate_object_o(x, y, poly_naveta);
@@ -83,34 +84,29 @@ void translate_naveta(float x, float y){
 }
 
 void verifica_ecran(){
+	float cerc_x = cerc_naveta->transf_points[0]->x;
+	float cerc_y = cerc_naveta->transf_points[0]->y;
 	while (true){
-		if ((cerc_naveta->transf_points[0]->x - 60) < 6){
-			//mut inapoi unde era inainte de mutare
-			translate_naveta(-viteza*cos(directie), 0); 
-			//mut fix pe margine
-			translate_naveta(- (cerc_naveta->transf_points[0]->x - 60 - 6), 0); 
-		}else
-		if ((cerc_naveta->transf_points[0]->x) > chenar_x+4){
+		if ((cerc_x - 60) < 6){
 			//mut inapoi unde era inainte de mutare
 			translate_naveta(-viteza*cos(directie), 0);
 			//mut fix pe margine
-			translate_naveta(chenar_x - cerc_naveta->transf_points[0]->x+4, 0);
-		}else
-		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
-			//mut inapoi unde era inainte de mutare
+			translate_naveta(-(cerc_x - 60 - 6), 0);
+		}
+		else if ((cerc_x) > chenar_x + 4){
+			translate_naveta(-viteza*cos(directie), 0);
+			translate_naveta(chenar_x - cerc_x + 4, 0);
+		}
+		else if ((cerc_y - 30) < 6){
 			translate_naveta(0, -viteza*sin(directie));
-			//mut fix pe margine
-			translate_naveta(0, -(cerc_naveta->transf_points[0]->y -30 - 6));
-		}else
-		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y+3){
-			//mut inapoi unde era inainte de mutare
+			translate_naveta(0, -(cerc_y - 30 - 6));
+		}
+		else if ((cerc_y + 30) > chenar_y + 3){
 			translate_naveta(0, -viteza*sin(directie));
-			//mut fix pe margine
-			translate_naveta(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
+			translate_naveta(0, chenar_y - cerc_y - 30 + 3);
 		}else break;
 	}
 }
-
 
 void move_straight(){
 	DrawingWindow::removeObject2D(poly_naveta);
@@ -129,13 +125,14 @@ void rotate(int param){
 
 	//if param 0 -> rotate_right
 	//else -> rotate_left
-	//float unghi = PI / 12;
+
+
 	float unghi = 0.03;
 	if (param != 0) unghi = -unghi;
 
 	//updatam directia actuala a navei
 	directie += unghi;
-	
+
 	//calcul centru poligon
 	for (int i = 0; i < poly_naveta->points.size(); i++)
 	{
@@ -168,22 +165,17 @@ void DrawingWindow::onIdle()
 {
 	if (left_pressed){
 		rotate(0);
-		//left_pressed = false;
 	}
 	if (up_pressed){
 		move_straight();
-		//up = false;
 	}
 	if (right_pressed){
 		rotate(1);
-		//right_pressed = false;
 	}
-
 
 	//For debug purposes
 	char buffer[50];
 	sprintf(buffer, "Tema1 v1.0 alpha");
-	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
@@ -193,10 +185,9 @@ void DrawingWindow::onIdle()
 //functia care se apeleaza la redimensionarea ferestrei
 void DrawingWindow::onReshape(int width, int height)
 {
-
 	visual->poarta(0,0,width,height); 
-
 }
+//functia care defineste ce se intampla cand se ia degetul de pe buton
 void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_UP:
@@ -217,19 +208,15 @@ void DrawingWindow::onKey(unsigned char key)
 	{
 	case GLUT_KEY_LEFT:
 		left_pressed = true;
-		//rotate(0);
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = true;
-		//rotate(1);
 		break;
 	case GLUT_KEY_UP:
 		up_pressed = true;
-		//move_straight();
 		break;
 	case 32:
 		//drill(param);
-		printf("Am apasat space\n");
 		break;
 	case 27: exit(0);
 	}
