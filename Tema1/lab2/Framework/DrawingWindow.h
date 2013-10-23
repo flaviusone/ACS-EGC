@@ -46,7 +46,7 @@ public:
 	static void keyboardFunction(unsigned char key, int x, int y);
 	static void specialFunction(int key, int x, int y);
 	static void mouseFunction(int button, int state, int x, int y);
-
+	static void buttonUP(int key, int x, int y);
 	//functii folosite in main.cpp
 	static void init();
 	static void onIdle();

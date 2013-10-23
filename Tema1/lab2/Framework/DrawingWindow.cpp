@@ -27,6 +27,7 @@ DrawingWindow::DrawingWindow(int argc, char** argv,int _width, int _height, int 
 	glutKeyboardFunc(keyboardFunction); //functia apelata la apasarea unei taste
 	glutSpecialFunc(specialFunction); //functia apelata la apasarea unei taste speciale
 	glutMouseFunc(mouseFunction); //functia apelata la click de mouse
+	glutSpecialUpFunc(buttonUP);
 
 	glClearColor(0.2,0.2,0.2,1);  //afiseaza fondul ferestrei aplicatiei in alb
 

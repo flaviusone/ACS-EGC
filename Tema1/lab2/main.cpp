@@ -20,7 +20,8 @@ Circle2D *cerc_naveta;
 Polygon2D *poly_naveta;
 Text *score,*modifying_score,*nolives;
 float directie = 0;
-float viteza = 20;	
+float viteza = 1;	
+bool left_pressed = false, right_pressed = false, up_pressed = false;
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -128,8 +129,8 @@ void rotate(int param){
 
 	//if param 0 -> rotate_right
 	//else -> rotate_left
-	float unghi = PI / 12;
-	//float unghi = 0.1;
+	//float unghi = PI / 12;
+	float unghi = 0.03;
 	if (param != 0) unghi = -unghi;
 
 	//updatam directia actuala a navei
@@ -165,7 +166,20 @@ void DrawingWindow::init()
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {
-	//verifica_ecran();
+	if (left_pressed){
+		rotate(0);
+		//left_pressed = false;
+	}
+	if (up_pressed){
+		move_straight();
+		//up = false;
+	}
+	if (right_pressed){
+		rotate(1);
+		//right_pressed = false;
+	}
+
+
 	//For debug purposes
 	char buffer[50];
 	sprintf(buffer, "Tema1 v1.0 alpha");
@@ -183,20 +197,35 @@ void DrawingWindow::onReshape(int width, int height)
 	visual->poarta(0,0,width,height); 
 
 }
-
+void DrawingWindow::buttonUP(int key, int x, int y){
+	switch (key){
+	case GLUT_KEY_UP:
+		up_pressed = false;
+		break;
+	case GLUT_KEY_LEFT:
+		left_pressed = false;
+		break;
+	case GLUT_KEY_RIGHT:
+		right_pressed = false;
+		break;
+	}
+}
 //functia care defineste ce se intampla cand se apasa pe tastatura
 void DrawingWindow::onKey(unsigned char key)
 {
 	switch (key)
 	{
 	case GLUT_KEY_LEFT:
-		rotate(0);
+		left_pressed = true;
+		//rotate(0);
 		break;
 	case GLUT_KEY_RIGHT:
-		rotate(1);
+		right_pressed = true;
+		//rotate(1);
 		break;
 	case GLUT_KEY_UP:
-		move_straight();
+		up_pressed = true;
+		//move_straight();
 		break;
 	case 32:
 		//drill(param);
