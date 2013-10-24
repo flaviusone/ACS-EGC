@@ -47,12 +47,14 @@ public:
 	static void specialFunction(int key, int x, int y);
 	static void mouseFunction(int button, int state, int x, int y);
 	static void buttonUP(int key, int x, int y);
+	static void keyboardbuttonUP(unsigned char key, int x, int y);
 	//functii folosite in main.cpp
 	static void init();
 	static void onIdle();
 	static void onKey(unsigned char key);
 	static void onMouse(int button, int state,int x, int y);
 	static void onReshape(int width,int height);
+	
 
 	
 	//functii pentru adaugarea de obiecte la sistemul de coordonate

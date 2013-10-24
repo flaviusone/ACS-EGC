@@ -17,7 +17,7 @@ int chenar_x, chenar_y;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
 Circle2D *cerc_naveta;
-Polygon2D *poly_naveta;
+Polygon2D *poly_naveta,*burghiu;
 Text *score, *modifying_score, *nolives;
 float directie = 0;
 float viteza = 1;
@@ -41,6 +41,9 @@ void init_naveta_spatiala(){
 	poly_naveta->addPoint(Point2D(centru_x, centru_y - 15));
 	poly_naveta->addPoint(Point2D(centru_x + 20, centru_y - 5));
 	poly_naveta->addPoint(Point2D(centru_x, centru_y - 25));
+
+	//adaug burghiul
+	burghiu = new Polygon2D(Color(255, 0, 0), true);
 
 	DrawingWindow::addObject2D(poly_naveta);
 	DrawingWindow::addObject2D(cerc_naveta);
@@ -92,23 +95,17 @@ void verifica_ecran(){
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->x) > chenar_x + 4){
-			//mut inapoi unde era inainte de mutare
 			translate_naveta(-viteza*cos(directie), 0);
-			//mut fix pe margine
 			translate_naveta(chenar_x - cerc_naveta->transf_points[0]->x + 4, 0);
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
-			//mut inapoi unde era inainte de mutare
 			translate_naveta(0, -viteza*sin(directie));
-			//mut fix pe margine
 			translate_naveta(0, -(cerc_naveta->transf_points[0]->y - 30 - 6));
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y + 3){
-			//mut inapoi unde era inainte de mutare
 			translate_naveta(0, -viteza*sin(directie));
-			//mut fix pe margine
 			translate_naveta(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
 		}
 		else break;
@@ -192,6 +189,13 @@ void DrawingWindow::onReshape(int width, int height)
 	visual->poarta(0, 0, width, height);
 
 }
+void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
+	switch (key){
+	case 110:
+		viteza = 1;
+		break;
+	}
+}
 void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_UP:
@@ -202,7 +206,6 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = false;
-		break;
 	}
 }
 //functia care defineste ce se intampla cand se apasa pe tastatura
@@ -219,7 +222,8 @@ void DrawingWindow::onKey(unsigned char key)
 	case GLUT_KEY_UP:
 		up_pressed = true;
 		break;
-	case 32:
+	case 110:
+		viteza = 3;
 		//drill(param);
 		break;
 	case 27: exit(0);
