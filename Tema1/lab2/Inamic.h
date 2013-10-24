@@ -11,7 +11,7 @@ class Inamic
 {
 public:
 	float directie;
-	float centru;
+	float centrux,centruy;
 	//valorile pentru colision box
 	float bx1, bx2, by1, by2;	
 	int tip;
@@ -25,6 +25,8 @@ public:
 	void addInamic2D();
 	void removeInamic2D();
 	void translate_to(float startX, float startY);
-
+	void translateInamic(float x, float y);
+	void calc_centru();
+	 
 
 };
