@@ -5,6 +5,7 @@
 #include "Framework/Rectangle2D.h"
 #include "Framework/Circle2D.h"
 #include "Framework/Polygon2D.h"
+#include "RectEnemy2D.h"
 #include <iostream>
 #include <windows.h>
 #include "Inamic.h"
@@ -80,6 +81,8 @@ void init_principale(){
 	//adaugam modifying score
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
+
+
 
 }
 
