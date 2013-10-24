@@ -20,7 +20,7 @@ Circle2D *cerc_naveta;
 Polygon2D *poly_naveta,*burghiu;
 Text *score, *modifying_score, *nolives;
 float directie = 0;
-float viteza = 3;
+float viteza = 3, viteza_aux = 0;
 bool left_pressed = false, right_pressed = false, up_pressed = false;
 bool burghiu_on = false;
 
@@ -95,23 +95,23 @@ void verifica_ecran(){
 	while (true){
 		if ((cerc_naveta->transf_points[0]->x - 60) < 6){
 			//mut inapoi unde era inainte de mutare
-			translate_naveta(-viteza*cos(directie), 0);
+			translate_naveta(-viteza_aux*cos(directie), 0);
 			//mut fix pe margine
 			translate_naveta(-(cerc_naveta->transf_points[0]->x - 60 - 6), 0);
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->x) > chenar_x + 4){
-			translate_naveta(-viteza*cos(directie), 0);
+			translate_naveta(-viteza_aux*cos(directie), 0);
 			translate_naveta(chenar_x - cerc_naveta->transf_points[0]->x + 4, 0);
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
-			translate_naveta(0, -viteza*sin(directie));
+			translate_naveta(0, -viteza_aux*sin(directie));
 			translate_naveta(0, -(cerc_naveta->transf_points[0]->y - 30 - 6));
 		}
 		else
 		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y + 3){
-			translate_naveta(0, -viteza*sin(directie));
+			translate_naveta(0, -viteza_aux*sin(directie));
 			translate_naveta(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
 		}
 		else break;
@@ -122,7 +122,10 @@ void move_straight(){
 	DrawingWindow::removeObject2D(poly_naveta);
 	DrawingWindow::removeObject2D(cerc_naveta);
 
-	translate_naveta(viteza*cos(directie), viteza*sin(directie));
+	if (viteza_aux<viteza)
+		viteza_aux += 0.05;
+
+	translate_naveta(viteza_aux*cos(directie), viteza_aux*sin(directie));
 
 	verifica_ecran();
 
@@ -184,7 +187,7 @@ void DrawingWindow::onIdle()
 
 	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "Tema1 v1.0 alpha");
+	sprintf(buffer, "Tema1 v1.0 alpha %f ",viteza_aux);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
@@ -203,6 +206,7 @@ void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
 	switch (key){
 	case 110:
 		viteza = 3;
+		viteza_aux = viteza;
 		break;
 	}
 }
@@ -210,6 +214,7 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_UP:
 		up_pressed = false;
+		viteza_aux = 0;
 		break;
 	case GLUT_KEY_LEFT:
 		left_pressed = false;
@@ -230,11 +235,12 @@ void DrawingWindow::onKey(unsigned char key)
 		right_pressed = true;
 		break;
 	case GLUT_KEY_UP:
+		if (!up_pressed)
+			viteza_aux = 0;		//plec de pe loc cu viteza 0
 		up_pressed = true;
 		break;
-	case 110:
+	case 110: //cand apas N dau boost la viteza
 		viteza = 5;
-		//drill(param);
 		break;
 	case 32:
 		if (burghiu_on){
