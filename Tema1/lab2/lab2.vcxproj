@@ -69,6 +69,7 @@
     <ClCompile Include="Framework\DrawingWindow.cpp" />
     <ClCompile Include="Framework\Transform2D.cpp" />
     <ClCompile Include="Framework\Visual2D.cpp" />
+    <ClCompile Include="Inamic.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +85,7 @@
     <ClInclude Include="Framework\Text.h" />
     <ClInclude Include="Framework\Transform2D.h" />
     <ClInclude Include="Framework\Visual2D.h" />
+    <ClInclude Include="Inamic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

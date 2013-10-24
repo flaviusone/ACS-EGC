@@ -7,7 +7,7 @@
 #include "Framework/Polygon2D.h"
 #include <iostream>
 #include <windows.h>
-
+#include "Inamic.h"
 
 #define PI 3.14159265358979323846
 
@@ -23,7 +23,7 @@ float directie = 0;
 float viteza = 3, viteza_aux = 0;
 bool left_pressed = false, right_pressed = false, up_pressed = false;
 bool burghiu_on = false;
-
+//vector<Inamic*> inamici;
 //Constructie naveta
 void init_naveta_spatiala(){
 	float centru_x = DrawingWindow::width / 2;
@@ -118,12 +118,12 @@ void verifica_ecran(){
 	}
 }
 
-void move_straight(){
+void move_straight(float viteza_aux){
 	DrawingWindow::removeObject2D(poly_naveta);
 	DrawingWindow::removeObject2D(cerc_naveta);
 
-	if (viteza_aux<viteza)
-		viteza_aux += 0.05;
+	//if (viteza_aux<viteza)
+	//	viteza_aux += 0.05;
 
 	translate_naveta(viteza_aux*cos(directie), viteza_aux*sin(directie));
 
@@ -181,7 +181,22 @@ void DrawingWindow::init()
 void DrawingWindow::onIdle()
 {
 	if (left_pressed)	rotate(0);
-	if (up_pressed)		move_straight();
+
+	//accelerare
+	if (up_pressed)
+	{
+		if (viteza_aux < viteza)
+			viteza_aux += 0.05;
+		move_straight(viteza_aux);
+	}
+
+	//decelerare
+	if (!up_pressed){
+		if (viteza_aux>0){
+			move_straight(viteza_aux);
+			viteza_aux -= 0.05;
+		}else	viteza_aux = 0;
+	}
 	if (right_pressed)	rotate(1);
 
 
@@ -214,7 +229,6 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
 	case GLUT_KEY_UP:
 		up_pressed = false;
-		viteza_aux = 0;
 		break;
 	case GLUT_KEY_LEFT:
 		left_pressed = false;
@@ -237,6 +251,7 @@ void DrawingWindow::onKey(unsigned char key)
 	case GLUT_KEY_UP:
 		if (!up_pressed)
 			viteza_aux = 0;		//plec de pe loc cu viteza 0
+
 		up_pressed = true;
 		break;
 	case 110: //cand apas N dau boost la viteza

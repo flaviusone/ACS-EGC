@@ -33,6 +33,9 @@
     <ClCompile Include="Framework\Visual2D.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Inamic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Circle2D.h">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Framework\Text.h">
       <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Inamic.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
