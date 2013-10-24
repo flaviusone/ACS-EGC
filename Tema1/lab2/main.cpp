@@ -20,8 +20,9 @@ Circle2D *cerc_naveta;
 Polygon2D *poly_naveta,*burghiu;
 Text *score, *modifying_score, *nolives;
 float directie = 0;
-float viteza = 1;
+float viteza = 3;
 bool left_pressed = false, right_pressed = false, up_pressed = false;
+bool burghiu_on = false;
 
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -44,7 +45,11 @@ void init_naveta_spatiala(){
 
 	//adaug burghiul
 	burghiu = new Polygon2D(Color(255, 0, 0), true);
+	burghiu->addPoint(Point2D(centru_x + 35, centru_y + 20));
+	burghiu->addPoint(Point2D(centru_x + 90, centru_y));
+	burghiu->addPoint(Point2D(centru_x + 35, centru_y - 20));
 
+	
 	DrawingWindow::addObject2D(poly_naveta);
 	DrawingWindow::addObject2D(cerc_naveta);
 
@@ -83,6 +88,7 @@ void translate_object_o(float x, float y, Object2D *ob){
 void translate_naveta(float x, float y){
 	translate_object_o(x, y, poly_naveta);
 	translate_object_o(x, y, cerc_naveta);
+	translate_object_o(x, y, burghiu);
 }
 
 void verifica_ecran(){
@@ -112,7 +118,6 @@ void verifica_ecran(){
 	}
 }
 
-
 void move_straight(){
 	DrawingWindow::removeObject2D(poly_naveta);
 	DrawingWindow::removeObject2D(cerc_naveta);
@@ -125,13 +130,16 @@ void move_straight(){
 	DrawingWindow::addObject2D(cerc_naveta);
 }
 
+//void adauga_inamic()
+
+
 void rotate(int param){
 	float centru_x = 0, centru_y = 0;
 
 	//if param 0 -> rotate_right
 	//else -> rotate_left
 
-	float unghi = 0.03;
+	float unghi = 0.05;
 	if (param != 0) unghi = -unghi;
 
 	//updatam directia actuala a navei
@@ -152,6 +160,8 @@ void rotate(int param){
 	Transform2D::rotateMatrix(unghi);
 	Transform2D::translateMatrix(centru_x, centru_y);
 	Transform2D::applyTransform_o(poly_naveta);
+	Transform2D::applyTransform_o(burghiu);
+	
 }
 
 void DrawingWindow::init()
@@ -192,7 +202,7 @@ void DrawingWindow::onReshape(int width, int height)
 void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
 	switch (key){
 	case 110:
-		viteza = 1;
+		viteza = 3;
 		break;
 	}
 }
@@ -223,8 +233,18 @@ void DrawingWindow::onKey(unsigned char key)
 		up_pressed = true;
 		break;
 	case 110:
-		viteza = 3;
+		viteza = 5;
 		//drill(param);
+		break;
+	case 32:
+		if (burghiu_on){
+			DrawingWindow::removeObject2D(burghiu);
+			burghiu_on = false;
+		}
+		else {
+			DrawingWindow::addObject2D(burghiu);
+			burghiu_on = true;
+		}
 		break;
 	case 27: exit(0);
 	}
