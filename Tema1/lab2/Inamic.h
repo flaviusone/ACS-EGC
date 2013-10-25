@@ -1,5 +1,8 @@
 #pragma once
 #include "Framework\DrawingWindow.h"
+#include "Framework\Rectangle2d.h"
+#include "Framework\Polygon2D.h"
+#include "Framework\Circle2D.h"
 #include "Framework\Object2D.h"
 
 
@@ -7,30 +10,27 @@ class Inamic
 {
 public:
 	float directie;
-	float centrux,centruy;
+	float centrux=0,centruy=0;
 	//valorile pentru colision box
 	float bxX, bxY;
 	int tip;
 	//partile din care este alcatuit inamicul
 	vector <Object2D*> parts;
 public:
-	Inamic(int tip, float dir, float startX, float startY);
+	Inamic(){}
+	Inamic(float dir, float startX, float startY);
 	~Inamic(){}
 
 	// Adauga elementele inamicului la drawingwindow
 	void addInamic2D(){
 		for (int i = 0; i < parts.size(); i++)
-		{
 			DrawingWindow::addObject2D(parts[i]);
-		}
 	}
 
 	// Scoate elmentele inamicului din drawingwindow
 	void removeInamic2D(){
 		for (int i = 0; i < parts.size(); i++)
-		{
 			DrawingWindow::removeObject2D(parts[i]);
-		}
 	}
 
 	//TODO
@@ -44,6 +44,7 @@ public:
 		for (int i = 0; i < parts.size(); i++){
 			Transform2D::applyTransform_o(parts[i]);
 		}
+
 	}
 
 	// Translateaza inamicul cu constanta primita
