@@ -5,7 +5,7 @@
 #include "Framework/Rectangle2D.h"
 #include "Framework/Circle2D.h"
 #include "Framework/Polygon2D.h"
-#include "RectEnemy2D.h"
+#include "Inamic1.h"
 #include <iostream>
 #include <windows.h>
 #include "Inamic.h"
@@ -58,6 +58,7 @@ void init_naveta_spatiala(){
 	DrawingWindow::addObject2D(poly_naveta);
 	DrawingWindow::addObject2D(cerc_naveta);
 
+
 	return;
 }
 
@@ -81,8 +82,6 @@ void init_principale(){
 	//adaugam modifying score
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
-
-
 
 }
 
@@ -189,30 +188,30 @@ void DrawingWindow::onIdle()
 	//spawnez inamic la fiecare 1 sec
 	t = clock();
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
-		Inamic *temp = new Inamic(0, directie, rand() % 1200 , rand() % 700);
+		Inamic *temp = new Inamic1(directie, rand() % 1200 , rand() % 700);
 		temp->addInamic2D();
 		inamici.push_back(temp);
 		old_t = t;
 	}
 
-	for (int i = 0; i < inamici.size(); i++){
-		float x, y;
-		printf("Inamic x %f \n", inamici.at(i)->centrux);
-		x = cerc_naveta->transf_points[0]->x - inamici.at(i)->centrux;
-		printf("Coord X punct %d  = %f \n", i, x);
-		y = cerc_naveta->transf_points[0]->y - inamici.at(i)->centruy;
-		printf("Coord Y punct %d  = %f \n", i, y);
-		unghiinamic = atan2(y, x);
-		inamici.at(i)->translateInamic(-viteza*cos(2*PI-unghiinamic), -viteza*sin(2*PI-unghiinamic));
-		inamici.at(i)->directie = unghiinamic;
+	//for (int i = 0; i < inamici.size(); i++){
+	//	float x, y;
+	//	printf("Inamic x %f \n", inamici.at(i)->centrux);
+	//	x = cerc_naveta->transf_points[0]->x - inamici.at(i)->centrux;
+	//	printf("Coord X punct %d  = %f \n", i, x);
+	//	y = cerc_naveta->transf_points[0]->y - inamici.at(i)->centruy;
+	//	printf("Coord Y punct %d  = %f \n", i, y);
+	//	unghiinamic = atan2(y, x);
+	//	inamici.at(i)->translate_with(-viteza*cos(2*PI-unghiinamic), -viteza*sin(2*PI-unghiinamic));
+	//	inamici.at(i)->directie = unghiinamic;
 
-		//verifica in bounds
-		if (inamici.at(i)->centrux < 5 || inamici.at(i)->centrux < chenar_x || inamici.at(i)->centruy < 5 || inamici.at(i)->centruy < chenar_y){
-			inamici.at(i)->removeInamic2D();
-			inamici.erase(inamici.begin() + i);
-			i--;
-		}
-	}
+	//	//verifica in bounds
+	//	if (inamici.at(i)->centrux < 5 || inamici.at(i)->centrux < chenar_x || inamici.at(i)->centruy < 5 || inamici.at(i)->centruy < chenar_y){
+	//		inamici.at(i)->removeInamic2D();
+	//		inamici.erase(inamici.begin() + i);
+	//		i--;
+	//	}
+	//}
 
 	if (left_pressed)	rotate(0);
 
