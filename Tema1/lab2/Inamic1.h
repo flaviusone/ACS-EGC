@@ -13,10 +13,8 @@ public:
 		rectangle2 = new Rectangle2D(Point2D(10, 10), 20, 20, Color(0, 1, 0), false);
 		parts.push_back(rectangle1);
 		parts.push_back(rectangle2);
-		translate_to(startX, startY);
-		printf("Vechiul centru este %f %f \n", centrux, centruy);
 		calc_centru();
-		printf("Noul centru este %f %f \n", centrux, centruy);
+		translate_to(startX, startY);
 		directie = dir;
 		tip = 1;
 	}

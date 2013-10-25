@@ -16,8 +16,10 @@ public:
 	float viteza = 3, viteza_aux = 0;
 	bool burghiu_on = false;
 	int chenar_x, chenar_y;
+	float centru_x, centru_y;
 public:
 
+	//Main constructor
 	Naveta(float centru_x, float centru_y,int chenarx,int chenary){
 		//adaug cercul
 		cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);
@@ -44,12 +46,7 @@ public:
 		burghiu->addPoint(Point2D(centru_x + 35, centru_y - 20));
 	}
 	
-	void translate_object_o(float x, float y, Object2D *ob){
-		Transform2D::loadIdentityMatrix();
-		Transform2D::translateMatrix(x, y);
-		Transform2D::applyTransform_o(ob);
-	}
-
+	//translateaza naveta cu deplasament x y
 	void translate(float x, float y){
 		Transform2D::loadIdentityMatrix();
 		Transform2D::translateMatrix(x, y);
@@ -58,6 +55,8 @@ public:
 		Transform2D::applyTransform_o(burghiu);
 	}
 
+
+	//roteste nava
 	void rotate(int param){
 		float centru_x = 0, centru_y = 0;
 
@@ -89,6 +88,7 @@ public:
 
 	}
 
+	//muta naveta inainte
 	void move_straight(float viteza_aux){
 		DrawingWindow::removeObject2D(poly_naveta);
 		DrawingWindow::removeObject2D(cerc_naveta);
@@ -104,7 +104,7 @@ public:
 		DrawingWindow::addObject2D(cerc_naveta);
 	}
 
-
+	//verifica daca am iesit din ecran
 	void verifica_ecran(){
 		while (true){
 			if ((cerc_naveta->transf_points[0]->x - 60) < 6){
@@ -131,6 +131,8 @@ public:
 			else break;
 		}
 	}
+
+	//adauga nava la drawingwindow
 	void addNaveta2D(){
 		DrawingWindow::addObject2D(poly_naveta);
 		DrawingWindow::addObject2D(cerc_naveta);
@@ -141,4 +143,15 @@ public:
 	void deactivateBurghiu(){
 		DrawingWindow::removeObject2D(burghiu);
 	}
+	
+	void calcCentru(){
+		for (int i = 0; i < poly_naveta->transf_points.size(); i++){
+			centru_x += poly_naveta->transf_points[i]->x;
+			centru_y += poly_naveta->transf_points[i]->y;
+		}
+		centru_x = centru_x / poly_naveta->transf_points.size();
+		centru_y = centru_y / poly_naveta->transf_points.size();
+	}
+
 };
+

@@ -40,9 +40,9 @@ public:
 	// Translateaza inamicul la coord specificate
 	void translate_to(float X, float Y){
 		Transform2D::loadIdentityMatrix();
-		Transform2D::translateMatrix(X - centrux, Y - centruy);
+		Transform2D::translateMatrix(X  , Y );
 		for (int i = 0; i < parts.size(); i++){
-			Transform2D::applyTransform_o(parts[i]);
+			Transform2D::applyTransform(parts[i]);
 		}
 
 	}

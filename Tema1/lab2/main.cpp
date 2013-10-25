@@ -20,13 +20,8 @@ clock_t t,old_t=0;
 int chenar_x, chenar_y;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
-Circle2D *cerc_naveta;
-Polygon2D *poly_naveta,*burghiu;
 Text *score, *modifying_score, *nolives;
-float directie = 0;
-float viteza = 3, viteza_aux = 0;
 bool left_pressed = false, right_pressed = false, up_pressed = false;
-bool burghiu_on = false;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
 Naveta *naveta;
@@ -75,26 +70,31 @@ float unghiinamic;
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
+	naveta->calcCentru();
 	//spawnez inamic la fiecare 1 sec
 	t = clock();
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
-		Inamic *temp = new Inamic1(directie, rand() % 1200 , rand() % 700);
+		Inamic *temp = new Inamic1(naveta->directie, rand() % 1200 , rand() % 700);
 		temp->addInamic2D();
 		inamici.push_back(temp);
 		old_t = t;
 	}
 
-	//for (int i = 0; i < inamici.size(); i++){
-	//	float x, y;
-	//	printf("Inamic x %f \n", inamici.at(i)->centrux);
-	//	x = cerc_naveta->transf_points[0]->x - inamici.at(i)->centrux;
-	//	printf("Coord X punct %d  = %f \n", i, x);
-	//	y = cerc_naveta->transf_points[0]->y - inamici.at(i)->centruy;
-	//	printf("Coord Y punct %d  = %f \n", i, y);
-	//	unghiinamic = atan2(y, x);
-	//	inamici.at(i)->translate_with(-viteza*cos(2*PI-unghiinamic), -viteza*sin(2*PI-unghiinamic));
-	//	inamici.at(i)->directie = unghiinamic;
-
+	for (int i = 0; i < inamici.size(); i++){
+		float dx, dy;
+		//printf("Inamic x %f \n", inamici.at(i)->centrux);
+		inamici[i]->calc_centru();
+		dx = - naveta->centru_x + inamici[i]->centrux;
+		//printf("Coord naveta X = %f Y = %f \n", naveta->cerc_naveta->transf_points[0]->x, naveta->cerc_naveta->transf_points[0]->y);
+		//printf("Coord inamic X = %f Y= %f \n\n", inamici[i]->centrux, inamici[i]->centruy);
+		dy = - naveta->centru_y + inamici[i]->centruy;
+		//printf("Coord Y punct %d  = %f \n", i, y);
+		
+		inamici[i]->translate_with(-dx / (fabs(dx) + fabs(dy)), -dy / (fabs(dx) + fabs(dy)));
+		// unghiinamic = atan2(y, x);
+		//inamici.at(i)->translate_with(viteza*cos( unghiinamic), viteza*sin(unghiinamic));
+		//inamici.at(i)->directie = unghiinamic;
+	}
 	//	//verifica in bounds
 	//	if (inamici.at(i)->centrux < 5 || inamici.at(i)->centrux < chenar_x || inamici.at(i)->centruy < 5 || inamici.at(i)->centruy < chenar_y){
 	//		inamici.at(i)->removeInamic2D();
@@ -126,7 +126,7 @@ void DrawingWindow::onIdle()
 
 	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "Tema1 v1.0 alpha %f  size %d", unghiinamic, inamici.size());
+	sprintf(buffer, "Coord X = %f Y = %f", naveta->centru_x, naveta->centru_y);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
@@ -159,6 +159,7 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = false;
+		break;
 	}
 }
 //functia care defineste ce se intampla cand se apasa pe tastatura
