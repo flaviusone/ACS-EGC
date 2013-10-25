@@ -11,6 +11,7 @@
 #include "Inamic.h"
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <math.h> 
+#include "Naveta.h"
 
 #define PI 3.14159265358979323846
 
@@ -28,37 +29,13 @@ bool left_pressed = false, right_pressed = false, up_pressed = false;
 bool burghiu_on = false;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
+Naveta *naveta;
 //Constructie naveta
 void init_naveta_spatiala(){
 	float centru_x = DrawingWindow::width / 2;
 	float centru_y = DrawingWindow::height / 2;
-
-	//adaug cercul
-	cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);
-
-	//adaug naveta
-	poly_naveta = new Polygon2D(Color(255, 0, 0), false);
-	poly_naveta->addPoint(Point2D(centru_x - 20, centru_y));
-	poly_naveta->addPoint(Point2D(centru_x, centru_y + 25));
-	poly_naveta->addPoint(Point2D(centru_x + 20, centru_y + 5));
-	poly_naveta->addPoint(Point2D(centru_x, centru_y + 15));
-	poly_naveta->addPoint(Point2D(centru_x - 10, centru_y));
-	poly_naveta->addPoint(Point2D(centru_x, centru_y - 15));
-	poly_naveta->addPoint(Point2D(centru_x + 20, centru_y - 5));
-	poly_naveta->addPoint(Point2D(centru_x, centru_y - 25));
-
-	//adaug burghiul
-	burghiu = new Polygon2D(Color(255, 0, 0), true);
-	burghiu->addPoint(Point2D(centru_x + 35, centru_y + 20));
-	burghiu->addPoint(Point2D(centru_x + 90, centru_y));
-	burghiu->addPoint(Point2D(centru_x + 35, centru_y - 20));
-
-	obiecte2d.push_back(cerc_naveta);
-
-	DrawingWindow::addObject2D(poly_naveta);
-	DrawingWindow::addObject2D(cerc_naveta);
-
-
+	naveta = new Naveta(centru_x, centru_y,chenar_x,chenar_y);
+	naveta->addNaveta2D();
 	return;
 }
 
@@ -85,94 +62,6 @@ void init_principale(){
 
 }
 
-void translate_object_o(float x, float y, Object2D *ob){
-	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(x, y);
-	Transform2D::applyTransform_o(ob);
-}
-
-void translate_naveta(float x, float y){
-	translate_object_o(x, y, poly_naveta);
-	translate_object_o(x, y, cerc_naveta);
-	translate_object_o(x, y, burghiu);
-}
-
-void verifica_ecran(){
-	while (true){
-		if ((cerc_naveta->transf_points[0]->x - 60) < 6){
-			//mut inapoi unde era inainte de mutare
-			translate_naveta(-viteza_aux*cos(directie), 0);
-			//mut fix pe margine
-			translate_naveta(-(cerc_naveta->transf_points[0]->x - 60 - 6), 0);
-		}
-		else
-		if ((cerc_naveta->transf_points[0]->x) > chenar_x + 4){
-			translate_naveta(-viteza_aux*cos(directie), 0);
-			translate_naveta(chenar_x - cerc_naveta->transf_points[0]->x + 4, 0);
-		}
-		else
-		if ((cerc_naveta->transf_points[0]->y - 30) < 6){
-			translate_naveta(0, -viteza_aux*sin(directie));
-			translate_naveta(0, -(cerc_naveta->transf_points[0]->y - 30 - 6));
-		}
-		else
-		if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y + 3){
-			translate_naveta(0, -viteza_aux*sin(directie));
-			translate_naveta(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
-		}
-		else break;
-	}
-}
-
-void move_straight(float viteza_aux){
-	DrawingWindow::removeObject2D(poly_naveta);
-	DrawingWindow::removeObject2D(cerc_naveta);
-
-	//if (viteza_aux<viteza)
-	//	viteza_aux += 0.05;
-
-	translate_naveta(viteza_aux*cos(directie), viteza_aux*sin(directie));
-
-	verifica_ecran();
-
-	DrawingWindow::addObject2D(poly_naveta);
-	DrawingWindow::addObject2D(cerc_naveta);
-}
-
-//void adauga_inamic()
-
-
-void rotate(int param){
-	float centru_x = 0, centru_y = 0;
-
-	//if param 0 -> rotate_right
-	//else -> rotate_left
-
-	float unghi = 0.05;
-	if (param != 0) unghi = -unghi;
-
-	//updatam directia actuala a navei
-	directie += unghi;
-
-	//calcul centru poligon
-	for (int i = 0; i < poly_naveta->points.size(); i++)
-	{
-		centru_x = centru_x + poly_naveta->transf_points[i]->x;
-		centru_y = centru_y + poly_naveta->transf_points[i]->y;
-	}
-	centru_x = centru_x / 8;
-	centru_y = centru_y / 8;
-
-	//rotirea navei
-	Transform2D::loadIdentityMatrix();
-	Transform2D::translateMatrix(-centru_x, -centru_y);
-	Transform2D::rotateMatrix(unghi);
-	Transform2D::translateMatrix(centru_x, centru_y);
-	Transform2D::applyTransform_o(poly_naveta);
-	Transform2D::applyTransform_o(burghiu);
-	
-}
-
 void DrawingWindow::init()
 {
 	//init chenar, scor, visual2d
@@ -181,6 +70,7 @@ void DrawingWindow::init()
 	//creeam naveta spatiala si o adaugam la centru
 	init_naveta_spatiala();
 }
+
 float unghiinamic;
 //functia care permite animatia
 void DrawingWindow::onIdle()
@@ -213,24 +103,25 @@ void DrawingWindow::onIdle()
 	//	}
 	//}
 
-	if (left_pressed)	rotate(0);
+	if (left_pressed)	naveta->rotate(0);
 
 	//accelerare
 	if (up_pressed)
 	{
-		if (viteza_aux < viteza)
-			viteza_aux += 0.05;
-		move_straight(viteza_aux);
+		if (naveta->viteza_aux < naveta->viteza)
+			naveta->viteza_aux += 0.05;
+		naveta->move_straight(naveta->viteza_aux);
 	}
 
 	//decelerare
 	if (!up_pressed){
-		if (viteza_aux>0){
-			move_straight(viteza_aux);
-			viteza_aux -= 0.05;
-		}else	viteza_aux = 0;
+		if (naveta->viteza_aux>0){
+			naveta->move_straight(naveta->viteza_aux);
+			naveta->viteza_aux -= 0.05;
+		}
+		else	naveta->viteza_aux = 0;
 	}
-	if (right_pressed)	rotate(1);
+	if (right_pressed)	naveta->rotate(1);
 
 
 	//For debug purposes
@@ -253,8 +144,8 @@ void DrawingWindow::onReshape(int width, int height)
 void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
 	switch (key){
 	case 110:
-		viteza = 3;
-		viteza_aux = viteza;
+		naveta->viteza = 3;
+		naveta->viteza_aux = naveta->viteza;
 		break;
 	}
 }
@@ -283,21 +174,21 @@ void DrawingWindow::onKey(unsigned char key)
 		break;
 	case GLUT_KEY_UP:
 		if (!up_pressed)
-			viteza_aux = 0;		//plec de pe loc cu viteza 0
+			naveta->viteza_aux = 0;		//plec de pe loc cu viteza 0
 
 		up_pressed = true;
 		break;
 	case 110: //cand apas N dau boost la viteza
-		viteza = 5;
+		naveta->viteza = 5;
 		break;
 	case 32:
-		if (burghiu_on){
-			DrawingWindow::removeObject2D(burghiu);
-			burghiu_on = false;
+		if (naveta->burghiu_on){
+			naveta->deactivateBurghiu();
+			naveta->burghiu_on = false;
 		}
 		else {
-			DrawingWindow::addObject2D(burghiu);
-			burghiu_on = true;
+			naveta->activateBurghiu();
+			naveta->burghiu_on = true;
 		}
 		break;
 	case 27: exit(0);
