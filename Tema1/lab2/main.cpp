@@ -70,17 +70,22 @@ float unghiinamic;
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
-	naveta->calcCentru();
+	
+
 	//spawnez inamic la fiecare 1 sec
 	t = clock();
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
 		Inamic *temp = new Inamic1(naveta->directie, rand() % 1200 , rand() % 700);
+		Inamic *temp2 = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
 		temp->addInamic2D();
 		inamici.push_back(temp);
+		temp2->addInamic2D();
+		inamici.push_back(temp2);
 		old_t = t;
 	}
 
 	for (int i = 0; i < inamici.size(); i++){
+		naveta->calcCentru();
 		float dx, dy;
 		//printf("Inamic x %f \n", inamici.at(i)->centrux);
 		inamici[i]->calc_centru();
@@ -91,9 +96,6 @@ void DrawingWindow::onIdle()
 		//printf("Coord Y punct %d  = %f \n", i, y);
 		
 		inamici[i]->translate_with(-dx / (fabs(dx) + fabs(dy)), -dy / (fabs(dx) + fabs(dy)));
-		// unghiinamic = atan2(y, x);
-		//inamici.at(i)->translate_with(viteza*cos( unghiinamic), viteza*sin(unghiinamic));
-		//inamici.at(i)->directie = unghiinamic;
 	}
 	//	//verifica in bounds
 	//	if (inamici.at(i)->centrux < 5 || inamici.at(i)->centrux < chenar_x || inamici.at(i)->centruy < 5 || inamici.at(i)->centruy < chenar_y){
@@ -126,7 +128,7 @@ void DrawingWindow::onIdle()
 
 	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "Coord X = %f Y = %f", naveta->centru_x, naveta->centru_y);
+	sprintf(buffer, "Coord X = %.3f Y = %.3f ", naveta->centru_x, naveta->centru_y);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
@@ -205,6 +207,7 @@ void DrawingWindow::onMouse(int button, int state, int x, int y)
 
 int main(int argc, char** argv)
 {
+	srand(time(0));
 	//creare fereastra
 	DrawingWindow dw(argc, argv, 1280, 720, 40, 0, "Tema1");
 	//se apeleaza functia init() - in care s-au adaugat obiecte

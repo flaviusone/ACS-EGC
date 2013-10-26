@@ -17,6 +17,7 @@ public:
 		translate_to(startX, startY);
 		directie = dir;
 		tip = 1;
+		
 	}
 	~Inamic1() {}
 

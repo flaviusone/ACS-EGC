@@ -12,17 +12,22 @@ class Naveta{
 public:
 	Circle2D *cerc_naveta;
 	Polygon2D *poly_naveta, *burghiu;
+
 	float directie = 0;
 	float viteza = 3, viteza_aux = 0;
 	bool burghiu_on = false;
 	int chenar_x, chenar_y;
-	float centru_x, centru_y;
+	float centru_x=0, centru_y=0;
 public:
 
 	//Main constructor
-	Naveta(float centru_x, float centru_y,int chenarx,int chenary){
+	Naveta(float centrux , float centruy,int chenarx,int chenary){
 		//adaug cercul
-		cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);
+
+		centru_x = centrux;
+		centru_y = centruy;
+
+		cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);				
 
 		//updatez detalii chenar
 		chenar_x = chenarx;
@@ -58,7 +63,7 @@ public:
 
 	//roteste nava
 	void rotate(int param){
-		float centru_x = 0, centru_y = 0;
+		centru_x = 0, centru_y = 0;
 
 		//if param 0 -> rotate_right
 		//else -> rotate_left
@@ -90,18 +95,11 @@ public:
 
 	//muta naveta inainte
 	void move_straight(float viteza_aux){
-		DrawingWindow::removeObject2D(poly_naveta);
-		DrawingWindow::removeObject2D(cerc_naveta);
-
-		//if (viteza_aux<viteza)
-		//	viteza_aux += 0.05;
+		removeNaveta2D();
 
 		translate(viteza_aux*cos(directie), viteza_aux*sin(directie));
-
 		verifica_ecran();
-
-		DrawingWindow::addObject2D(poly_naveta);
-		DrawingWindow::addObject2D(cerc_naveta);
+		addNaveta2D();
 	}
 
 	//verifica daca am iesit din ecran
@@ -137,6 +135,12 @@ public:
 		DrawingWindow::addObject2D(poly_naveta);
 		DrawingWindow::addObject2D(cerc_naveta);
 	}
+
+	//adauga nava la drawingwindow
+	void removeNaveta2D(){
+		DrawingWindow::removeObject2D(poly_naveta);
+		DrawingWindow::removeObject2D(cerc_naveta);
+	}
 	void activateBurghiu(){
 		DrawingWindow::addObject2D(burghiu);
 	}
@@ -149,8 +153,8 @@ public:
 			centru_x += poly_naveta->transf_points[i]->x;
 			centru_y += poly_naveta->transf_points[i]->y;
 		}
-		centru_x = centru_x / poly_naveta->transf_points.size();
-		centru_y = centru_y / poly_naveta->transf_points.size();
+		centru_x = centru_x / 8;
+		centru_y = centru_y / 8;
 	}
 
 };

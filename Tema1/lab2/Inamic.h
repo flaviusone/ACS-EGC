@@ -58,16 +58,16 @@ public:
 	
 	// functie generica care calculeaza centrul obiectului folosind media aritmetica
 	void calc_centru(){
+		int counter=0;
 		for (int i = 0; i < parts.size(); i++){
 			for (int j = 0; j < parts[i]->transf_points.size(); j++){
 				centrux += parts[i]->transf_points[j]->x;
 				centruy += parts[i]->transf_points[j]->y;
+				counter++;
 			}
-			centrux = centrux / parts[i]->transf_points.size();
-			centruy = centruy / parts[i]->transf_points.size();
 		}
-		centrux = centrux / parts.size();
-		centruy = centruy / parts.size();
+		centrux /= counter;
+		centruy /= counter;
 	}
 	
 	 
