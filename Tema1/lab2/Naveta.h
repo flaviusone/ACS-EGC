@@ -10,7 +10,7 @@
 class Naveta{
 
 public:
-	Circle2D *cerc_naveta,*cerc_collision;
+	Circle2D *cerc_naveta;
 	Polygon2D *poly_naveta, *burghiu;
 
 	// valorile pentur collision center
@@ -50,16 +50,22 @@ public:
 		poly_naveta->addPoint(Point2D(centru_x + 20, centru_y - 5));
 		poly_naveta->addPoint(Point2D(centru_x, centru_y - 25));
 
+		//temp values
+		float y = 25, x = 80;
+
 		//adaug burghiul
 		burghiu = new Polygon2D(Color(255, 0, 0), true);
-		burghiu->addPoint(Point2D(centru_x + 25, centru_y + 25));
-		burghiu->addPoint(Point2D(centru_x + 100, centru_y));
-		burghiu->addPoint(Point2D(centru_x + 25, centru_y - 25));
+		burghiu->addPoint(Point2D(centru_x + 30, centru_y + y));
+		burghiu->addPoint(Point2D(centru_x + 30 + x / 4, centru_y + 3 * y / 4));
+		burghiu->addPoint(Point2D(centru_x + 30 + x / 2, centru_y + y / 2));
+		burghiu->addPoint(Point2D(centru_x + 30 + 3 * x / 4 , centru_y + y / 4));
+		burghiu->addPoint(Point2D(centru_x + 110, centru_y));
+		burghiu->addPoint(Point2D(centru_x + 30 + 3 * x / 4 , centru_y - y / 4));
+		burghiu->addPoint(Point2D(centru_x + 30 + x / 2, centru_y - y / 2));
+		burghiu->addPoint(Point2D(centru_x + 30 + x / 4, centru_y - 3 * y / 4));
+		burghiu->addPoint(Point2D(centru_x + 30, centru_y - 25));
 
 		calcCentru();
-
-		//creeaza cerc collision
-		cerc_collision= new Circle2D(Point2D(centru_burghiu_x, centru_burghiu_y), 25, Color(255, 0, 0), false);
 
 
 	}
@@ -71,7 +77,6 @@ public:
 		Transform2D::applyTransform_o(cerc_naveta);
 		Transform2D::applyTransform_o(poly_naveta);
 		Transform2D::applyTransform_o(burghiu);
-		Transform2D::applyTransform_o(cerc_collision);
 	}
 
 
@@ -104,7 +109,6 @@ public:
 		Transform2D::translateMatrix(centru_x, centru_y);
 		Transform2D::applyTransform_o(poly_naveta);
 		Transform2D::applyTransform_o(burghiu);
-		Transform2D::applyTransform_o(cerc_collision);
 
 	}
 
@@ -159,14 +163,10 @@ public:
 	void activateBurghiu(){
 		DrawingWindow::addObject2D(burghiu);
 
-		//debug purposes
-		DrawingWindow::addObject2D(cerc_collision);
 	}
 	void deactivateBurghiu(){
 		DrawingWindow::removeObject2D(burghiu);
 
-		//debug
-		DrawingWindow::removeObject2D(cerc_collision);
 	}
 	
 	void calcCentru(){
