@@ -17,6 +17,10 @@ public:
 		translate_to(startX, startY);
 		directie = dir;
 		tip = 1;
+
+		//latime si lungime collision box	
+		bxX = 30;
+		bxY = 30;
 		
 	}
 	~Inamic1() {}

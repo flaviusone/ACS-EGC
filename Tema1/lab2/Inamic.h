@@ -21,6 +21,25 @@ public:
 	Inamic(float dir, float startX, float startY);
 	~Inamic(){}
 
+	void setCollisionBox(){
+		float minX = 10000,minY = 10000;
+		float maxX = -10000, maxY = -10000;
+		for (int i = 0; i < parts.size(); i++){
+			for (int j = 0; j < parts[i]->transf_points.size(); j++){
+				if (parts[i]->transf_points[j]->x < minX)
+					minX = parts[i]->transf_points[j]->x;
+				if (parts[i]->transf_points[j]->x > maxX)
+					minX = parts[i]->transf_points[j]->x;
+				if (parts[i]->transf_points[j]->y < minY)
+					minX = parts[i]->transf_points[j]->y;
+				if (parts[i]->transf_points[j]->y < maxX)
+					minX = parts[i]->transf_points[j]->y;
+			}
+		}
+		bxX = maxX - minX;
+		bxY = maxY - minY;
+	}
+
 	// Adauga elementele inamicului la drawingwindow
 	void addInamic2D(){
 		for (int i = 0; i < parts.size(); i++)

@@ -10,11 +10,13 @@
 class Naveta{
 
 public:
-	Circle2D *cerc_naveta;
+	Circle2D *cerc_naveta,*cerc_collision;
 	Polygon2D *poly_naveta, *burghiu;
 
+	// valorile pentur collision center
+	float centru_burghiu_x, centru_burghiu_y;
 	float directie = 0;
-	float viteza = 3, viteza_aux = 0;
+	float viteza = 1, viteza_aux = 0;
 	bool burghiu_on = false;
 	int chenar_x, chenar_y;
 	float centru_x=0, centru_y=0;
@@ -28,6 +30,10 @@ public:
 		centru_y = centruy;
 
 		cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);				
+
+		for (int i = 0; i < cerc_naveta->transf_points.size(); i++){
+			printf("Punct %d \n", i);
+		}
 
 		//updatez detalii chenar
 		chenar_x = chenarx;
@@ -46,9 +52,16 @@ public:
 
 		//adaug burghiul
 		burghiu = new Polygon2D(Color(255, 0, 0), true);
-		burghiu->addPoint(Point2D(centru_x + 35, centru_y + 20));
-		burghiu->addPoint(Point2D(centru_x + 90, centru_y));
-		burghiu->addPoint(Point2D(centru_x + 35, centru_y - 20));
+		burghiu->addPoint(Point2D(centru_x + 25, centru_y + 25));
+		burghiu->addPoint(Point2D(centru_x + 100, centru_y));
+		burghiu->addPoint(Point2D(centru_x + 25, centru_y - 25));
+
+		calcCentru();
+
+		//creeaza cerc collision
+		cerc_collision= new Circle2D(Point2D(centru_burghiu_x, centru_burghiu_y), 25, Color(255, 0, 0), false);
+
+
 	}
 	
 	//translateaza naveta cu deplasament x y
@@ -58,6 +71,7 @@ public:
 		Transform2D::applyTransform_o(cerc_naveta);
 		Transform2D::applyTransform_o(poly_naveta);
 		Transform2D::applyTransform_o(burghiu);
+		Transform2D::applyTransform_o(cerc_collision);
 	}
 
 
@@ -68,7 +82,7 @@ public:
 		//if param 0 -> rotate_right
 		//else -> rotate_left
 
-		float unghi = 0.05;
+		float unghi = 0.03;
 		if (param != 0) unghi = -unghi;
 
 		//updatam directia actuala a navei
@@ -90,6 +104,7 @@ public:
 		Transform2D::translateMatrix(centru_x, centru_y);
 		Transform2D::applyTransform_o(poly_naveta);
 		Transform2D::applyTransform_o(burghiu);
+		Transform2D::applyTransform_o(cerc_collision);
 
 	}
 
@@ -143,9 +158,15 @@ public:
 	}
 	void activateBurghiu(){
 		DrawingWindow::addObject2D(burghiu);
+
+		//debug purposes
+		DrawingWindow::addObject2D(cerc_collision);
 	}
 	void deactivateBurghiu(){
 		DrawingWindow::removeObject2D(burghiu);
+
+		//debug
+		DrawingWindow::removeObject2D(cerc_collision);
 	}
 	
 	void calcCentru(){
@@ -155,6 +176,16 @@ public:
 		}
 		centru_x = centru_x / 8;
 		centru_y = centru_y / 8;
+
+		//centru cerc collision == centru burghiu
+		//calculeaza centrul burghiului ca sa plasam cercul
+		centru_burghiu_x = 0, centru_burghiu_y = 0;
+		for (int i = 0; i < burghiu->transf_points.size(); i++){
+			centru_burghiu_x += burghiu->transf_points[i]->x;
+			centru_burghiu_y += burghiu->transf_points[i]->y;
+		}
+		centru_burghiu_x /= burghiu->transf_points.size();
+		centru_burghiu_y /= burghiu->transf_points.size();
 	}
 
 };
