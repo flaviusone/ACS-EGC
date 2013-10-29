@@ -29,6 +29,7 @@ Naveta *naveta;
 int lives = 3;
 float enemy_speed = 0.2;
 int score_val = 0;
+char buffer[20];
 //Constructie naveta
 void init_naveta_spatiala(){
 	float centru_x = DrawingWindow::width / 2;
@@ -59,6 +60,8 @@ void init_principale(){
 	//adaugam modifying score
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
+
+	nolives = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 
 }
 
@@ -161,14 +164,18 @@ void DrawingWindow::onIdle()
 	if (right_pressed)	naveta->rotate(1);
 
 
-	//For debug purposes
-	char buffer[20];
-	sprintf(buffer, " %06d ", score_val);
+
 	//adaugam modifying score
+	sprintf(buffer, " %06d ", score_val);
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
-	//For debug purposes
+	
+	//adaugam si vieti
+	sprintf(buffer, "Lives x%d ", lives);
+	DrawingWindow::removeText(nolives);
+	nolives = new Text(buffer, Point2D(DrawingWindow::width - 140.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(nolives);
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
