@@ -190,9 +190,31 @@ public:
 	}
 
 	// Verifica coliziune inamic cu burghiu
-	void check_collision(vector <Inamic*> *inamici){
+	void check_collision(vector <Inamic*> *inamici,int *life){
 
 		for (int i = 0; i < (*inamici).size(); i++){
+			(*inamici)[i]->calc_centru();
+			for (int j = 0; j < cerc_naveta->transf_points.size(); j += 2)
+			{
+				float punct_x = cerc_naveta->transf_points[j]->x;
+				float punct_y = cerc_naveta->transf_points[j]->y;
+
+				if (punct_x < (*inamici)[i]->hitbox->transf_points[1]->x &&
+					punct_x >(*inamici)[i]->hitbox->transf_points[0]->x &&
+					punct_y < (*inamici)[i]->hitbox->transf_points[3]->y &&
+					punct_y >(*inamici)[i]->hitbox->transf_points[0]->y){
+						printf("M-a lovit in Nava");
+						(*inamici)[i]->removeInamic2D();
+						Inamic *temp = (*inamici)[i];
+						(*inamici).erase((*inamici).begin() + i);
+						delete temp;
+						i--;
+						(*life)--;
+						return;
+				}
+
+			}
+			// Verifica coliziune cu Burghiul
 			if (burghiu_on){
 				(*inamici)[i]->calc_centru();
 				for (int j = 0; j < burghiu->transf_points.size(); j++)
@@ -211,7 +233,6 @@ public:
 							i--;
 							break;
 					}
-
 				}
 			}
 		}

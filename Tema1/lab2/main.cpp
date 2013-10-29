@@ -26,6 +26,7 @@ bool left_pressed = false, right_pressed = false, up_pressed = false;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
 Naveta *naveta;
+int lives = 3;
 float enemy_speed = 0.2;
 //Constructie naveta
 void init_naveta_spatiala(){
@@ -113,7 +114,7 @@ void DrawingWindow::onIdle()
 	enemy_attack();
 	
 	// Verifica coliziuni cu nava si burghiu
-	naveta->check_collision(&inamici);
+	naveta->check_collision(&inamici,&lives);
 	
 
 	// Miscare stanga
@@ -140,7 +141,7 @@ void DrawingWindow::onIdle()
 
 	//For debug purposes
 	char buffer[50];
-	sprintf(buffer, "X=%.2f Y=%.2f ", naveta->centru_burghiu_x,naveta->centru_burghiu_y);
+	sprintf(buffer, "Lives: %d ",lives);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
