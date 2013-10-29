@@ -95,12 +95,16 @@ void enemy_attack(){
 }
 
 void enemy_spawn(){
-	//spawnez inamic la fiecare 1 sec
+	
 	t = clock();
+
+	//cresc nivelul la fiecare 10 secunde
 	if ((float)t / CLOCKS_PER_SEC / 10 > speed_counter){
 		speed_counter++;
-		enemy_speed += 0.2;
-}
+		enemy_speed += 0.1;
+	}
+
+	//spawnez inamic la fiecare 1 sec
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
 		float startx = rand() % 1220;
 		float starty = rand() % 720;
@@ -174,6 +178,8 @@ void DrawingWindow::onIdle()
 	//accelerare
 	if (up_pressed)
 	{
+		if (naveta->viteza_aux > naveta->viteza)
+			naveta->viteza_aux -= 0.05;
 		if (naveta->viteza_aux < naveta->viteza)
 			naveta->viteza_aux += 0.05;
 		naveta->move_straight(naveta->viteza_aux);
@@ -213,12 +219,12 @@ void DrawingWindow::onReshape(int width, int height)
 
 }
 void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
-	switch (key){
-	case 110:
-		naveta->viteza = 3;
-		naveta->viteza_aux = naveta->viteza;
-		break;
-	}
+	//switch (key){
+	//case 110:
+	//	naveta->viteza = 3;
+	//	naveta->viteza_aux = naveta->viteza;
+	//	break;
+	//}
 }
 void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
@@ -250,16 +256,18 @@ void DrawingWindow::onKey(unsigned char key)
 
 		up_pressed = true;
 		break;
-	case 110: //cand apas N dau boost la viteza
-		naveta->viteza = 5;
-		break;
+	//case 110: //cand apas N dau boost la viteza
+	//	naveta->viteza = 5;
+	//	break;
 	case 32:
 		if (naveta->burghiu_on){
 			naveta->deactivateBurghiu();
+			naveta->viteza = 3;
 			naveta->burghiu_on = false;
 		}
 		else {
 			naveta->activateBurghiu();
+			naveta->viteza = 1;
 			naveta->burghiu_on = true;
 		}
 		break;
