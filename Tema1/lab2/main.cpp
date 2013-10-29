@@ -102,7 +102,22 @@ void enemy_spawn(){
 		enemy_speed += 0.2;
 }
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
-		Inamic *temp = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
+		float startx = rand() % 1220;
+		float starty = rand() % 720;
+
+		//verific sa nu spawnez pe naveta
+
+		while (true){
+			if (startx < naveta->centru_x + 100 &&
+				startx > naveta->centru_x - 100 &&
+				startx < naveta->centru_y + 100 &&
+				startx > naveta->centru_y - 100){
+					startx = rand() % 1200;
+					starty = rand() % 700;
+			}
+			else break;
+		}
+		Inamic *temp = new Inamic1(naveta->directie,startx, starty);
 		//Inamic *temp2 = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
 		temp->addInamic2D();
 		inamici.push_back(temp);
@@ -132,8 +147,7 @@ void respawn_world(){
 	lives = 3;
 	// scor = 0
 	score_val = 0;
-
-	
+		
 	enemy_speed = 0.2;
 }
 
