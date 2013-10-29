@@ -6,6 +6,7 @@
 #include "Framework/Circle2D.h"
 #include "Framework/Polygon2D.h"
 #include "Inamic1.h"
+#include "Inamic2.h"
 #include <iostream>
 #include <windows.h>
 #include "Inamic.h"
@@ -121,12 +122,17 @@ void enemy_spawn(){
 			}
 			else break;
 		}
-		Inamic *temp = new Inamic1(naveta->directie,startx, starty);
-		//Inamic *temp2 = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
-		temp->addInamic2D();
-		inamici.push_back(temp);
-		//temp2->addInamic2D();
-		//inamici.push_back(temp2);
+		if (rand() % 20  > 10){
+			Inamic *temp = new Inamic2(naveta->directie, startx, starty);
+			temp->addInamic2D();
+			inamici.push_back(temp);
+		}
+		else{
+			Inamic *temp2 = new Inamic1(naveta->directie, startx, starty);
+			temp2->addInamic2D();
+			inamici.push_back(temp2);
+		}
+		
 		old_t = t;
 	}
 }
@@ -169,8 +175,8 @@ void DrawingWindow::onIdle()
 	// Verifica coliziuni cu nava si burghiu
 	naveta->check_collision(&inamici,&lives,&score_val);
 	
-	if (lives == 0)
-		respawn_world();
+	//if (lives == 0)
+	//	respawn_world();
 
 	// Miscare stanga
 	if (left_pressed)	naveta->rotate(0);
@@ -262,7 +268,7 @@ void DrawingWindow::onKey(unsigned char key)
 	case 32:
 		if (naveta->burghiu_on){
 			naveta->deactivateBurghiu();
-			naveta->viteza = 3;
+			naveta->viteza = 2;
 			naveta->burghiu_on = false;
 		}
 		else {

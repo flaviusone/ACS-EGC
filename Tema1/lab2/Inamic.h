@@ -82,6 +82,15 @@ public:
 	// functie generica care calculeaza centrul obiectului folosind media aritmetica
 	void calc_centru(){
 		int counter=0;
+
+		//centrul inamicului este si centrul hitboxului
+		centrux = (hitbox->transf_points[1]->x - hitbox->transf_points[0]->x) / 2 
+			+ hitbox->transf_points[0]->x;
+		centruy = (hitbox->transf_points[3]->y - hitbox->transf_points[0]->y) / 2 
+			+ hitbox->transf_points[0]->y;
+
+		/*
+		centrux = 0; centruy = 0;
 		for (int i = 0; i < parts.size(); i++){
 			for (int j = 0; j < parts[i]->transf_points.size(); j++){
 				centrux += parts[i]->transf_points[j]->x;
@@ -90,7 +99,7 @@ public:
 			}
 		}
 		centrux /= counter;
-		centruy /= counter;
+		centruy /= counter;*/
 	}
 	
 	 

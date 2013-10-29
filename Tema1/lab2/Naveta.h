@@ -16,7 +16,7 @@ public:
 	// valorile pentur collision center
 	float centru_burghiu_x, centru_burghiu_y;
 	float directie = 0;
-	float viteza = 3, viteza_aux = 0;
+	float viteza = 2, viteza_aux = 0;
 	bool burghiu_on = false;
 	int chenar_x, chenar_y;
 	float centru_x=0, centru_y=0;
@@ -31,9 +31,6 @@ public:
 
 		cerc_naveta = new Circle2D(Point2D(centru_x, centru_y), 30, Color(255, 0, 0), false);				
 
-		for (int i = 0; i < cerc_naveta->transf_points.size(); i++){
-			printf("Punct %d \n", i);
-		}
 
 		//updatez detalii chenar
 		chenar_x = chenarx;
@@ -170,6 +167,8 @@ public:
 	
 	//Calculeaza centrul navei si centrul burghiului
 	void calcCentru(){
+		centru_x = 0;
+		centru_y = 0;
 		for (int i = 0; i < poly_naveta->transf_points.size(); i++){
 			centru_x += poly_naveta->transf_points[i]->x;
 			centru_y += poly_naveta->transf_points[i]->y;
@@ -202,7 +201,6 @@ public:
 					punct_x >(*inamici)[i]->hitbox->transf_points[0]->x &&
 					punct_y < (*inamici)[i]->hitbox->transf_points[3]->y &&
 					punct_y >(*inamici)[i]->hitbox->transf_points[0]->y){
-						printf("M-a lovit in Nava");
 						(*inamici)[i]->removeInamic2D();
 						Inamic *temp = (*inamici)[i];
 						(*inamici).erase((*inamici).begin() + i);
