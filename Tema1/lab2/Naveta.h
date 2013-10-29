@@ -16,7 +16,7 @@ public:
 	// valorile pentur collision center
 	float centru_burghiu_x, centru_burghiu_y;
 	float directie = 0;
-	float viteza = 1, viteza_aux = 0;
+	float viteza = 3, viteza_aux = 0;
 	bool burghiu_on = false;
 	int chenar_x, chenar_y;
 	float centru_x=0, centru_y=0;

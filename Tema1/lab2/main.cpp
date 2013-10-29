@@ -17,19 +17,23 @@
 
 using namespace std;
 clock_t t,old_t=0;
-int chenar_x, chenar_y;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
 Circle2D * cerc_test;
 Text *score, *modifying_score, *nolives;
-bool left_pressed = false, right_pressed = false, up_pressed = false;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
 Naveta *naveta;
-int lives = 3;
+int lives = 3,	
+	score_val = 0,
+	chenar_x, chenar_y,
+	speed_counter = 1;
+bool left_pressed = false, 
+	 right_pressed = false, 
+	 up_pressed = false;
 float enemy_speed = 0.2;
-int score_val = 0;
 char buffer[20];
+
 //Constructie naveta
 void init_naveta_spatiala(){
 	float centru_x = DrawingWindow::width / 2;
@@ -93,6 +97,10 @@ void enemy_attack(){
 void enemy_spawn(){
 	//spawnez inamic la fiecare 1 sec
 	t = clock();
+	if ((float)t / CLOCKS_PER_SEC / 10 > speed_counter){
+		speed_counter++;
+		enemy_speed += 0.2;
+}
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
 		Inamic *temp = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
 		//Inamic *temp2 = new Inamic1(naveta->directie, rand() % 1200, rand() % 700);
@@ -124,12 +132,16 @@ void respawn_world(){
 	lives = 3;
 	// scor = 0
 	score_val = 0;
+
+	
+	enemy_speed = 0.2;
 }
 
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
 	
+
 	//Spawnez inamic la fiecare 1 secunda
 	enemy_spawn();
 
@@ -166,7 +178,8 @@ void DrawingWindow::onIdle()
 
 
 	//adaugam modifying score
-	sprintf(buffer, " %06d ", score_val);
+	sprintf(buffer, " %.2f ", enemy_speed);
+	//sprintf(buffer, " %06d ", score_val);
 	DrawingWindow::removeText(modifying_score);
 	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
