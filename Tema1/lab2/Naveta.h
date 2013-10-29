@@ -166,7 +166,6 @@ public:
 	}
 	void deactivateBurghiu(){
 		DrawingWindow::removeObject2D(burghiu);
-
 	}
 	
 	//Calculeaza centrul navei si centrul burghiului
@@ -190,7 +189,7 @@ public:
 	}
 
 	// Verifica coliziune inamic cu burghiu
-	void check_collision(vector <Inamic*> *inamici,int *life){
+	void check_collision(vector <Inamic*> *inamici,int *life,int *scor){
 
 		for (int i = 0; i < (*inamici).size(); i++){
 			(*inamici)[i]->calc_centru();
@@ -226,10 +225,19 @@ public:
 						punct_x >(*inamici)[i]->hitbox->transf_points[0]->x &&
 						punct_y < (*inamici)[i]->hitbox->transf_points[3]->y &&
 						punct_y >(*inamici)[i]->hitbox->transf_points[0]->y){
+
+							//update scor
+							(*scor) += (*inamici)[i]->value;
+
+							//scot inamic din window
 							(*inamici)[i]->removeInamic2D();
+
+							//salvez pt delete
 							Inamic *temp = (*inamici)[i];
 							(*inamici).erase((*inamici).begin() + i);
 							delete temp;
+
+							//dec i 
 							i--;
 							break;
 					}

@@ -13,7 +13,7 @@ public:
 	float centrux=0,centruy=0;
 	//valorile pentru colision box
 	float bxX=0, bxY=0;
-	int tip;
+	int tip,value;
 	//partile din care este alcatuit inamicul
 	vector <Object2D*> parts;
 	Rectangle2D *hitbox;

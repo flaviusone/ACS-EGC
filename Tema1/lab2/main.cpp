@@ -28,6 +28,7 @@ vector<Object2D*> obiecte2d;
 Naveta *naveta;
 int lives = 3;
 float enemy_speed = 0.2;
+int score_val = 0;
 //Constructie naveta
 void init_naveta_spatiala(){
 	float centru_x = DrawingWindow::width / 2;
@@ -112,11 +113,14 @@ void respawn_world(){
 	}
 
 	naveta->removeNaveta2D();
+	naveta->deactivateBurghiu();
 	delete naveta;
 	init_naveta_spatiala();
 
 	// reda vietile
 	lives = 3;
+	// scor = 0
+	score_val = 0;
 }
 
 //functia care permite animatia
@@ -130,7 +134,7 @@ void DrawingWindow::onIdle()
 	enemy_attack();
 	
 	// Verifica coliziuni cu nava si burghiu
-	naveta->check_collision(&inamici,&lives);
+	naveta->check_collision(&inamici,&lives,&score_val);
 	
 	if (lives == 0)
 		respawn_world();
@@ -158,11 +162,11 @@ void DrawingWindow::onIdle()
 
 
 	//For debug purposes
-	char buffer[50];
-	sprintf(buffer, "Lives: %d ",lives);
+	char buffer[20];
+	sprintf(buffer, " %06d ", score_val);
 	//adaugam modifying score
 	DrawingWindow::removeText(modifying_score);
-	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 + 100.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
 	//For debug purposes
 }
