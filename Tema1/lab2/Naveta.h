@@ -169,6 +169,7 @@ public:
 
 	}
 	
+	//Calculeaza centrul navei si centrul burghiului
 	void calcCentru(){
 		for (int i = 0; i < poly_naveta->transf_points.size(); i++){
 			centru_x += poly_naveta->transf_points[i]->x;
@@ -177,8 +178,8 @@ public:
 		centru_x = centru_x / 8;
 		centru_y = centru_y / 8;
 
-		//centru cerc collision == centru burghiu
-		//calculeaza centrul burghiului ca sa plasam cercul
+		
+		//calculeaza centrul burghiului
 		centru_burghiu_x = 0, centru_burghiu_y = 0;
 		for (int i = 0; i < burghiu->transf_points.size(); i++){
 			centru_burghiu_x += burghiu->transf_points[i]->x;
@@ -186,6 +187,36 @@ public:
 		}
 		centru_burghiu_x /= burghiu->transf_points.size();
 		centru_burghiu_y /= burghiu->transf_points.size();
+	}
+
+	// Verifica coliziune inamic cu burghiu
+	void check_collision(vector <Inamic*> *inamici){
+
+		for (int i = 0; i < (*inamici).size(); i++){
+			if (burghiu_on){
+				(*inamici)[i]->calc_centru();
+				for (int j = 0; j < burghiu->transf_points.size(); j++)
+				{
+					float punct_x = burghiu->transf_points[j]->x;
+					float punct_y = burghiu->transf_points[j]->y;
+
+					if (punct_x < (*inamici)[i]->hitbox->transf_points[1]->x &&
+						punct_x >(*inamici)[i]->hitbox->transf_points[0]->x &&
+						punct_y < (*inamici)[i]->hitbox->transf_points[3]->y &&
+						punct_y >(*inamici)[i]->hitbox->transf_points[0]->y){
+							(*inamici)[i]->removeInamic2D();
+							Inamic *temp = (*inamici)[i];
+							(*inamici).erase((*inamici).begin() + i);
+							delete temp;
+							i--;
+							break;
+					}
+
+				}
+			}
+		}
+
+		return;
 	}
 
 };

@@ -11,17 +11,20 @@ public:
 	Inamic1(float dir, float startX, float startY){
 		rectangle1 = new Rectangle2D(Point2D(0, 0), 20, 20, Color(0, 1, 0), false);
 		rectangle2 = new Rectangle2D(Point2D(10, 10), 20, 20, Color(0, 1, 0), false);
+		
+		//latime si lungime collision box	
+		bxX = 30;
+		bxY = 30;
+
+		hitbox = new Rectangle2D(Point2D(0, 0), bxX, bxY, Color(0, 1, 0), false);
+
 		parts.push_back(rectangle1);
 		parts.push_back(rectangle2);
 		calc_centru();
 		translate_to(startX, startY);
 		directie = dir;
 		tip = 1;
-
-		//latime si lungime collision box	
-		bxX = 30;
-		bxY = 30;
-		
+	
 	}
 	~Inamic1() {}
 
