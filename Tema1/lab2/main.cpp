@@ -59,8 +59,6 @@ void init_principale(){
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
 
-	cerc_test = new Circle2D(Point2D(0, 0), 30, Color(255, 0, 0), false);
-	DrawingWindow::addObject2D(cerc_test);
 }
 
 void DrawingWindow::init()
@@ -102,7 +100,25 @@ void enemy_spawn(){
 	}
 }
 
-float unghiinamic;
+void respawn_world(){
+
+	// Sterge toti inamicii
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->removeInamic2D();
+		Inamic *temp = inamici[i];
+		inamici.erase(inamici.begin() + i);
+		delete temp; //destruct
+		i--;
+	}
+
+	naveta->removeNaveta2D();
+	delete naveta;
+	init_naveta_spatiala();
+
+	// reda vietile
+	lives = 3;
+}
+
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
@@ -116,6 +132,8 @@ void DrawingWindow::onIdle()
 	// Verifica coliziuni cu nava si burghiu
 	naveta->check_collision(&inamici,&lives);
 	
+	if (lives == 0)
+		respawn_world();
 
 	// Miscare stanga
 	if (left_pressed)	naveta->rotate(0);
