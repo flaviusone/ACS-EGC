@@ -47,8 +47,8 @@ public:
 		calc_centru();
 		translate_to(startX, startY);
 		directie = dir;
-		tip = 1;
-		value = 10;
+		tip = 2;
+		value = 30;
 
 	}
 	~Inamic2() {}

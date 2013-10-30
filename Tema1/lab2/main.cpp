@@ -25,14 +25,16 @@ Text *score, *modifying_score, *nolives;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
 Naveta *naveta;
-int lives = 3,	
-	score_val = 0,
-	chenar_x, chenar_y,
-	speed_counter = 1;
+int lives = 3,
+score_val = 0,
+chenar_x, chenar_y,
+speed_counter = 1;
+	
 bool left_pressed = false, 
 	 right_pressed = false, 
 	 up_pressed = false;
-float enemy_speed = 0.2;
+float enemy_speed = 0.2, 
+	  spawn_time = 1;
 char buffer[20];
 
 //Constructie naveta
@@ -66,7 +68,7 @@ void init_principale(){
 	modifying_score = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(modifying_score);
 
-	nolives = new Text("000000", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	nolives = new Text("000000", Point2D(DrawingWindow::width - 140.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 
 }
 
@@ -103,10 +105,11 @@ void enemy_spawn(){
 	if ((float)t / CLOCKS_PER_SEC / 10 > speed_counter){
 		speed_counter++;
 		enemy_speed += 0.1;
+		spawn_time -= 0.1;
 	}
 
 	//spawnez inamic la fiecare 1 sec
-	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > 1){
+	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > spawn_time){
 		float startx = rand() % 1220;
 		float starty = rand() % 720;
 
@@ -204,16 +207,16 @@ void DrawingWindow::onIdle()
 
 
 	//adaugam modifying score
-	sprintf(buffer, " %.2f ", enemy_speed);
-	//sprintf(buffer, " %06d ", score_val);
+	//sprintf(buffer, " %.2f ", enemy_speed);
+	sprintf(buffer, " %06d ", score_val);
 	DrawingWindow::removeText(modifying_score);
-	modifying_score = new Text(buffer, Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	modifying_score->text = buffer;
 	DrawingWindow::addText(modifying_score);
 	
 	//adaugam si vieti
 	sprintf(buffer, "Lives x%d ", lives);
 	DrawingWindow::removeText(nolives);
-	nolives = new Text(buffer, Point2D(DrawingWindow::width - 140.0f, DrawingWindow::height - 80.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	nolives->text = buffer;
 	DrawingWindow::addText(nolives);
 }
 
