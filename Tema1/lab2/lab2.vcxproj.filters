@@ -86,5 +86,8 @@
     <ClInclude Include="Inamic3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

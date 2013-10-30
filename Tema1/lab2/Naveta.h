@@ -84,7 +84,7 @@ public:
 		//if param 0 -> rotate_right
 		//else -> rotate_left
 
-		float unghi = 0.03;
+		float unghi = 0.02;
 		if (param != 0) unghi = -unghi;
 
 		//updatam directia actuala a navei

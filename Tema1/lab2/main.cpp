@@ -8,6 +8,7 @@
 #include "Inamic1.h"
 #include "Inamic2.h"
 #include "Inamic3.h"
+#include "Laser.h"
 #include <iostream>
 #include <windows.h>
 #include "Inamic.h"
@@ -18,13 +19,14 @@
 #define PI 3.14159265358979323846
 
 using namespace std;
-clock_t t,old_t=0;
+clock_t t, old_t = 0, old_t2 = 0;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
 Circle2D * cerc_test;
 Text *score, *modifying_score, *nolives;
 vector<Inamic*> inamici;
 vector<Object2D*> obiecte2d;
+vector<Laser*> lasere;
 Naveta *naveta;
 int lives = 3,
 score_val = 0,
@@ -200,6 +202,65 @@ void respawn_world(){
 	spawn_time = 1;
 }
 
+void laser_spawn(){
+	t = clock();
+	
+	if ((((float)t) - ((float)old_t2)) / CLOCKS_PER_SEC > 0.5){
+		naveta->calcCentru();
+		Laser *temp = new Laser(naveta->directie,naveta->centru_x+ cos(naveta->directie),naveta->centru_y+ sin(naveta->directie));
+		lasere.push_back(temp);
+		Laser *temp2 = new Laser(naveta->directie + PI/6, naveta->centru_x + cos(naveta->directie + PI/6), naveta->centru_y + sin(naveta->directie + PI/6));
+		lasere.push_back(temp2);
+		Laser *temp3 = new Laser(naveta->directie - PI / 6, naveta->centru_x + cos(naveta->directie + PI / 6), naveta->centru_y + sin(naveta->directie - PI / 6));
+		lasere.push_back(temp3);
+		old_t2 = t;
+	}
+
+
+}
+//verifica coliziuni cu inamicii
+
+void laser_collision(){
+	for (int i = 0; i < inamici.size(); i++){
+		for (int j = 0; j < lasere.size(); j++){
+			for (int k = 0; k < lasere[j]->body->transf_points.size(); k++){
+				float punct_x = lasere[j]->body->transf_points[k]->x;
+				float punct_y = lasere[j]->body->transf_points[k]->y;
+
+				if (punct_x < inamici[i]->hitbox->transf_points[1]->x &&
+					punct_x >inamici[i]->hitbox->transf_points[0]->x &&
+					punct_y < inamici[i]->hitbox->transf_points[3]->y &&
+					punct_y >inamici[i]->hitbox->transf_points[0]->y){
+
+						score_val += inamici[i]->value;
+
+						//remove inamic si laser
+						inamici[i]->removeInamic2D();
+						lasere[j]->removeLaser2D();
+						Inamic *temp = inamici[i];
+						Laser *templaser = lasere[j];
+						inamici.erase(inamici.begin() + i);
+						lasere.erase(lasere.begin() + j);
+						delete temp;
+						delete templaser;
+						return;
+						i--;
+						j--;
+
+				}//endif
+			}//endfor
+		}//endfor
+	}//endfor
+}//end function
+
+void move_lasers(){
+	for (int i = 0; i < lasere.size(); i++){
+		lasere[i]->calc_centru();
+
+
+		lasere[i]->translate_with(cos(lasere[i]->directie), sin(lasere[i]->directie));
+	}
+}
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
@@ -214,6 +275,13 @@ void DrawingWindow::onIdle()
 	// Verifica coliziuni cu nava si burghiu
 	naveta->check_collision(&inamici,&lives,&score_val);
 	
+	// spawn laser
+	laser_spawn();
+
+	laser_collision();
+
+	move_lasers();
+
 	if (lives == 0)
 		respawn_world();
 
