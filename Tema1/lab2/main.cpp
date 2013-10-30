@@ -7,6 +7,7 @@
 #include "Framework/Polygon2D.h"
 #include "Inamic1.h"
 #include "Inamic2.h"
+#include "Inamic3.h"
 #include <iostream>
 #include <windows.h>
 #include "Inamic.h"
@@ -93,7 +94,15 @@ void enemy_attack(){
 		float inamic_centruy = inamici[i]->centruy;
 		dx = -naveta->centru_x + inamic_centrux;
 		dy = -naveta->centru_y + inamic_centruy;
+
+		/*if (inamici[i]->tip == 2){
+			inamici[i]->rotire();
+		}*/
+
+		if (inamici[i]->tip != 3)
 		inamici[i]->translate_with(-enemy_speed*dx / (fabs(dx) + fabs(dy)), -enemy_speed*dy / (fabs(dx) + fabs(dy)));
+
+		
 	}
 }
 
@@ -125,10 +134,15 @@ void enemy_spawn(){
 			}
 			else break;
 		}
-		if (rand() % 20  > 10){
+		float  spawn = rand() % 30;
+		if (spawn  < 10){
 			Inamic *temp = new Inamic2(naveta->directie, startx, starty);
 			temp->addInamic2D();
 			inamici.push_back(temp);
+		}else if (spawn > 10 && spawn < 20){
+			Inamic *temp3 = new Inamic3(naveta->directie, startx, starty);
+			temp3->addInamic2D();
+			inamici.push_back(temp3);
 		}
 		else{
 			Inamic *temp2 = new Inamic1(naveta->directie, startx, starty);
@@ -178,8 +192,8 @@ void DrawingWindow::onIdle()
 	// Verifica coliziuni cu nava si burghiu
 	naveta->check_collision(&inamici,&lives,&score_val);
 	
-	//if (lives == 0)
-	//	respawn_world();
+	if (lives == 0)
+		respawn_world();
 
 	// Miscare stanga
 	if (left_pressed)	naveta->rotate(0);
