@@ -78,13 +78,29 @@ public:
 		glm::mat4 result(0);
 
 		//TODO
-
+		glm::vec3 forward = center_position - eye_position;
+		forward = glm::normalize(forward);
+		glm::vec3 newup ;
+		newup = glm::normalize(up_direction);
+		glm::vec3 right = forward;
+		right = glm::cross(right, newup);
+		newup = right;
+		newup = glm::cross(newup, forward);
+		result = glm::mat4(right.x, newup.x, -forward.x, 0,right.y, newup.y, -forward.y, 0, right.z, newup.z, -forward.z, 0, 0, 0, 0, 1);
+		result = glm::translate(result,-eye_position);
+		
 		return result;
 	}
 	glm::mat4 myCreateProjectionMatrix(const float field_of_view_y, const float aspect, const float z_near, const float z_far){
 		glm::mat4 result(0);
 		
+
+		float f = 1.0f / tan(field_of_view_y / 2);
+
+		result = glm::mat4(f/aspect,0,0,0,0,f,0,0,0,0,(z_far+z_near)/(z_near-z_far),-1,0,0,2*z_far*z_near/(z_near-z_far),0);
 		//TODO
+
+		result = glm::perspective(field_of_view_y, aspect, z_near, z_far);
 
 		return result;
 	}
@@ -115,8 +131,18 @@ public:
 		glUniformMatrix4fv(location_projection_matrix,1,false,glm::value_ptr(projection_matrix));
 		glUniform4f(location_object_color, 1,0,0,0);
 		
+		
+		alex.gradinaru@cs.pub.ro
+
+
 		//deseneaza obiect
 		lab::drawWireCube(40);
+		glm::mat4 tempmat = glm::translate(model_matrix, glm::vec3(0, 0.2, 0));
+		glUniformMatrix4fv(location_model_matrix, 1, false, glm::value_ptr(tempmat));
+
+		lab::drawSolidTeapot(100);
+
+		
 	}
 	//functie chemata dupa ce am terminat cadrul de desenare (poate fi folosita pt modelare/simulare)
 	void notifyEndFrame(){}
@@ -168,7 +194,7 @@ public:
 int main(){
 	//initializeaza GLUT (fereastra + input + context OpenGL)
 	lab::glut::WindowInfo window(std::string("lab shadere 1"),800,600,100,100,true);
-	lab::glut::ContextInfo context(3,3,false);
+	lab::glut::ContextInfo context(3,1,false);
 	lab::glut::FramebufferInfo framebuffer(true,true,true,true);
 	lab::glut::init(window,context, framebuffer);
 
