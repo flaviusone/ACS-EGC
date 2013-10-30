@@ -56,7 +56,22 @@ public:
 
 	//TODO
 	//eventuala functie de rotire
-	void rotire();
+	void rotire(){
+		float unghi = -0.05;
+		
+
+		//calc_centru();
+
+		Transform2D::loadIdentityMatrix();
+		Transform2D::translateMatrix(-centrux, -centruy);
+		Transform2D::rotateMatrix(unghi);
+		Transform2D::translateMatrix(centrux, centruy);
+		for (int i = 0; i < parts.size(); i++){
+			Transform2D::applyTransform_o(parts[i]);
+		}
+		Transform2D::applyTransform_o(hitbox);
+
+	};
 
 	// Translateaza inamicul la coord specificate
 	void translate_to(float X, float Y){
@@ -84,10 +99,17 @@ public:
 		int counter=0;
 
 		//centrul inamicului este si centrul hitboxului
-		centrux = (hitbox->transf_points[1]->x - hitbox->transf_points[0]->x) / 2 
-			+ hitbox->transf_points[0]->x;
-		centruy = (hitbox->transf_points[3]->y - hitbox->transf_points[0]->y) / 2 
-			+ hitbox->transf_points[0]->y;
+		centrux = (hitbox->transf_points[0]->x +
+			hitbox->transf_points[1]->x +
+			hitbox->transf_points[2]->x +
+			hitbox->transf_points[3]->x)/4;
+		
+		centruy = (hitbox->transf_points[0]->y +
+			hitbox->transf_points[1]->y +
+			hitbox->transf_points[2]->y +
+			hitbox->transf_points[3]->y) / 4;
+
+		
 
 		/*
 		centrux = 0; centruy = 0;
@@ -99,7 +121,8 @@ public:
 			}
 		}
 		centrux /= counter;
-		centruy /= counter;*/
+		centruy /= counter;
+		*/
 	}
 	
 	 
