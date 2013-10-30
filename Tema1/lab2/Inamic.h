@@ -9,37 +9,20 @@
 class Inamic
 {
 public:
-	float directie;
-	float centrux=0,centruy=0;
-	//valorile pentru colision box
-	float bxX=0, bxY=0;
-	int tip,value;
-	//partile din care este alcatuit inamicul
-	vector <Object2D*> parts;
-	Rectangle2D *hitbox;
+	float	directie,					// Directie de deplasare
+			centrux = 0, centruy = 0,	//Centru inamic
+			bxX = 0, bxY = 0;			//Limitele pentru collision box
+
+	int tip,	//Tipul inamicului
+		value;	//Valoarea acestuia pentru scor
+
+	vector <Object2D*> parts; //partile din care este alcatuit inamicul
+
+	Rectangle2D *hitbox;	//Hitbox-ul inamicului
 public:
 	Inamic(){}
 	Inamic(float dir, float startX, float startY);
 	~Inamic(){}
-
-	void setCollisionBox(){
-		float minX = 10000,minY = 10000;
-		float maxX = -10000, maxY = -10000;
-		for (int i = 0; i < parts.size(); i++){
-			for (int j = 0; j < parts[i]->transf_points.size(); j++){
-				if (parts[i]->transf_points[j]->x < minX)
-					minX = parts[i]->transf_points[j]->x;
-				if (parts[i]->transf_points[j]->x > maxX)
-					minX = parts[i]->transf_points[j]->x;
-				if (parts[i]->transf_points[j]->y < minY)
-					minX = parts[i]->transf_points[j]->y;
-				if (parts[i]->transf_points[j]->y < maxX)
-					minX = parts[i]->transf_points[j]->y;
-			}
-		}
-		bxX = maxX - minX;
-		bxY = maxY - minY;
-	}
 
 	// Adauga elementele inamicului la drawingwindow
 	void addInamic2D(){
@@ -53,25 +36,6 @@ public:
 			DrawingWindow::removeObject2D(parts[i]);
 		DrawingWindow::removeObject2D(hitbox);
 	}
-
-	//TODO
-	//eventuala functie de rotire
-	void rotire(){
-		float unghi = -0.05;
-		
-
-		//calc_centru();
-
-		Transform2D::loadIdentityMatrix();
-		Transform2D::translateMatrix(-centrux, -centruy);
-		Transform2D::rotateMatrix(unghi);
-		Transform2D::translateMatrix(centrux, centruy);
-		for (int i = 0; i < parts.size(); i++){
-			Transform2D::applyTransform_o(parts[i]);
-		}
-		Transform2D::applyTransform_o(hitbox);
-
-	};
 
 	// Translateaza inamicul la coord specificate
 	void translate_to(float X, float Y){
@@ -96,7 +60,6 @@ public:
 	
 	// functie generica care calculeaza centrul obiectului folosind media aritmetica
 	void calc_centru(){
-		int counter=0;
 
 		//centrul inamicului este si centrul hitboxului
 		centrux = (hitbox->transf_points[0]->x +
@@ -108,23 +71,5 @@ public:
 			hitbox->transf_points[1]->y +
 			hitbox->transf_points[2]->y +
 			hitbox->transf_points[3]->y) / 4;
-
-		
-
-		/*
-		centrux = 0; centruy = 0;
-		for (int i = 0; i < parts.size(); i++){
-			for (int j = 0; j < parts[i]->transf_points.size(); j++){
-				centrux += parts[i]->transf_points[j]->x;
-				centruy += parts[i]->transf_points[j]->y;
-				counter++;
-			}
-		}
-		centrux /= counter;
-		centruy /= counter;
-		*/
 	}
-	
-	 
-
 };
