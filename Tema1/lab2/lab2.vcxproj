@@ -90,6 +90,7 @@
     <ClInclude Include="Inamic3.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Naveta.h" />
+    <ClInclude Include="PowerUp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

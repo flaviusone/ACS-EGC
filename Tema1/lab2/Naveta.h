@@ -17,7 +17,7 @@ public:
 	float centru_burghiu_x, centru_burghiu_y;
 	float directie = 0;
 	float viteza = 2, viteza_aux = 0;
-	bool burghiu_on = false;
+	bool burghiu_on = false, laser_on = false;
 	int chenar_x, chenar_y;
 	float centru_x=0, centru_y=0;
 public:
@@ -188,7 +188,7 @@ public:
 	}
 
 	// Verifica coliziune inamic cu burghiu
-	void check_collision(vector <Inamic*> *inamici,int *life,int *scor){
+	void check_collision(vector <Inamic*> *inamici,int *life,int *scor ,clock_t *old_t){
 
 		for (int i = 0; i < (*inamici).size(); i++){
 			(*inamici)[i]->calc_centru();
@@ -223,6 +223,11 @@ public:
 						punct_x >(*inamici)[i]->hitbox->transf_points[0]->x &&
 						punct_y < (*inamici)[i]->hitbox->transf_points[3]->y &&
 						punct_y >(*inamici)[i]->hitbox->transf_points[0]->y){
+
+							if ((*inamici)[i]->tip == 4){
+								(*old_t) = clock();
+								laser_on = true;
+							}
 
 							//update scor
 							(*scor) += (*inamici)[i]->value;

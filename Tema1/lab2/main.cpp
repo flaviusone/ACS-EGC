@@ -8,6 +8,7 @@
 #include "Inamic1.h"
 #include "Inamic2.h"
 #include "Inamic3.h"
+#include "PowerUp.h"
 #include "Laser.h"
 #include <iostream>
 #include <windows.h>
@@ -19,7 +20,7 @@
 #define PI 3.14159265358979323846
 
 using namespace std;
-clock_t t, old_t = 0, old_t2 = 0;
+clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 Visual2D *visual;
 Rectangle2D *chenar_alb;
 Circle2D * cerc_test;
@@ -35,7 +36,8 @@ speed_counter = 1;
 	
 bool left_pressed = false, 
 	 right_pressed = false, 
-	 up_pressed = false;
+	 up_pressed = false,
+	 laser_on = false;
 float enemy_speed = 0.2, 
 	  spawn_time = 1;
 char buffer[20];
@@ -167,10 +169,15 @@ void enemy_spawn(){
 			temp3->addInamic2D();
 			inamici.push_back(temp3);
 		}
-		else{
+		else if(spawn > 20 && spawn < 29){
 			Inamic *temp2 = new Inamic1(naveta->directie, startx, starty);
 			temp2->addInamic2D();
 			inamici.push_back(temp2);
+		}
+		else{
+			Inamic *temp4 = new PowerUp(naveta->directie, startx, starty);
+			temp4->addInamic2D();
+			inamici.push_back(temp4);
 		}
 		
 		old_t = t;
@@ -286,13 +293,20 @@ void DrawingWindow::onIdle()
 	enemy_attack();
 	
 	// Verifica coliziuni cu nava si burghiu
-	naveta->check_collision(&inamici,&lives,&score_val);
+	naveta->check_collision(&inamici,&lives,&score_val,&old_t3);
 	
-	// spawn laser
-	laser_spawn();
+	if (naveta->laser_on){
+		//trag doar 10 secunde cu laserul
+		if ((((float)t) - ((float)old_t3)) / CLOCKS_PER_SEC  < 10){
+			// spawn laser
+			laser_spawn();
+		}
+		else naveta->laser_on = false;
+	}
 
+	//verifica coliziunea cu inamicii
 	laser_collision();
-
+	//misca laserele si despawneaza cand ies din cadru
 	move_lasers();
 
 	if (lives == 0)
