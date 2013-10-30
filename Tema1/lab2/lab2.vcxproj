@@ -87,6 +87,7 @@
     <ClInclude Include="Inamic.h" />
     <ClInclude Include="Inamic1.h" />
     <ClInclude Include="Inamic2.h" />
+    <ClInclude Include="Inamic3.h" />
     <ClInclude Include="Naveta.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

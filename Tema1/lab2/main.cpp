@@ -95,11 +95,30 @@ void enemy_attack(){
 		dx = -naveta->centru_x + inamic_centrux;
 		dy = -naveta->centru_y + inamic_centruy;
 
-		/*if (inamici[i]->tip == 2){
+		/*if (inamici[i]->tip != 1){
 			inamici[i]->rotire();
 		}*/
 
-		if (inamici[i]->tip != 3)
+		if (inamici[i]->tip == 2){
+
+			if (inamic_centrux - 15 < 6){
+				inamici[i]->directie -= PI/2;
+			}
+			else if (inamic_centrux + 15 > chenar_x + 4){
+				inamici[i]->directie -= PI/2;
+			}
+			else if (inamic_centruy - 15 < 6){
+				inamici[i]->directie -= PI/2;
+			}
+			else if (inamic_centruy + 15 > chenar_y + 3){
+				inamici[i]->directie -= PI/2;
+			}
+
+
+			inamici[i]->translate_with(enemy_speed*cos(inamici[i]->directie), enemy_speed*sin(inamici[i]->directie));
+		}
+
+		if (inamici[i]->tip == 1)
 		inamici[i]->translate_with(-enemy_speed*dx / (fabs(dx) + fabs(dy)), -enemy_speed*dy / (fabs(dx) + fabs(dy)));
 
 		
@@ -119,8 +138,8 @@ void enemy_spawn(){
 
 	//spawnez inamic la fiecare 1 sec
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > spawn_time){
-		float startx = rand() % 1220;
-		float starty = rand() % 720;
+		float startx = rand() % 1150;
+		float starty = rand() % 650;
 
 		//verific sa nu spawnez pe naveta
 
@@ -128,7 +147,9 @@ void enemy_spawn(){
 			if (startx < naveta->centru_x + 100 &&
 				startx > naveta->centru_x - 100 &&
 				startx < naveta->centru_y + 100 &&
-				startx > naveta->centru_y - 100){
+				startx > naveta->centru_y - 100 &&
+				startx < 20 && starty < 20
+				){
 					startx = rand() % 1200;
 					starty = rand() % 700;
 			}
@@ -176,6 +197,7 @@ void respawn_world(){
 	score_val = 0;
 		
 	enemy_speed = 0.2;
+	spawn_time = 1;
 }
 
 //functia care permite animatia
