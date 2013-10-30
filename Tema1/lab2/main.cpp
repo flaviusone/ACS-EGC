@@ -77,27 +77,19 @@ void init_principale(){
 
 }
 
-void DrawingWindow::init()
-{
-	//init chenar, scor, visual2d
-	init_principale();
-
-	//creeam naveta spatiala si o adaugam la centru
-	init_naveta_spatiala();
-}
 
 void enemy_attack(){
+	// Calcul centru nava
+	naveta->calcCentru();
 	for (int i = 0; i < inamici.size(); i++){
-		naveta->calcCentru();
+
+		// Calcul centru inamic
 		inamici[i]->calc_centru();
 
-		float inamic_bxX = inamici[i]->bxX;
-		float inamic_byY = inamici[i]->bxY;
-		float inamic_centrux = inamici[i]->centrux;
-		float inamic_centruy = inamici[i]->centruy;
-		float dx = -naveta->centru_x + inamic_centrux;
-		float dy = -naveta->centru_y + inamic_centruy;
+		float dx = -naveta->centru_x + inamici[i]->centrux;
+		float dy = -naveta->centru_y + inamici[i]->centruy;
 
+		// Daca este steluta fa coliziuni smart cu pereti
 		if (inamici[i]->tip == 2){
 
 			if (inamici[i]->centrux - 15 < 6){
@@ -112,11 +104,11 @@ void enemy_attack(){
 			else if (inamici[i]->centruy + 15 > chenar_y + 3){
 				inamici[i]->directie -= PI/2;
 			}
-
-
+			// Muta obiectul spre nava
 			inamici[i]->translate_with(enemy_speed*cos(inamici[i]->directie), enemy_speed*sin(inamici[i]->directie));
 		}
 
+		// Daca este inamic tip 1 doar muta spre nava
 		if (inamici[i]->tip == 1)
 		inamici[i]->translate_with(-enemy_speed*dx / (fabs(dx) + fabs(dy)), -enemy_speed*dy / (fabs(dx) + fabs(dy)));
 
@@ -133,6 +125,7 @@ void enemy_spawn(){
 		speed_counter++;
 		enemy_speed += 0.1;
 		spawn_time -= 0.1;
+		if (spawn_time == 0) spawn_time = 0.1;
 	}
 
 	//spawnez inamic la fiecare 1 sec
@@ -141,7 +134,6 @@ void enemy_spawn(){
 		float starty = rand() % 650;
 
 		//verific sa nu spawnez pe naveta
-
 		while (true){
 			if (startx < naveta->centru_x + 100 &&
 				startx > naveta->centru_x - 100 &&
@@ -154,27 +146,31 @@ void enemy_spawn(){
 			}
 			else break;
 		}
+
 		float  spawn = rand() % 30;
 		if (spawn  < 10){
+			// Spawnez inamic de tip stea
 			Inamic *temp = new Inamic2(naveta->directie, startx, starty);
 			temp->addInamic2D();
 			inamici.push_back(temp);
 		}else if (spawn > 10 && spawn < 20){
+			// Spawnez inamic de tip patrat static
 			Inamic *temp3 = new Inamic3(naveta->directie, startx, starty);
 			temp3->addInamic2D();
 			inamici.push_back(temp3);
 		}
 		else if(spawn > 20 && spawn < 29){
+			// Spawnez inamic de tip 2 patrate
 			Inamic *temp2 = new Inamic1(naveta->directie, startx, starty);
 			temp2->addInamic2D();
 			inamici.push_back(temp2);
 		}
 		else{
+			// Spawnez power up (sansa 1 la 30)
 			Inamic *temp4 = new PowerUp(naveta->directie, startx, starty);
 			temp4->addInamic2D();
 			inamici.push_back(temp4);
 		}
-		
 		old_t = t;
 	}
 }
@@ -190,23 +186,24 @@ void respawn_world(){
 		i--;
 	}
 
+	// Sterge naveta
 	naveta->removeNaveta2D();
 	naveta->deactivateBurghiu();
 	delete naveta;
-	init_naveta_spatiala();
 
+	// Initializeaza noul joc
+	init_naveta_spatiala();
 	// reda vietile
 	lives = 3;
 	// scor = 0
-	score_val = 0;
-		
+	score_val = 0;	
 	enemy_speed = 0.2;
 	spawn_time = 1;
 }
 
+// Spawneaza 3 lasere la fiecare 0.5 sec
 void laser_spawn(){
 	t = clock();
-	
 	if ((((float)t) - ((float)old_t2)) / CLOCKS_PER_SEC > 0.5){
 		naveta->calcCentru();
 		Laser *temp = new Laser(naveta->directie,naveta->centru_x+ cos(naveta->directie),naveta->centru_y+ sin(naveta->directie));
@@ -217,15 +214,13 @@ void laser_spawn(){
 		lasere.push_back(temp3);
 		old_t2 = t;
 	}
-
-
 }
-//verifica coliziuni cu inamicii
 
+//verifica coliziuni cu inamicii
 void laser_collision(){
-	for (int i = 0; i < inamici.size(); i++){
-		for (int j = 0; j < lasere.size(); j++){
-			for (int k = 0; k < lasere[j]->body->transf_points.size(); k++){
+	for (int i = 0; i < inamici.size(); i++){ //pentru toti inamicii
+		for (int j = 0; j < lasere.size(); j++){ //pentru toate laserele
+			for (int k = 0; k < lasere[j]->body->transf_points.size(); k++){ //pentru fiecare punct de pe 1 laser
 				float punct_x = lasere[j]->body->transf_points[k]->x;
 				float punct_y = lasere[j]->body->transf_points[k]->y;
 
@@ -234,6 +229,7 @@ void laser_collision(){
 					punct_y < inamici[i]->hitbox->transf_points[3]->y &&
 					punct_y >inamici[i]->hitbox->transf_points[0]->y){
 
+						//actualizeaza scorul
 						score_val += inamici[i]->value;
 
 						//remove inamic si laser
@@ -257,30 +253,33 @@ void laser_collision(){
 
 void move_lasers(){
 	for (int i = 0; i < lasere.size(); i++){
-		//lasere[i]->calc_centru();
-
 		float punct_x = lasere[i]->body->transf_points[0]->x;
 		float punct_y = lasere[i]->body->transf_points[0]->y;
-
-		if (punct_x < 0 || 
-			punct_x > chenar_x + 10 ||
-			punct_y < 0  ||
-			punct_y > chenar_y + 10){
+		// Daca laserul a depasit chenar atunci sterge-l
+		if (punct_x < 0 || 	punct_x > chenar_x + 10 || 	punct_y < 0  || punct_y > chenar_y + 10){
 			lasere[i]->removeLaser2D();
 			Laser *templaser = lasere[i];
 			lasere.erase(lasere.begin() + i);
 			delete templaser;
 			i--;
 		}else
-
 		lasere[i]->translate_with(cos(lasere[i]->directie), sin(lasere[i]->directie));
 	}
 }
+
+void DrawingWindow::init()
+{
+	//init chenar, scor, visual2d
+	init_principale();
+
+	//creeam naveta spatiala si o adaugam la centru
+	init_naveta_spatiala();
+}
+
+
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {	
-	
-
 	//Spawnez inamic la fiecare 1 secunda
 	enemy_spawn();
 
@@ -307,6 +306,7 @@ void DrawingWindow::onIdle()
 
 	//verifica coliziunea cu inamicii
 	laser_collision();
+
 	//misca laserele si despawneaza cand ies din cadru
 	move_lasers();
 
@@ -339,7 +339,6 @@ void DrawingWindow::onIdle()
 
 
 	//adaugam modifying score
-	//sprintf(buffer, " %.2f ", enemy_speed);
 	sprintf(buffer, " %06d ", score_val);
 	DrawingWindow::removeText(modifying_score);
 	modifying_score->text = buffer;
@@ -360,12 +359,7 @@ void DrawingWindow::onReshape(int width, int height)
 
 }
 void DrawingWindow::keyboardbuttonUP(unsigned char key, int x, int y){
-	//switch (key){
-	//case 110:
-	//	naveta->viteza = 3;
-	//	naveta->viteza_aux = naveta->viteza;
-	//	break;
-	//}
+	
 }
 void DrawingWindow::buttonUP(int key, int x, int y){
 	switch (key){
@@ -397,9 +391,6 @@ void DrawingWindow::onKey(unsigned char key)
 
 		up_pressed = true;
 		break;
-	//case 110: //cand apas N dau boost la viteza
-	//	naveta->viteza = 5;
-	//	break;
 	case 32:
 		if (naveta->burghiu_on){
 			naveta->deactivateBurghiu();
