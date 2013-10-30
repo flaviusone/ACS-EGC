@@ -255,8 +255,21 @@ void laser_collision(){
 
 void move_lasers(){
 	for (int i = 0; i < lasere.size(); i++){
-		lasere[i]->calc_centru();
+		//lasere[i]->calc_centru();
 
+		float punct_x = lasere[i]->body->transf_points[0]->x;
+		float punct_y = lasere[i]->body->transf_points[0]->y;
+
+		if (punct_x < 0 || 
+			punct_x > chenar_x + 10 ||
+			punct_y < 0  ||
+			punct_y > chenar_y + 10){
+			lasere[i]->removeLaser2D();
+			Laser *templaser = lasere[i];
+			lasere.erase(lasere.begin() + i);
+			delete templaser;
+			i--;
+		}else
 
 		lasere[i]->translate_with(cos(lasere[i]->directie), sin(lasere[i]->directie));
 	}
