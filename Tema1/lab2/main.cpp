@@ -93,28 +93,23 @@ void enemy_attack(){
 
 		float inamic_bxX = inamici[i]->bxX;
 		float inamic_byY = inamici[i]->bxY;
-		float dx, dy;
 		float inamic_centrux = inamici[i]->centrux;
 		float inamic_centruy = inamici[i]->centruy;
-		dx = -naveta->centru_x + inamic_centrux;
-		dy = -naveta->centru_y + inamic_centruy;
-
-		/*if (inamici[i]->tip != 1){
-			inamici[i]->rotire();
-		}*/
+		float dx = -naveta->centru_x + inamic_centrux;
+		float dy = -naveta->centru_y + inamic_centruy;
 
 		if (inamici[i]->tip == 2){
 
-			if (inamic_centrux - 15 < 6){
+			if (inamici[i]->centrux - 15 < 6){
 				inamici[i]->directie -= PI/2;
 			}
-			else if (inamic_centrux + 15 > chenar_x + 4){
+			else if (inamici[i]->centrux + 15 > chenar_x + 4){
 				inamici[i]->directie -= PI/2;
 			}
-			else if (inamic_centruy - 15 < 6){
+			else if (inamici[i]->centruy - 15 < 6){
 				inamici[i]->directie -= PI/2;
 			}
-			else if (inamic_centruy + 15 > chenar_y + 3){
+			else if (inamici[i]->centruy + 15 > chenar_y + 3){
 				inamici[i]->directie -= PI/2;
 			}
 
@@ -300,8 +295,14 @@ void DrawingWindow::onIdle()
 		if ((((float)t) - ((float)old_t3)) / CLOCKS_PER_SEC  < 10){
 			// spawn laser
 			laser_spawn();
+			naveta->burghiu_on = false;
+			naveta->deactivateBurghiu();
 		}
-		else naveta->laser_on = false;
+		else {
+			naveta->laser_on = false;
+			naveta->burghiu_on = true;
+			naveta->activateBurghiu();
+		}
 	}
 
 	//verifica coliziunea cu inamicii
