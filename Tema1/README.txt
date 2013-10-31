@@ -44,6 +44,18 @@ Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul d
 	IDE: Visual Studio 2013 RC
 	Sistem Operare: Windows 8.1 Pro
 
+3.1 Schema generala
+
+	Ideea de baza este ca nava spatiala sa supravietuiasca cat mai mult.Astfel inamici se vor spawna la fiecare 10 secunde initial, apoi acest timp fiind decrementat.Viteza inamicilor va creste de asemenea.
+
+	Inamicii inteligenti vor ataca naveta spatiala, se vor deplasa direct catre centrul ei.
+
+	Inamici tip stea vor ricosa din pereti.
+
+	La colectarea unui PowerUp naveta va incepe sa traga cu lasere in 3 directii.
+
+
+
 	3.2 Diagrama Clase
 
 +--main+----+Inamic.h+-----+Inamic1.h
@@ -63,9 +75,20 @@ Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul d
        +----+Transform2d.cpp
        |
        +----+Visual2D.cpp
-            
+   
+3.3 Mesaje
+	Scorul se va modifica cand un inamic va fi omorat de catre burghiul sau laserul navei spatiale
 
+	Vietile se vor decrementa pana la 0 cand jucatorul este lovit de catre inamici         
 
+3.4 Evenimente
+	
+	Coliziune Burghiu - Inamic : inamicul este scos din ecran si scorul updatat
+	Coliziune Naveta - Inamic : inamicul este scos din ecran si vietile decrementate
+	Coliziune Naveta - Pereti : naveta nu are voie sa iasa din cadru
+	Coliziune Inamici - Pereti : acestia vor ricosa la un unghi egal cu unghi_curent - PI/2
+	Coliziune Burghiu - PowerUp : Naveta va incepe sa traga cu lasere
+	Coliziune Lasere - Inamici : ambele vor disparea si scorul va fi updatat
 
 
 
