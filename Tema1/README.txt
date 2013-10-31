@@ -13,3 +13,47 @@ Cuprins
 7.Functionalitati
 
 1.Cerinta
+
+Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul din laboratoarele 1-3.Jocul trebuie sa aiba la baza un teren de joc, un jucator controlat din taste si o serie de inamici care trebuiesc distrusi pentru a acumula scor.
+
+2.Utilizare
+	Programul se ruleaza direct fara niciun parametru de intrare.
+
+	2.1 Fisiere
+		Nu sunt folosite fisiere de intrare sau iesire
+
+	2.2 Consola
+		In consola nu se afiseaza nimic si nu se primesc parametrii.
+
+	2.3 Input Tastatura
+		Taste:
+			[Sageata-Sus]
+				- cat timp butonul este tinut apasa nava va inainta cu o acceleratie crescatoare
+			[Sageata-Stanga]
+				- cat timp butonul este tinut apasat nava se va roti catre stanga cu un unghi prestabilit
+			[Sageata-Dreapta]
+				- cat timp butonul este tinut apasat nava se va roti catre dreapta cu un unghi prestabilit
+			[Space]
+				- cand tasta space va fi apasata arma navei spatiale va fi activata/dezactivata.
+			[Escape]
+				- butonul escape va inchide fereastra grafica si va oprii programul
+	2.4 Interfata Grafica
+		Interfaca grafica nu contine butoane apasabile.
+
+3.Implementare
+	IDE: Visual Studio 2013 RC
+	Sistem Operare: Windows 8.1 Pro
+
+7. functionalitati
+	Functionalitati Standard (ca in enunt)
+		-Miscare nava spatiala
+		-Afisare scor / numar vieti
+		-3 tipuri diferite de inamici formati din structuri complexe
+		-Elementele nu ies din cadru
+		-Detectare coliziune nava-inamic
+	Functionalitati Bonus
+		- Mai multe nivele de dificultate: la fiecare 10 secunde viteza de spawn si viteza inamicilor creste
+		- Inamici inteligenti: inamicii se indreapta catre jucator sau inamicii ricoseaza din pereti
+		- Deplasare nava cu accelerare si franare
+		- Burghiu + adaugare de proiectile de tip laser
+		- Bonusuri: Cand apare un inamic de tip cerc portocaliu iar acesta este distrus cu burgiul (si doar cu burghiul) nava va incepe sa traga cu lasere in 3 directii timp de 10 secunde
