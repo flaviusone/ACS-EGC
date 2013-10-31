@@ -43,6 +43,7 @@ Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul d
 3.Implementare
 	IDE: Visual Studio 2013 RC
 	Sistem Operare: Windows 8.1 Pro
+	S-a folosit frameworkul din laboratorul 2 exercitiul 1.
 
 3.1 Schema generala
 
