@@ -1,3 +1,10 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: main.h
+Descriere: Main
+*/
+
 #include "Framework/DrawingWindow.h"
 #include "Framework/Visual2D.h"
 #include "Framework/Transform2D.h"

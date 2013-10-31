@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Naveta.h
+Descriere: Clasa principala pentru naveta
+*/
 #pragma once
 #include "Framework/DrawingWindow.h"
 #include "Framework/Visual2D.h"

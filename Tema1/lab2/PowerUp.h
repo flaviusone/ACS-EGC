@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: PowerUp.h
+Descriere: Clasa principala pentru inamicul de tip powerUp
+*/
 #pragma once
 #include "Inamic.h"
 

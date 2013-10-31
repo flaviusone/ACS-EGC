@@ -1,3 +1,10 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Inamic.h
+Descriere: Clasa principala pentru inamici
+*/
+
 #pragma once
 #include "Framework\DrawingWindow.h"
 #include "Framework\Rectangle2d.h"

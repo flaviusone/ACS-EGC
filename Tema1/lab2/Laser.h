@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Laser.h
+Descriere: Clasa principala pentru lasere nava
+*/
 #pragma once
 #include "Framework\DrawingWindow.h"
 #include "Framework\Rectangle2d.h"

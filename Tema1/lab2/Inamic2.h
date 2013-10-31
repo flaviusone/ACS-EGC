@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Inamic2.h
+Descriere: Clasa principala Inamic tip 2
+*/
 #pragma once
 #include "Inamic.h"
 
