@@ -44,6 +44,46 @@ Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul d
 	IDE: Visual Studio 2013 RC
 	Sistem Operare: Windows 8.1 Pro
 
+	3.2 Diagrama Clase
+
++--main+----+Inamic.h+-----+Inamic1.h
+       |             |
+       |             +-----+Inamic2.h
+       |             |
+       |             +-----+Inamic3.h
+       |             |
+       |             +-----+PowerUp.h
+       |
+       +----+Laser.h
+       |
+       +----+Naveta.h
+       |
+       +----+DrawingWindow.cpp
+       |
+       +----+Transform2d.cpp
+       |
+       +----+Visual2D.cpp
+            
+
+
+
+
+
+4.Testare
+	IDE: Visual Studio 2013 RC
+	Sistem Operare: Windows 8.1 Pro
+
+	Se activeaza burghiul si se incearca sa se supravietuiasca cat mai mult posibil, incercat sa se detecteze eventuale buguri.	
+
+5. Probleme Aparute
+	Daca s-ar firespectat cerinta precizata in enunt prin care orice obiect nu are voie sa paraseasca chenarul atunci nava ar fi ramas blocata cu burghiul intr-un colt.Conform unui post de pe forum burghiul navei spatiale are voie sa iasa din cadru.
+
+	Dificil de implementat coliziunea cu obiectele
+
+	Probleme cu rotatia inamicilor.Inamicii erau detectati la coliziuni cu un delay semnificativ.Astfel s-a renuntat la rotirea inamicilor.
+
+	Probleme de optimizare la coliziuni, s-au mai redus din punctele verificate folosind hitbox pe inamici.
+
 6. Continutul Arhivei
 	Pe langa fisierele specifice framework-ului din laboratoarele 1-3 am sa mentionez fisiere adaugate sau fisierele modificate.
 
