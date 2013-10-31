@@ -6,7 +6,7 @@ class Inamic3 :public Inamic
 public:
 	int aux;
 	Rectangle2D *rect1;
-	Polygon2D *poly1, *poly2, *poly3, *poly4;
+	Polygon2D *poly1;
 	Circle2D *cerc;
 
 
@@ -17,9 +17,11 @@ public:
 		bxX = 30;
 		bxY = 30;
 
+		//Init patrat
 		rect1 = new Rectangle2D(Point2D(0, 0), 30, 30, Color(0.5, 0.5, 0), false);
 		parts.push_back(rect1);
 
+		//Init poligon
 		poly1 = new Polygon2D(Color(1, 0, 1), false);
 		poly1->addPoint(Point2D(0, 15));
 		poly1->addPoint(Point2D(15, 30));

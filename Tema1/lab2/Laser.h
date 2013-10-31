@@ -9,14 +9,16 @@
 class Laser
 {
 public:
-	float directie;
-	float centrux = 0, centruy = 0;
+	float	directie,
+			centrux = 0, 
+			centruy = 0;
 	Polygon2D *body;
 
 public:
 	Laser(float dir, float startX, float startY){
+		
+		//Creeaza body laser
 		body = new Polygon2D(Color(1, 0, 0), true);
-
 		body->addPoint(Point2D(0, 0));
 		body->addPoint(Point2D(25, 0));
 		body->addPoint(Point2D(50, 0));
@@ -24,12 +26,13 @@ public:
 		body->addPoint(Point2D(25, 10));
 		body->addPoint(Point2D(0, 10));
 
+		//Roteste si muta laserul 
 		Transform2D::loadIdentityMatrix();
 		Transform2D::rotateMatrix(dir);
 		Transform2D::translateMatrix(startX, startY);
 		Transform2D::applyTransform(body);
 
-
+		// Directia este egala cu cea a navei
 		directie = dir;
 
 		//adaugam la view
@@ -51,8 +54,6 @@ public:
 	}
 
 	void calc_centru(){
-		
-
 		//centrul inamicului este si centrul hitboxului
 		centrux = (body->transf_points[0]->x +
 			body->transf_points[2]->x +
