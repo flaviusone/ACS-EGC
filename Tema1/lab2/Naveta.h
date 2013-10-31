@@ -13,19 +13,21 @@ public:
 	Circle2D *cerc_naveta;
 	Polygon2D *poly_naveta, *burghiu;
 
-	// valorile pentur collision center
-	float centru_burghiu_x, centru_burghiu_y;
-	float directie = 0;
-	float viteza = 2, viteza_aux = 0;
-	bool burghiu_on = false, laser_on = false;
-	int chenar_x, chenar_y;
+	float	centru_burghiu_x,
+			centru_burghiu_y,
+			directie = 0,
+			viteza = 2,		//Viteaza la care se ajunge
+			viteza_aux = 0; //Viteza actuala
+	bool	burghiu_on = false, 
+			laser_on = false;
+	int chenar_x, // Dimensiunile chenarului cadrului
+		chenar_y;
 	float centru_x=0, centru_y=0;
 public:
 
 	//Main constructor
 	Naveta(float centrux , float centruy,int chenarx,int chenary){
-		//adaug cercul
-
+		
 		centru_x = centrux;
 		centru_y = centruy;
 
@@ -81,9 +83,6 @@ public:
 	void rotate(int param){
 		centru_x = 0, centru_y = 0;
 
-		//if param 0 -> rotate_right
-		//else -> rotate_left
-
 		float unghi = 0.02;
 		if (param != 0) unghi = -unghi;
 
@@ -129,17 +128,23 @@ public:
 			}
 			else
 			if ((cerc_naveta->transf_points[0]->x) > chenar_x + 4){
+				//mut inapoi unde era inainte de mutare
 				translate(-viteza_aux*cos(directie), 0);
+				//mut fix pe margine
 				translate(chenar_x - cerc_naveta->transf_points[0]->x + 4, 0);
 			}
 			else
 			if ((cerc_naveta->transf_points[0]->y - 30) < 6){
+				//mut inapoi unde era inainte de mutare
 				translate(0, -viteza_aux*sin(directie));
+				//mut fix pe margine
 				translate(0, -(cerc_naveta->transf_points[0]->y - 30 - 6));
 			}
 			else
 			if ((cerc_naveta->transf_points[0]->y + 30) > chenar_y + 3){
+				//mut inapoi unde era inainte de mutare
 				translate(0, -viteza_aux*sin(directie));
+				//mut fix pe margine
 				translate(0, chenar_y - cerc_naveta->transf_points[0]->y - 30 + 3);
 			}
 			else break;
@@ -157,10 +162,13 @@ public:
 		DrawingWindow::removeObject2D(poly_naveta);
 		DrawingWindow::removeObject2D(cerc_naveta);
 	}
+	// Activeaza burghiu
 	void activateBurghiu(){
 		DrawingWindow::addObject2D(burghiu);
 
 	}
+
+	//Dezactiveaza burghiu
 	void deactivateBurghiu(){
 		DrawingWindow::removeObject2D(burghiu);
 	}
