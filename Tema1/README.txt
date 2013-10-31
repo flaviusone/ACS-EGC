@@ -44,6 +44,33 @@ Se cere sa se implementeze un joc de tipul Geometry Wars folosint framework-ul d
 	IDE: Visual Studio 2013 RC
 	Sistem Operare: Windows 8.1 Pro
 
+6. Continutul Arhivei
+	Pe langa fisierele specifice framework-ului din laboratoarele 1-3 am sa mentionez fisiere adaugate sau fisierele modificate.
+
+	Pentru a respecta structura din framework si pentr a mentine codul cat mai lizibil si mai simplu, clasele au fost declarate
+
+		- main.cpp
+			sursa principala a aplicatiei
+		- Inamic.h
+			implementare calsa principala pentru inamic.va fi mosteninta de celelalte clase tip inamic
+		- Inamic1.h
+			mosteneste inamic.h si descrie inamicul de tip 1 (cele doua patrate verzi).
+		- Inamic2.h
+			mosteneste inamic.h si descrie inamicul de tip 2 (stea de culoare mov).
+		- Inamic3.h
+			mosteneste inamic.h si descrie inamicul de tip 3(patrat + romb de culori diferite).
+		- Laser.h
+			inplementarea clasei proiectilelor trase de nava spatiala
+		- Naveta.h
+			implementarea clasei principale pentru nava spatiala
+		- PowerUp
+			mosteneste inamic.h si descrie inamicul de tip powerUp care activeaza laserele odata distrusa cu burghiul
+		- DrawingWindow.cpp
+			s-a modificat fisierul adaugand functiile glutSpecialUpFunc(buttonUP);
+			glutKeyboardUpFunc(keyboardbuttonUP);
+			glClearColor(0.2,0.2,0.2,1);
+			pentru recunoasterea ridicarii degetului de pe butoane si pentru a modifica backgroundul ferestrei.
+
 7. functionalitati
 	Functionalitati Standard (ca in enunt)
 		-Miscare nava spatiala
