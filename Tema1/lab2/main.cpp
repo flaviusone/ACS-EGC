@@ -195,6 +195,7 @@ void respawn_world(){
 	init_naveta_spatiala();
 	// reda vietile
 	lives = 3;
+
 	// scor = 0
 	score_val = 0;	
 	enemy_speed = 0.2;
@@ -263,7 +264,7 @@ void move_lasers(){
 			delete templaser;
 			i--;
 		}else
-		lasere[i]->translate_with(cos(lasere[i]->directie), sin(lasere[i]->directie));
+			lasere[i]->translate_with(1.5*cos(lasere[i]->directie), 1.5*sin(lasere[i]->directie));
 	}
 }
 
