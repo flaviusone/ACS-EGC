@@ -279,12 +279,13 @@ void Transform3D::applyTransform(Point3D *p, Point3D* transf_p)
 	transf_p->x = MVPMatrix[0][0] * p->x + MVPMatrix[0][1] * p->y + MVPMatrix[0][2] * p->z + MVPMatrix[0][3];
 	transf_p->y = MVPMatrix[1][0] * p->x + MVPMatrix[1][1] * p->y + MVPMatrix[1][2] * p->z + MVPMatrix[1][3];
 	transf_p->z = MVPMatrix[2][0] * p->x + MVPMatrix[2][1] * p->y + MVPMatrix[2][2] * p->z + MVPMatrix[2][3];
-	
-	//impartirea perspectiva w = -(z - zc)/zc
+	float w = MVPMatrix[3][0] * p->x + MVPMatrix[3][1] * p->y + MVPMatrix[3][2] * p->z + MVPMatrix[3][3];
+
+	//impartirea perspectiva
 	if (proj_type)
 	{
-		transf_p->x /= -(p->z - ZC) / ZC;
-		transf_p->y /= -(p->z - ZC) / ZC;
+		transf_p->x /= w;
+		transf_p->y /= w;
 	}
 
 }
