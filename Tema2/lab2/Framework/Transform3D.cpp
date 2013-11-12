@@ -9,20 +9,20 @@ using namespace std;
 float ZC; //folosit pentru impartirea perspectiva
 
 //initial matricea de transformare este egala cu matricea identitate
-	// 1 0 0 0
-	// 0 1 0 0
-	// 0 0 1 0
-	// 0 0 0 1
-	
-float Transform3D::ModelMatrix[4][4] = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
-float Transform3D::ProjectionMatrix[4][4] = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
-float Transform3D::MVPMatrix[4][4] = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
+// 1 0 0 0
+// 0 1 0 0
+// 0 0 1 0
+// 0 0 0 1
+
+float Transform3D::ModelMatrix[4][4] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+float Transform3D::ProjectionMatrix[4][4] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+float Transform3D::MVPMatrix[4][4] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 bool Transform3D::proj_type(false);
 
 
 Transform3D::Transform3D()
 {
-	
+
 }
 
 
@@ -57,11 +57,11 @@ void Transform3D::loadIdentityProjectionMatrix()
 
 void Transform3D::multiplyModelMatrix(float matrix[4][4])
 {//								m00   m01  m02  m03     tm00  tm01  tm02  tm03
- // matrix * ModelMatrix =      m10   m11  m12  m13  *  tm10  tm11  tm12  tm13
- //								m20   m21  m22  m23     tm20  tm21  tm22  tm23
- //                             m30   m31  m32  m33     tm30  tm31  tm32  tm33
+	// matrix * ModelMatrix =      m10   m11  m12  m13  *  tm10  tm11  tm12  tm13
+	//								m20   m21  m22  m23     tm20  tm21  tm22  tm23
+	//                             m30   m31  m32  m33     tm30  tm31  tm32  tm33
 
-	int i,j,k;
+	int i, j, k;
 	float aux_matrix[4][4];
 
 	for (i = 0; i < 4; i++)
@@ -80,11 +80,11 @@ void Transform3D::multiplyModelMatrix(float matrix[4][4])
 	{
 		for (j = 0; j < 4; j++)
 		{
-			
-			ModelMatrix[i][j] = aux_matrix[i][j];	
+
+			ModelMatrix[i][j] = aux_matrix[i][j];
 		}
 	}
-	
+
 }
 
 
@@ -92,11 +92,11 @@ void Transform3D::multiplyModelMatrix(float matrix[4][4])
 
 void Transform3D::multiplyProjectionMatrix(float matrix[4][4])
 {//								m00   m01  m02  m03     tm00  tm01  tm02  tm03
- // matrix * ProjectionMatrix = m10   m11  m12  m13  *  tm10  tm11  tm12  tm13
- //								m20   m21  m22  m23     tm20  tm21  tm22  tm23
- //                             m30   m31  m32  m33     tm30  tm31  tm32  tm33
+	// matrix * ProjectionMatrix = m10   m11  m12  m13  *  tm10  tm11  tm12  tm13
+	//								m20   m21  m22  m23     tm20  tm21  tm22  tm23
+	//                             m30   m31  m32  m33     tm30  tm31  tm32  tm33
 
-	int i,j,k;
+	int i, j, k;
 	float aux_matrix[4][4];
 
 
@@ -111,16 +111,16 @@ void Transform3D::multiplyProjectionMatrix(float matrix[4][4])
 			}
 		}
 	}
-	
+
 	for (i = 0; i < 4; i++)
 	{
 		for (j = 0; j < 4; j++)
 		{
-			
+
 			ProjectionMatrix[i][j] = aux_matrix[i][j];
 		}
 	}
-	
+
 }
 
 
@@ -140,7 +140,7 @@ void Transform3D::translateMatrix(float tx, float ty, float tz)
 	TranslateMatrix[1][0] = 0; TranslateMatrix[1][1] = 1; TranslateMatrix[1][2] = 0; TranslateMatrix[1][3] = ty;
 	TranslateMatrix[2][0] = 0; TranslateMatrix[2][1] = 0; TranslateMatrix[2][2] = 1; TranslateMatrix[2][3] = tz;
 	TranslateMatrix[3][0] = 0; TranslateMatrix[3][1] = 0; TranslateMatrix[3][2] = 0; TranslateMatrix[3][3] = 1;
-	
+
 	//se inmulteste matricea de translatie cu matricea curenta de modelare
 	//folosim scrierea vectori coloana
 	multiplyModelMatrix(TranslateMatrix);
@@ -177,11 +177,11 @@ void Transform3D::rotateMatrixOz(float u)
 	//0        0       1  0
 	//0        0       0  1
 
-	RotateMatrix[0][0] = cos(u);  RotateMatrix[0][1] = - sin(u); RotateMatrix[0][2] = 0;   RotateMatrix[0][3] = 0;
+	RotateMatrix[0][0] = cos(u);  RotateMatrix[0][1] = -sin(u); RotateMatrix[0][2] = 0;   RotateMatrix[0][3] = 0;
 	RotateMatrix[1][0] = sin(u);  RotateMatrix[1][1] = cos(u);   RotateMatrix[1][2] = 0;   RotateMatrix[1][3] = 0;
 	RotateMatrix[2][0] = 0;       RotateMatrix[2][1] = 0;		 RotateMatrix[2][2] = 1;   RotateMatrix[2][3] = 0;
 	RotateMatrix[3][0] = 0;       RotateMatrix[3][1] = 0;        RotateMatrix[3][2] = 0;   RotateMatrix[3][3] = 1;
-	
+
 	//se inmulteste matricea de rotatie cu matricea curenta de modelare
 	//folosim scrierea vectori coloana
 	multiplyModelMatrix(RotateMatrix);
@@ -197,11 +197,11 @@ void Transform3D::rotateMatrixOy(float u)
 	//sin(u)   0       cos(u)  0
 	//0        0       0       1
 
-	RotateMatrix[0][0] = cos(u);  RotateMatrix[0][1] = 0;  RotateMatrix[0][2] = - sin(u);  RotateMatrix[0][3] = 0;
+	RotateMatrix[0][0] = cos(u);  RotateMatrix[0][1] = 0;  RotateMatrix[0][2] = -sin(u);  RotateMatrix[0][3] = 0;
 	RotateMatrix[1][0] = 0;		  RotateMatrix[1][1] = 1;  RotateMatrix[1][2] = 0;         RotateMatrix[1][3] = 0;
 	RotateMatrix[2][0] = sin(u);  RotateMatrix[2][1] = 0;  RotateMatrix[2][2] = cos(u);    RotateMatrix[2][3] = 0;
 	RotateMatrix[3][0] = 0;       RotateMatrix[3][1] = 0;  RotateMatrix[3][2] = 0;         RotateMatrix[3][3] = 1;
-	
+
 	//se inmulteste matricea de rotatie cu matricea curenta de modelare
 	//folosim scrierea vectori coloana
 	multiplyModelMatrix(RotateMatrix);
@@ -221,7 +221,7 @@ void Transform3D::rotateMatrixOx(float u)
 	RotateMatrix[1][0] = 0;    RotateMatrix[1][1] = cos(u);  RotateMatrix[1][2] = -sin(u);  RotateMatrix[1][3] = 0;
 	RotateMatrix[2][0] = 0;    RotateMatrix[2][1] = sin(u);  RotateMatrix[2][2] = cos(u);   RotateMatrix[2][3] = 0;
 	RotateMatrix[3][0] = 0;	   RotateMatrix[3][1] = 0;       RotateMatrix[3][2] = 0;        RotateMatrix[3][3] = 1;
-	
+
 	//se inmulteste matricea de rotatie cu matricea curenta de modelare
 	//folosim scrierea vectori coloana
 	multiplyModelMatrix(RotateMatrix);
@@ -232,14 +232,17 @@ void Transform3D::parallelProjectionMatrix(float a, float b, float c)
 {
 	float ParallProjectionMatrix[4][4];
 
-	proj_type=false;
+	proj_type = false;
 
-	//TODO
-	
+	ParallProjectionMatrix[0][0] = 1; ParallProjectionMatrix[0][1] = 0; ParallProjectionMatrix[0][2] = -(a / c);	ParallProjectionMatrix[0][3] = 0;
+	ParallProjectionMatrix[1][0] = 0; ParallProjectionMatrix[1][1] = 1; ParallProjectionMatrix[1][2] = -(b / c);	ParallProjectionMatrix[1][3] = 0;
+	ParallProjectionMatrix[2][0] = 0; ParallProjectionMatrix[2][1] = 0; ParallProjectionMatrix[2][2] = 0;			ParallProjectionMatrix[2][3] = 0;
+	ParallProjectionMatrix[3][0] = 0; ParallProjectionMatrix[3][1] = 0; ParallProjectionMatrix[3][2] = 0;	ParallProjectionMatrix[3][3] = 1;
+
 	//se inmulteste matricea de proiectie ParallProjectionMatrix  cu matricea curenta de proiectie
 	//folosim scrierea vectori coloana
-	
-	//multiplyProjectionMatrix(ParallProjectionMatrix);
+
+	multiplyProjectionMatrix(ParallProjectionMatrix);
 
 }
 
@@ -249,17 +252,20 @@ void Transform3D::perspectiveProjectionMatrix(float xc, float yc, float zc)
 {
 	float PerspProjectionMatrix[4][4];
 
-	proj_type=true;
+	proj_type = true;
 
-	//TODO	
-	
-	
+	PerspProjectionMatrix[0][0] = 1; PerspProjectionMatrix[0][1] = 0; PerspProjectionMatrix[0][2] = -(xc / zc);    PerspProjectionMatrix[0][3] = 0;
+	PerspProjectionMatrix[1][0] = 0; PerspProjectionMatrix[1][1] = 1; PerspProjectionMatrix[1][2] = -(yc / zc);    PerspProjectionMatrix[1][3] = 0;
+	PerspProjectionMatrix[2][0] = 0; PerspProjectionMatrix[2][1] = 0; PerspProjectionMatrix[2][2] = 0;           PerspProjectionMatrix[2][3] = 0;
+	PerspProjectionMatrix[3][0] = 0; PerspProjectionMatrix[3][1] = 0; PerspProjectionMatrix[3][2] = -(1 / zc);     PerspProjectionMatrix[3][3] = 1;
+
+
 	//se inmulteste matricea de proiectie PerspProjectionMatrix  cu matricea curenta de proiectie
 	//folosim scrierea vectori coloana
 
-	//multiplyProjectionMatrix(PerspProjectionMatrix);
-	
-	
+	multiplyProjectionMatrix(PerspProjectionMatrix);
+
+
 	//salvam coordonata z a centrului de proie
 	ZC = zc;
 
@@ -273,12 +279,13 @@ void Transform3D::applyTransform(Point3D *p, Point3D* transf_p)
 	transf_p->x = MVPMatrix[0][0] * p->x + MVPMatrix[0][1] * p->y + MVPMatrix[0][2] * p->z + MVPMatrix[0][3];
 	transf_p->y = MVPMatrix[1][0] * p->x + MVPMatrix[1][1] * p->y + MVPMatrix[1][2] * p->z + MVPMatrix[1][3];
 	transf_p->z = MVPMatrix[2][0] * p->x + MVPMatrix[2][1] * p->y + MVPMatrix[2][2] * p->z + MVPMatrix[2][3];
-	
-	//impartirea perspectiva w = -(z - zc)/zc
+	float w = MVPMatrix[3][0] * p->x + MVPMatrix[3][1] * p->y + MVPMatrix[3][2] * p->z + MVPMatrix[3][3];
+
+	//impartirea perspectiva
 	if (proj_type)
 	{
-		transf_p->x /= -(transf_p->z - ZC) / ZC;
-		transf_p->y /= -(transf_p->z - ZC) / ZC;
+		transf_p->x /= w;
+		transf_p->y /= w;
 	}
 
 }
@@ -287,7 +294,7 @@ void Transform3D::applyTransform(Object3D* o)
 {
 	//calculez matricea MVP = ProjectionMatrix * ModelMatrix
 
-	int i,j,k;
+	int i, j, k;
 
 	for (i = 0; i < 4; i++)
 	{
@@ -302,7 +309,7 @@ void Transform3D::applyTransform(Object3D* o)
 	}
 
 	for (i = 0; i < o->vertices.size(); i++)
-		applyTransform(o->vertices[i],o->transf_vertices[i]);
+		applyTransform(o->vertices[i], o->transf_vertices[i]);
 }
 
 
