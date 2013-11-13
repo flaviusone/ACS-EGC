@@ -305,7 +305,8 @@ void DrawingWindow::clip(float XFm, float XFM, float YFm, float YFM, int XPm, in
 	//glViewport(x,y,width,height) - x si y sunt coordonatele punctului celui mai din stanga jos
 	
 
-	glViewport(XPm,height-YPM,XPM-XPm,YPM-YPm);
+	//glViewport(XPm,height-YPM,XPM-XPm,YPM-YPm);
+	glViewport(0, 0, 1280, 1280);
 	//cout<<"YPm="<<YPm<<" height="<<height<<" YPM="<<YPM<<endl;	
 	//se stabileste transformarea de proiectie
 	glMatrixMode(GL_PROJECTION);
