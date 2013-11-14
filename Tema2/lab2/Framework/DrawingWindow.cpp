@@ -43,7 +43,7 @@ DrawingWindow::DrawingWindow(int argc, char** argv,int _width, int _height, int 
 	glutMouseFunc(mouseFunction); //functia apelata la click de mouse
 	glutSpecialUpFunc(buttonUP);
 
-	glClearColor(1,1,1,1);  //afiseaza fondul ferestrei aplicatiei in alb
+	glClearColor(0.2,0.2,0.2,0);  //afiseaza fondul ferestrei aplicatiei in alb
 
 	//activeaza testul de adancime pentru eliminarea partilor nevizibile in imagini
 	glEnable(GL_DEPTH_TEST); 
@@ -305,8 +305,8 @@ void DrawingWindow::clip(float XFm, float XFM, float YFm, float YFM, int XPm, in
 	//glViewport(x,y,width,height) - x si y sunt coordonatele punctului celui mai din stanga jos
 	
 
-	//glViewport(XPm,height-YPM,XPM-XPm,YPM-YPm);
-	glViewport(0, 0, 1280, 1280);
+	glViewport(XPm,height-YPM,XPM-XPm,YPM-YPm);
+	//glViewport(0, 0, 1280, 1280);
 	//cout<<"YPm="<<YPm<<" height="<<height<<" YPM="<<YPM<<endl;	
 	//se stabileste transformarea de proiectie
 	glMatrixMode(GL_PROJECTION);

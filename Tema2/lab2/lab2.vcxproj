@@ -72,6 +72,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Framework\Circle2D.h" />
     <ClInclude Include="Framework\Color.h" />
     <ClInclude Include="Framework\DrawingWindow.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="Framework\Transform2D.h" />
     <ClInclude Include="Framework\Transform3D.h" />
     <ClInclude Include="Framework\Visual2D.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

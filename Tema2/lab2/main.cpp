@@ -9,10 +9,13 @@
 #include <iostream>
 #include <windows.h>
 #include "Player.h"
+#include "Board.h"
 
 
 #define PI 3.14159265358979323846
 #define inf 1000000
+#define stanga 1
+#define dreapta -1
 using namespace std;
 
 Visual2D *v2d1;
@@ -20,12 +23,14 @@ Object3D *cube21,*cube22,*chenar;
 vector <Point3D*> vertices;
 vector <Face*> faces;
 Player *player;
+Board *board;
 float n=1;
 bool	left_pressed = false,
 		right_pressed = false,
 		up_pressed = false,
-		down_pressed = false;
-	
+		down_pressed = false,
+		press = false;
+float unghi = PI / 12;
 
 void init_player(){
 	player = new Player();
@@ -34,26 +39,7 @@ void init_player(){
 }
 
 void init_board(){
-	n = 3;
-	vertices.push_back(new Point3D(-n, 0, -n));
-	vertices.push_back(new Point3D(n, 0, -n));
-	vertices.push_back(new Point3D(2*n, 0, 5*n));
-	vertices.push_back(new Point3D(-2*n, 0, 5*n));
-
-	vector <int> contour;
-	//fata jos
-	contour.clear();
-	contour.push_back(0);
-	contour.push_back(1);
-	contour.push_back(2);
-	contour.push_back(3);
-	faces.push_back(new Face(contour));
-
-	chenar = new Object3D(vertices, faces, Color(1, 0, 0), false);
-	DrawingWindow::addObject3D(chenar);
-	Transform3D::loadIdentityProjectionMatrix();
-	Transform3D::perspectiveProjectionMatrix(0.5, 10, 20);
-	Transform3D::applyTransform(chenar);
+	board = new Board();
 }
 
 
@@ -61,27 +47,15 @@ void init_board(){
 void DrawingWindow::init()
 {
 	
-	v2d1 = new Visual2D(-9,-12,9,12,0,0,DrawingWindow::width,DrawingWindow::height); 
+	v2d1 = new Visual2D(0,0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
 	v2d1->tipTran(true);
 	addVisual2D(v2d1);
-	
+
 	init_board();
-
-	//se deseneaza playerul
 	init_player();
-	
-	
 		
-	/*Transform3D::loadIdentityProjectionMatrix();
-	Transform3D::perspectiveProjectionMatrix(0.5, 4, 4);
-	Transform3D::applyTransform(player->parts[0]);
-
-	Transform3D::loadIdentityModelMatrix();
-	Transform3D::translateMatrix(2, 0, 0);
-	Transform3D::applyTransform(player->parts[0]);*/
-	//Transform3D::translateMatrix(0,0,ty);
-	//Transform3D::rotateMatrixOy(-0.5);
-	//Transform3D::rotateMatrixOz(-0.1);
+	//se deseneaza playerul
+	
 }
 
 
@@ -89,15 +63,25 @@ void DrawingWindow::init()
 void DrawingWindow::onIdle()
 {
 
-	if (right_pressed)
+	if (right_pressed){
 		player->move_right();
-	if (left_pressed)
+		board->rotate(dreapta);
+	}
+	
+	if (left_pressed){
 		player->move_left();
+		board->rotate(stanga);
+	}
+
+	if (!press){
+		player->set_straight();
+		board->set_straight();
+	}
+
 	if (up_pressed)
 		player->move_up();
 	if (down_pressed)
 		player->move_down();
-
 
 	
 }
@@ -118,9 +102,15 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 		break;
 	case GLUT_KEY_LEFT:
 		left_pressed = false;
+		board->set_straight();
+		press = false;
+		//player->set_straight(-1);
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = false;
+		press = false;
+		board->set_straight();
+		//player->set_straight(1);
 		break;
 	case GLUT_KEY_DOWN:
 		down_pressed = false;
@@ -135,13 +125,13 @@ void DrawingWindow::onKey(unsigned char key)
 	{
 	case GLUT_KEY_LEFT:
 		left_pressed = true;
+		press = true;
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = true;
+		press = true;
 		break;
 	case GLUT_KEY_UP:
-		//if (!up_pressed)
-		//	naveta->viteza_aux = 0;		//plec de pe loc cu viteza 0
 		up_pressed = true;
 		break;
 	case GLUT_KEY_DOWN:
