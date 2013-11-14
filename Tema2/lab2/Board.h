@@ -49,15 +49,27 @@ public:
 		Transform3D::perspectiveProjectionMatrix(DrawingWindow::width / 2, DrawingWindow::height / 2 + 400, 600);
 		Transform3D::applyTransform(chenar);
 	}
-	void rotate(int semn){
+	void rotate_stanga(){
 		if (counter < unghi)
 			counter += 0.01;
 		Transform3D::loadIdentityModelMatrix();
-		Transform3D::translateMatrix(-centrux, -centruy,-centruz);
-		Transform3D::rotateMatrixOz(semn*counter);
+		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
+		Transform3D::rotateMatrixOz(counter);
 		Transform3D::translateMatrix(centrux, centruy, centruz);
 		Transform3D::applyTransform(chenar);
-		last_dir = semn;
+		last_dir = stanga;
+	}
+
+
+	void rotate_dreapta(){
+		if (counter > -unghi)
+			counter -= 0.01;
+		Transform3D::loadIdentityModelMatrix();
+		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
+		Transform3D::rotateMatrixOz(counter);
+		Transform3D::translateMatrix(centrux, centruy, centruz);
+		Transform3D::applyTransform(chenar);
+		last_dir = dreapta;
 	}
 
 	void calc_centru(){
@@ -75,16 +87,11 @@ public:
 	}
 
 	void set_straight(){
-		if (counter > 0)
-			counter -= 0.01;
-
 		Transform3D::loadIdentityModelMatrix();
-
-		Transform3D::loadIdentityModelMatrix();
-		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
-		Transform3D::rotateMatrixOz(last_dir*counter);
-		Transform3D::translateMatrix(centrux, centruy, centruz);
-
+		if (counter > 0.01)
+			rotate_dreapta();
+		else if (counter < -0.01)
+			rotate_stanga();
 		Transform3D::applyTransform(chenar);
 	}
 	~Board(){};

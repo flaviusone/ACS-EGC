@@ -65,12 +65,12 @@ void DrawingWindow::onIdle()
 
 	if (right_pressed){
 		player->move_right();
-		board->rotate(dreapta);
+		board->rotate_dreapta();
 	}
 	
 	if (left_pressed){
 		player->move_left();
-		board->rotate(stanga);
+		board->rotate_stanga();
 	}
 
 	if (!press){
@@ -78,10 +78,10 @@ void DrawingWindow::onIdle()
 		board->set_straight();
 	}
 
-	if (up_pressed)
+	/*if (up_pressed)
 		player->move_up();
 	if (down_pressed)
-		player->move_down();
+		player->move_down();*/
 
 	
 }
