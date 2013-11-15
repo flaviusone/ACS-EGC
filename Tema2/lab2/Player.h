@@ -98,7 +98,6 @@ public:
 	void set_perspecitve(){
 		Transform3D::loadIdentityProjectionMatrix();
 		Transform3D::perspectiveProjectionMatrix(DrawingWindow::width / 2, DrawingWindow::height / 2 + 400, 600);
-		//Transform3D::perspectiveProjectionMatrix(tx,-tz,600);
 		for (int i = 0; i < parts.size(); i++){
 			Transform3D::applyTransform(parts[i]);
 		}
@@ -156,9 +155,9 @@ public:
 	void set_straight(){
 		Transform3D::loadIdentityModelMatrix();
 
-		if (counter > 0)
+		if (counter > 0.01)
 			rotate_dreapta();
-		else if (counter < 0)
+		else if (counter < -0.01)
 			rotate_stanga();
 		
 		Transform3D::translateMatrix(tx, ty, tz);

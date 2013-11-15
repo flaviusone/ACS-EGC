@@ -6,14 +6,14 @@
 #define PI 3.14159265358979323846
 #define stanga 1
 #define dreapta -1
-
+#define rotate_speed 0.01
 class Inamic{
 public:
 	vector <Point3D*> vertices;
 	vector <Face*> faces;
 	Object3D* body;
 	float n = 100;
-	float speed = 5;
+	float speed = 0.5;
 	float tx = 0, ty = 0, tz = 0;
 	float centrux, centruy, centruz;
 	float counterL = 0, counterR = 0, counter = 0;
@@ -34,7 +34,7 @@ public:
 
 	void rotate_stanga(){
 		if (counter < unghi)
-			counter += 0.01;
+			counter += rotate_speed;
 		Transform3D::loadIdentityModelMatrix();
 		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
 		Transform3D::rotateMatrixOz(counter);
@@ -46,7 +46,7 @@ public:
 
 	void rotate_dreapta(){
 		if (counter > -unghi)
-			counter -= 0.01;
+			counter -= rotate_speed;
 		Transform3D::loadIdentityModelMatrix();
 		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
 		Transform3D::rotateMatrixOz(counter);
@@ -57,12 +57,19 @@ public:
 
 	void set_straight(){
 		//Transform3D::loadIdentityModelMatrix();
-		if (counter > 0.01)
+		if (counter > rotate_speed)
 			rotate_dreapta();
-		else if (counter < -0.01)
+		else if (counter < -rotate_speed)
 			rotate_stanga();
 		//Transform3D::translateMatrix(tx, ty, tz);
 		//Transform3D::applyTransform(body);
+	}
+
+	void move_down(){
+		tz += speed;
+		//Transform3D::loadIdentityModelMatrix();
+		Transform3D::translateMatrix(tx, ty, tz);
+		Transform3D::applyTransform(body);
 	}
 	
 	void calc_centru(){
