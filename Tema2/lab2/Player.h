@@ -122,7 +122,6 @@ public:
 		Transform3D::translateMatrix(-n / 2, -n / 2, -n / 2);
 		Transform3D::rotateMatrixOz(counter);
 		Transform3D::translateMatrix(n / 2, n / 2, n / 2);
-		last_dir = stanga;
 	}
 
 
@@ -132,7 +131,6 @@ public:
 		Transform3D::translateMatrix(-n / 2, -n / 2, -n / 2);
 		Transform3D::rotateMatrixOz(counter);
 		Transform3D::translateMatrix(n / 2, n / 2, n / 2);
-		last_dir = dreapta;
 	}
 
 	void move_right(){
@@ -163,9 +161,6 @@ public:
 		else if (counter < 0)
 			rotate_stanga();
 		
-		/*Transform3D::translateMatrix(-n / 2, -n / 2, -n / 2);
-		Transform3D::rotateMatrixOz(counter * last_dir);
-		Transform3D::translateMatrix(n / 2, n / 2, n / 2);*/
 		Transform3D::translateMatrix(tx, ty, tz);
 		for (int i = 0; i < parts.size(); i++){
 			Transform3D::applyTransform(parts[i]);

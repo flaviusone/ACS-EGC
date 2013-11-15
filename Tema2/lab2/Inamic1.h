@@ -69,19 +69,17 @@ public:
 		faces.push_back(new Face(contour));
 
 		// Create object
-		body = new Object3D(vertices, faces, Color(1, 0, 0), false);
+		body = new Object3D(vertices, faces, Color(1, 0.75, 0), false);
 
+		// Set center position
+		calc_centru();
 
-		// Set perspective
-		Transform3D::loadIdentityProjectionMatrix();
-		Transform3D::perspectiveProjectionMatrix(DrawingWindow::width / 2, DrawingWindow::height / 2 + 400, 600);
 		// Translate
 		tx += startX;
 		ty += startY;
 		tz += startZ;
 		Transform3D::translateMatrix(tx, ty, tz);
 		Transform3D::applyTransform(body);
-
 		// Add to visual
 		DrawingWindow::addObject3D(body);
 
