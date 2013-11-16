@@ -10,6 +10,7 @@
 #include <windows.h>
 #include "Player.h"
 #include "Board.h"
+#include "Inamic1.h"
 
 
 #define PI 3.14159265358979323846
@@ -22,8 +23,11 @@ Visual2D *v2d1;
 Object3D *cube21,*cube22,*chenar;
 vector <Point3D*> vertices;
 vector <Face*> faces;
+vector <Inamic*> inamici;
 Player *player;
 Board *board;
+Text *score;
+char buffer[20];
 float n=1;
 bool	left_pressed = false,
 		right_pressed = false,
@@ -31,6 +35,30 @@ bool	left_pressed = false,
 		down_pressed = false,
 		press = false;
 float unghi = PI / 12;
+
+void inamici_rotate_dreapta(){
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->rotate_dreapta();
+	}
+}
+
+void inamici_rotate_stanga(){
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->rotate_stanga();
+	}
+}
+
+void inamici_set_straight(){
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->set_straight();
+	}
+}
+
+void inamici_move_down(){
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->move_down();
+	}
+}
 
 void init_player(){
 	player = new Player();
@@ -50,12 +78,14 @@ void DrawingWindow::init()
 	v2d1 = new Visual2D(0,0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
 	v2d1->tipTran(true);
 	addVisual2D(v2d1);
-
-	init_board();
-	init_player();
-		
-	//se deseneaza playerul
 	
+	init_board();
+	Inamic *temp = new Inamic1(DrawingWindow::width / 2 , 0.0, -DrawingWindow::height / 2 );
+	inamici.push_back(temp);
+	init_player();
+	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(score);
+
 }
 
 
@@ -66,23 +96,23 @@ void DrawingWindow::onIdle()
 	if (right_pressed){
 		player->move_right();
 		board->rotate_dreapta();
+		inamici_rotate_dreapta();
 	}
 	
 	if (left_pressed){
 		player->move_left();
 		board->rotate_stanga();
+		inamici_rotate_stanga();
 	}
 
+	// Set straight if nothing pressed
 	if (!press){
 		player->set_straight();
 		board->set_straight();
+		inamici_set_straight();
 	}
 
-	/*if (up_pressed)
-		player->move_up();
-	if (down_pressed)
-		player->move_down();*/
-
+	inamici_move_down();
 	
 }
 
@@ -102,15 +132,11 @@ void DrawingWindow::buttonUP(int key, int x, int y){
 		break;
 	case GLUT_KEY_LEFT:
 		left_pressed = false;
-		board->set_straight();
 		press = false;
-		//player->set_straight(-1);
 		break;
 	case GLUT_KEY_RIGHT:
 		right_pressed = false;
 		press = false;
-		board->set_straight();
-		//player->set_straight(1);
 		break;
 	case GLUT_KEY_DOWN:
 		down_pressed = false;

@@ -67,7 +67,10 @@ public:
 
 	void move_down(){
 		tz += speed;
-		//Transform3D::loadIdentityModelMatrix();
+		Transform3D::loadIdentityModelMatrix();
+		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
+		Transform3D::rotateMatrixOz(counter);
+		Transform3D::translateMatrix(centrux, centruy, centruz);
 		Transform3D::translateMatrix(tx, ty, tz);
 		Transform3D::applyTransform(body);
 	}

@@ -87,6 +87,8 @@
     <ClInclude Include="Framework\Transform2D.h" />
     <ClInclude Include="Framework\Transform3D.h" />
     <ClInclude Include="Framework\Visual2D.h" />
+    <ClInclude Include="Inamic.h" />
+    <ClInclude Include="Inamic1.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
