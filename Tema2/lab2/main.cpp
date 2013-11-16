@@ -11,7 +11,7 @@
 #include "Player.h"
 #include "Board.h"
 #include "Inamic1.h"
-
+#include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 
 #define PI 3.14159265358979323846
 #define inf 1000000
@@ -27,8 +27,10 @@ vector <Inamic*> inamici;
 Player *player;
 Board *board;
 Text *score;
+clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
-float n=1;
+float n=1,
+	  spawn_time = 1;
 bool	left_pressed = false,
 		right_pressed = false,
 		up_pressed = false,
@@ -69,7 +71,40 @@ void init_player(){
 void init_board(){
 	board = new Board();
 }
+void remove_enemy(){
+	for (int i = 0; i < inamici.size(); i++)
+	if (inamici[i]->tz > 300)
+	{
+		inamici[i]->removeInamic3D();
+		Inamic *temp = inamici[i];
+		inamici.erase(inamici.begin() + i);
+		delete temp;
+		i--;
+	}
+}
+void enemy_spawn(){
+	t = clock();
 
+	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > spawn_time){
+		float startx = rand() % DrawingWindow::width - 100;
+		float startz = -rand() % 10*DrawingWindow::width;
+
+		//verific sa nu spawnez pe naveta
+		while (true){
+			if (startz > 500 && startx < 100){
+					startx = rand() % DrawingWindow::width - 100;
+					startz = -rand() % 10 * DrawingWindow::width;
+			}
+			else break;
+		}
+		//printf("%f %f\n", player->tz - 200, startz);
+		printf("Lungime %d \n", inamici.size());
+		Inamic *temp = new Inamic1(startx, 0.0, startz);
+		inamici.push_back(temp);
+		old_t = t;
+	}
+
+}
 
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
@@ -80,8 +115,6 @@ void DrawingWindow::init()
 	addVisual2D(v2d1);
 	
 	init_board();
-	Inamic *temp = new Inamic1(DrawingWindow::width / 2 , 0.0, -DrawingWindow::height / 2 );
-	inamici.push_back(temp);
 	init_player();
 	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(score);
@@ -111,8 +144,9 @@ void DrawingWindow::onIdle()
 		board->set_straight();
 		inamici_set_straight();
 	}
-
+	enemy_spawn();
 	inamici_move_down();
+	remove_enemy();
 	
 }
 
@@ -175,6 +209,7 @@ void DrawingWindow::onMouse(int button,int state,int x, int y)
 
 int main(int argc, char** argv)
 {
+
 	//creare fereastra
 	DrawingWindow dw(argc, argv, 1280, 720, 50, 0, "Tema 2 EGC");
 	//se apeleaza functia init() - in care s-au adaugat obiecte

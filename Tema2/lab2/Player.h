@@ -83,7 +83,7 @@ public:
 		
 
 		tx += DrawingWindow::width / 2 - n/2 ;
-		tz -= DrawingWindow::height / 2 - n/2;
+		tz -= DrawingWindow::height / 2 - 2*n;
 		set_perspecitve();
 		Transform3D::translateMatrix(tx, ty, tz);
 		for (int i = 0; i < parts.size(); i++){

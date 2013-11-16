@@ -13,7 +13,7 @@ public:
 	vector <Face*> faces;
 	Object3D* body;
 	float n = 100;
-	float speed = 0.5;
+	float speed = 10;
 	float tx = 0, ty = 0, tz = 0;
 	float centrux, centruy, centruz;
 	float counterL = 0, counterR = 0, counter = 0;
