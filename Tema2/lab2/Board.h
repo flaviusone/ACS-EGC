@@ -57,7 +57,7 @@ public:
 		Transform3D::rotateMatrixOz(counter);
 		Transform3D::translateMatrix(centrux, centruy, centruz);
 		Transform3D::applyTransform(chenar);
-		last_dir = stanga;
+		
 	}
 
 
@@ -69,7 +69,7 @@ public:
 		Transform3D::rotateMatrixOz(counter);
 		Transform3D::translateMatrix(centrux, centruy, centruz);
 		Transform3D::applyTransform(chenar);
-		last_dir = dreapta;
+		
 	}
 
 	void calc_centru(){

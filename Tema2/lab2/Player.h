@@ -3,8 +3,7 @@
 #include "Framework\DrawingWindow.h"
 #include "Framework\Object3D.h"
 #define PI 3.14159265358979323846
-#define stanga 1
-#define dreapta -1
+#define coef_pereti 100
 class Player{
 
 public:
@@ -13,7 +12,7 @@ public:
 	vector <Face*> faces;
 
 	float n = 100;
-	float speed = 5;
+	float speed = 10;
 	float tx = 0, ty = 0, tz = 0;
 	float centrux, centruy, centruz;
 	float counterL = 0, counterR = 0,counter = 0;
@@ -134,6 +133,11 @@ public:
 
 	void move_right(){
 		tx += speed;
+
+		// Daca am ajuns la margine nu mai avansez
+		if ((tx + n / 2) > DrawingWindow::width - coef_pereti)
+			tx -= speed;
+		
 		Transform3D::loadIdentityModelMatrix();
 		rotate_dreapta();
 		Transform3D::translateMatrix(tx, ty, tz);
@@ -144,6 +148,8 @@ public:
 
 	void move_left(){
 		tx -= speed;
+		if ((tx - n/2) < 0  )
+			tx += speed;
 		Transform3D::loadIdentityModelMatrix();
 		rotate_stanga();
 		Transform3D::translateMatrix(tx,ty,tz);

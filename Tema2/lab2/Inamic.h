@@ -17,7 +17,6 @@ public:
 	float tx = 0, ty = 0, tz = 0;
 	float centrux, centruy, centruz;
 	float counterL = 0, counterR = 0, counter = 0;
-	int last_dir = 0;
 	float unghi = PI / 12;
 
 public:
