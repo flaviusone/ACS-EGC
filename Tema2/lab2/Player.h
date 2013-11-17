@@ -14,7 +14,7 @@ public:
 
 	float n = 100;						// pentru constructie player
 	float speed = 10;					// viteza miscare laterale
-	float enemy_speed = 25;				// viteza inaintare
+	float enemy_speed = 10;				// viteza inaintare
 	float tx = 0.0, ty = 0.0, tz = 0.0;	// folosite la translatie
 	float centrux, centruy, centruz;	// coordonate centru
 	

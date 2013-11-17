@@ -27,6 +27,7 @@ vector <Inamic*> inamici;
 Player *player;
 Board *board;
 Text *score,*lifes,*speed;
+Rectangle2D *speed_out, *speed_in;
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
 float n=1,
@@ -71,6 +72,21 @@ void init_player(){
 
 void init_board(){
 	board = new Board();
+
+	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(score);
+
+	lifes = new Text("Shield: ", Point2D(10, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(lifes);
+
+	speed = new Text("Speed: ", Point2D(10, DrawingWindow::height - 100.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(speed);
+
+	speed_out = new Rectangle2D(Point2D(90, DrawingWindow::height - 100), 150, 30, Color(1, 0, 0), false);
+	DrawingWindow::addObject2D(speed_out);
+
+	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 95), 140, 20, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(speed_in);
 }
 void remove_enemy(){
 	for (int i = 0; i < inamici.size(); i++)
@@ -120,7 +136,13 @@ void enemy_check_collision(){
 		}
 	}
 }
+void update_score(){
+	player->update_socre();
 
+	DrawingWindow::removeObject2D(speed_in);
+	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), player->enemy_speed - 10, 20, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(speed_in);
+}
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
 {
@@ -131,8 +153,7 @@ void DrawingWindow::init()
 	
 	init_board();
 	init_player();
-	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
-	DrawingWindow::addText(score);
+
 
 }
 
@@ -163,7 +184,7 @@ void DrawingWindow::onIdle()
 	enemy_spawn();				// spawnez nou inamic daca e nevoie
 	inamici_move_down();		// translatez toti inamicii in jos
 	enemy_check_collision();	// verific daca am lovit un inamic
-	player->update_socre();		// updatez distanta parcursa
+	update_score();				// updatez distanta parcursa
 	remove_enemy();				// verific daca au iesit din cadru
 	
 	
