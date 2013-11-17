@@ -12,17 +12,17 @@ public:
 	vector <Point3D*> vertices;
 	vector <Face*> faces;
 
-	float n = 100;
-	float speed = 10;
-	float enemy_speed = 25;
-	float tx = 0.0, ty = 0.0, tz = 0.0;
-	float centrux, centruy, centruz;
+	float n = 100;						// pentru constructie player
+	float speed = 10;					// viteza miscare laterale
+	float enemy_speed = 25;				// viteza inaintare
+	float tx = 0.0, ty = 0.0, tz = 0.0;	// folosite la translatie
+	float centrux, centruy, centruz;	// coordonate centru
 	
-	float counterL = 0, counterR = 0,counter = 0;
-	int last_dir = 0;
-	int lives = 3;
-	float unghi = PI / 12;
-	float raza = 70;
+	float counterL = 0, counterR = 0,counter = 0; // folosite la rotatia pe OZ
+	int lives = 3;								  // numar de vieti
+	float unghi = PI / 12;						  // unghi maxim de rotatie player
+	float raza = 70;							  // raza coliziune
+	float distanta_parcursa = 0;				  //folosit la scor
 public:
 	Player(){
 		//varfurile de jos
@@ -232,5 +232,7 @@ public:
 		return 0;
 	}
 
-
+	void update_socre(){
+		distanta_parcursa += enemy_speed/300;
+	}
 };

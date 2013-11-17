@@ -26,7 +26,7 @@ vector <Face*> faces;
 vector <Inamic*> inamici;
 Player *player;
 Board *board;
-Text *score;
+Text *score,*lifes,*speed;
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
 float n=1,
@@ -37,6 +37,7 @@ bool	left_pressed = false,
 		down_pressed = false,
 		press = false;
 float unghi = PI / 12;
+int k = 0;
 
 void inamici_rotate_dreapta(){
 	for (int i = 0; i < inamici.size(); i++){
@@ -130,7 +131,7 @@ void DrawingWindow::init()
 	
 	init_board();
 	init_player();
-	score = new Text("SCORE", Point2D(DrawingWindow::width / 2 - 40.0f, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(score);
 
 }
@@ -158,17 +159,23 @@ void DrawingWindow::onIdle()
 		board->set_straight();
 		inamici_set_straight();
 	}
-	if (up_pressed){
-		player->move_up();
-	}
-	if (down_pressed){
-		player->move_down();
-	}
-	enemy_spawn();
-	inamici_move_down();
-	enemy_check_collision();
-	remove_enemy();
+
+	enemy_spawn();				// spawnez nou inamic daca e nevoie
+	inamici_move_down();		// translatez toti inamicii in jos
+	enemy_check_collision();	// verific daca am lovit un inamic
+	player->update_socre();		// updatez distanta parcursa
+	remove_enemy();				// verific daca au iesit din cadru
 	
+	
+	// afisez de 6 ori pe sec
+	if (k == 10){
+		sprintf(buffer, "Distance: %0.0f", player->distanta_parcursa);
+		DrawingWindow::removeText(score);
+		score->text = buffer;
+		DrawingWindow::addText(score);
+		k = 0;
+	}
+	k++;
 }
 
 //functia care se apeleaza la redimensionarea ferestrei
