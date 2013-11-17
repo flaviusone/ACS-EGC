@@ -27,7 +27,9 @@ vector <Inamic*> inamici;
 Player *player;
 Board *board;
 Text *score,*lifes,*speed;
-Rectangle2D *speed_out, *speed_in;
+Rectangle2D *speed_out, *speed_in,
+			*life1,*life2,*life3;
+
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
 float n=1,
@@ -71,22 +73,39 @@ void init_player(){
 }
 
 void init_board(){
+
+	// Initializez chenar principal de joc
 	board = new Board();
 
-	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	// Initializez text Scor ( distanta parcursa )
+	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(score);
 
-	lifes = new Text("Shield: ", Point2D(10, DrawingWindow::height - 50.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	// Initializez text Shield
+	lifes = new Text("Shield: ", Point2D(10, DrawingWindow::height - 50.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(lifes);
 
-	speed = new Text("Speed: ", Point2D(10, DrawingWindow::height - 100.0f), Color(0, 1, 0), BITMAP_TIMES_ROMAN_24);
+	// Initializez indicatoare Shield
+
+	life1 = new Rectangle2D(Point2D(90, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life1);
+	life2 = new Rectangle2D(Point2D(130, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life2);
+	life3 = new Rectangle2D(Point2D(170, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life3);
+
+	// Initializez text speed
+	speed = new Text("Speed: ", Point2D(10, DrawingWindow::height - 100.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
 	DrawingWindow::addText(speed);
 
-	speed_out = new Rectangle2D(Point2D(90, DrawingWindow::height - 100), 150, 30, Color(1, 0, 0), false);
+	// Initializez bara ce indica speed
+	speed_out = new Rectangle2D(Point2D(90, DrawingWindow::height - 100), 150, 30, Color(1, 1, 1), false);
 	DrawingWindow::addObject2D(speed_out);
-
 	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 95), 140, 20, Color(1, 0, 0), true);
 	DrawingWindow::addObject2D(speed_in);
+
+
+
 }
 void remove_enemy(){
 	for (int i = 0; i < inamici.size(); i++)
@@ -120,11 +139,28 @@ void enemy_spawn(){
 	}
 
 }
-
+void update_lives(){
+	player->lives--;
+	switch (player->lives)
+	{
+	case 2:
+		DrawingWindow::removeObject2D(life3);
+		break;
+	case 1:
+		DrawingWindow::removeObject2D(life2);
+		break;
+	case 0:
+		DrawingWindow::removeObject2D(life1);
+		break;
+	default:
+		break;
+	}
+}
 void enemy_check_collision(){
 	for (int i = 0; i < inamici.size(); i++){
 		if (player->enemy_check_collision(inamici[i])){
-			player->lives--;
+			update_lives();
+			
 
 			inamici[i]->removeInamic3D();
 			Inamic *temp = inamici[i];
@@ -140,7 +176,7 @@ void update_score(){
 	player->update_socre();
 
 	DrawingWindow::removeObject2D(speed_in);
-	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), player->enemy_speed - 10, 20, Color(1, 0, 0), true);
+	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), (player->enemy_speed - 10)*1.2, 20, Color(1, 0, 0), true);
 	DrawingWindow::addObject2D(speed_in);
 }
 //functia care permite adaugarea de obiecte

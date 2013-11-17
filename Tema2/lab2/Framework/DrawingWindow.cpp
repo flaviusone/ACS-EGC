@@ -43,7 +43,8 @@ DrawingWindow::DrawingWindow(int argc, char** argv,int _width, int _height, int 
 	glutMouseFunc(mouseFunction); //functia apelata la click de mouse
 	glutSpecialUpFunc(buttonUP);
 
-	glClearColor(0.2,0.2,0.2,0);  //afiseaza fondul ferestrei aplicatiei in alb
+	//glClearColor(0.2,0.2,0.2,0);  //afiseaza fondul ferestrei aplicatiei in alb
+	glClearColor(0, 0, 0, 0);  //afiseaza fondul ferestrei aplicatiei in alb
 
 	//activeaza testul de adancime pentru eliminarea partilor nevizibile in imagini
 	glEnable(GL_DEPTH_TEST); 
