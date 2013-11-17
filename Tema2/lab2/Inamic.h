@@ -13,12 +13,12 @@ public:
 	vector <Face*> faces;
 	Object3D* body;
 	float n = 100;
-	float speed = 10;
+	float speed = 25;
 	float tx = 0, ty = 0, tz = 0;
 	float centrux, centruy, centruz;
 	float counterL = 0, counterR = 0, counter = 0;
 	float unghi = PI / 12;
-
+	float raza = 0;
 public:
 	Inamic(){};
 	Inamic(float startX, float startY,float startZ);
@@ -30,7 +30,7 @@ public:
 	void removeInamic3D(){
 		DrawingWindow::removeObject3D(body);
 	}
-
+	
 	void rotate_stanga(){
 		if (counter < unghi)
 			counter += rotate_speed;
@@ -87,5 +87,4 @@ public:
 		centruy /= numar_puncte;
 		centruz /= numar_puncte;
 	}
-
 };

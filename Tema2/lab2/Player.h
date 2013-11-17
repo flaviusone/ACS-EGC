@@ -2,6 +2,7 @@
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
 #include "Framework\Object3D.h"
+#include "Inamic.h"
 #define PI 3.14159265358979323846
 #define coef_pereti 100
 class Player{
@@ -13,11 +14,15 @@ public:
 
 	float n = 100;
 	float speed = 10;
-	float tx = 0, ty = 0, tz = 0;
+	float enemy_speed = 25;
+	float tx = 0.0, ty = 0.0, tz = 0.0;
 	float centrux, centruy, centruz;
+	
 	float counterL = 0, counterR = 0,counter = 0;
 	int last_dir = 0;
+	int lives = 3;
 	float unghi = PI / 12;
+	float raza = 70;
 public:
 	Player(){
 		//varfurile de jos
@@ -195,9 +200,9 @@ public:
 		int numar_puncte = 0;
 		for (int i = 0; i < parts.size(); i++){
 			for (int j = 0; j < parts[i]->transf_vertices.size(); j++){
-				centrux += parts[i]->transf_vertices[j]->x;
-				centruy += parts[i]->transf_vertices[j]->y;
-				centruz += parts[i]->transf_vertices[j]->z;
+				centrux += parts[i]->vertices[j]->x;
+				centruy += parts[i]->vertices[j]->y;
+				centruz += parts[i]->vertices[j]->z;
 				numar_puncte++;
 			}
 		}
@@ -207,7 +212,25 @@ public:
 
 	}
 	
+	int enemy_check_collision(Inamic *inamic){
+		calc_centru();
+		inamic->calc_centru();
+		float	centrux_t = centrux + tx,
+				centruy_t = centruy + ty,
+				centruz_t = centruz + tz;
+		float	inamic_centrux_t = inamic->centrux + inamic->tx,
+				inamic_centruy_t = inamic->centruy + inamic->ty,
+				inamic_centruz_t = inamic->centruz + inamic->tz;
+		float distanta_euclidiana = sqrt(
+			pow((centrux_t - inamic_centrux_t),2) +
+			pow((centruy_t - inamic_centruy_t),2) +
+			pow((centruz_t - inamic_centruz_t),2));
+		if (distanta_euclidiana < inamic->raza + raza){
+			return 1;
+		}
 
+		return 0;
+	}
 
 
 };

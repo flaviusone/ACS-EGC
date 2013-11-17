@@ -74,6 +74,9 @@ public:
 		// Set center position
 		calc_centru();
 
+		// Seteaza raza collision
+		raza = 70;
+
 		// Translate
 		tx += startX;
 		ty += startY;

@@ -30,7 +30,7 @@ Text *score;
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
 float n=1,
-	  spawn_time = 1;
+	  spawn_time = 0.6;
 bool	left_pressed = false,
 		right_pressed = false,
 		up_pressed = false,
@@ -91,19 +91,33 @@ void enemy_spawn(){
 
 		//verific sa nu spawnez pe naveta
 		while (true){
-			if (startz > 500 && startx < 100){
+			if ( (startz > -1000) || (startx < 100)){
 					startx = rand() % DrawingWindow::width - 100;
 					startz = -rand() % 10 * DrawingWindow::width;
 			}
 			else break;
 		}
-		//printf("%f %f\n", player->tz - 200, startz);
-		printf("Lungime %d \n", inamici.size());
 		Inamic *temp = new Inamic1(startx, 0.0, startz);
 		inamici.push_back(temp);
 		old_t = t;
 	}
 
+}
+
+void enemy_check_collision(){
+	for (int i = 0; i < inamici.size(); i++){
+		if (player->enemy_check_collision(inamici[i])){
+			player->lives--;
+
+			inamici[i]->removeInamic3D();
+			Inamic *temp = inamici[i];
+			inamici.erase(inamici.begin() + i);
+			delete temp;
+			i--;
+			printf("Coliziune \n");
+			return;
+		}
+	}
 }
 
 //functia care permite adaugarea de obiecte
@@ -144,8 +158,15 @@ void DrawingWindow::onIdle()
 		board->set_straight();
 		inamici_set_straight();
 	}
+	if (up_pressed){
+		player->move_up();
+	}
+	if (down_pressed){
+		player->move_down();
+	}
 	enemy_spawn();
 	inamici_move_down();
+	enemy_check_collision();
 	remove_enemy();
 	
 }
