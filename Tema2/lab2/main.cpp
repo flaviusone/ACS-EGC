@@ -12,6 +12,8 @@
 #include "Board.h"
 #include "Inamic1.h"
 #include "Inamic2.h"
+#include "Inamic3.h"
+#include <math.h>
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 
 #define PI 3.14159265358979323846
@@ -30,6 +32,7 @@ Board *board;
 Text *score,*lifes,*speed,*endgame,*accelerate;
 Rectangle2D *speed_out, *speed_in,
 			*life1,*life2,*life3;
+Inamic *temp;
 int game_over = 0;
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
@@ -132,7 +135,7 @@ void increase_enemy_speed(){
 void enemy_spawn(){
 	t = clock();
 
-	//cresc nivelul la fiecare 10 secunde
+	//cresc nivelul la fiecare 6 secunde
 	if ((float)t / CLOCKS_PER_SEC / 6 > speed_counter){
 		speed_counter++;
 		increase_enemy_speed();
@@ -156,8 +159,25 @@ void enemy_spawn(){
 			}
 			else break;
 		}
-		Inamic *temp = new Inamic2(startx, 0.0, startz,enemy_speed);
-		inamici.push_back(temp);
+		int spawn = round(rand() % 4);
+		switch (spawn)
+		{
+		case 3:
+			temp = new Inamic3(startx, 0.0, startz, enemy_speed);
+			inamici.push_back(temp);
+			break;
+		case 2:
+			temp = new Inamic2(startx, 0.0, startz, enemy_speed);
+			inamici.push_back(temp);
+			break;
+		case 1:
+			temp = new Inamic1(startx, 0.0, startz, enemy_speed);
+			inamici.push_back(temp);
+			break;
+		default:
+			break;
+		}
+		
 		old_t = t;
 	}
 
