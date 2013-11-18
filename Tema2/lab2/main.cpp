@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Board.h"
 #include "Inamic1.h"
+#include "Inamic2.h"
 #include <time.h>       /* clock_t, clock, CLOCKS_PER_SEC */
 
 #define PI 3.14159265358979323846
@@ -26,14 +27,14 @@ vector <Face*> faces;
 vector <Inamic*> inamici;
 Player *player;
 Board *board;
-Text *score,*lifes,*speed;
+Text *score,*lifes,*speed,*endgame,*accelerate;
 Rectangle2D *speed_out, *speed_in,
 			*life1,*life2,*life3;
-
+int game_over = 0;
 clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
 char buffer[20];
 float n=1,
-	  spawn_time = 0.6;
+	  spawn_time = 1;
 bool	left_pressed = false,
 		right_pressed = false,
 		up_pressed = false,
@@ -41,6 +42,9 @@ bool	left_pressed = false,
 		press = false;
 float unghi = PI / 12;
 int k = 0;
+int speed_counter = 1;
+int display_accelerate = 0;
+float enemy_speed=10;
 
 void inamici_rotate_dreapta(){
 	for (int i = 0; i < inamici.size(); i++){
@@ -104,7 +108,7 @@ void init_board(){
 	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 95), 140, 20, Color(1, 0, 0), true);
 	DrawingWindow::addObject2D(speed_in);
 
-
+	accelerate = new Text("AUTO-ACCELERATE", Point2D(DrawingWindow::width/2-100, DrawingWindow::height/2), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
 
 }
 void remove_enemy(){
@@ -118,26 +122,56 @@ void remove_enemy(){
 		i--;
 	}
 }
+void increase_enemy_speed(){
+	enemy_speed += 5;
+	for (int i = 0; i < inamici.size(); i++){
+		inamici[i]->speed += 5;
+	}
+	player->enemy_speed += 5;
+}
 void enemy_spawn(){
 	t = clock();
 
+	//cresc nivelul la fiecare 10 secunde
+	if ((float)t / CLOCKS_PER_SEC / 6 > speed_counter){
+		speed_counter++;
+		increase_enemy_speed();
+		spawn_time -= 0.05;
+		if (spawn_time == 0) spawn_time = 0.1;
+		display_accelerate = 1;
+		old_t2 = clock();
+		DrawingWindow::addText(accelerate);
+		printf("Accelerate speed \n");
+	}
+
 	if ((((float)t) - ((float)old_t)) / CLOCKS_PER_SEC > spawn_time){
 		float startx = rand() % DrawingWindow::width - 100;
-		float startz = -rand() % 10*DrawingWindow::width;
+		float startz = -rand() % 15*DrawingWindow::width;
 
 		//verific sa nu spawnez pe naveta
 		while (true){
-			if ( (startz > -1000) || (startx < 100)){
+			if ( (startz > -5000) || (startx < 100)){
 					startx = rand() % DrawingWindow::width - 100;
 					startz = -rand() % 10 * DrawingWindow::width;
 			}
 			else break;
 		}
-		Inamic *temp = new Inamic1(startx, 0.0, startz);
+		Inamic *temp = new Inamic2(startx, 0.0, startz,enemy_speed);
 		inamici.push_back(temp);
 		old_t = t;
 	}
 
+}
+
+void display_accelerate_speed(){
+	t = clock();
+	// Daca au trecut 2 secunde de text afisat
+	if ((((float)t) - ((float)old_t2)) / CLOCKS_PER_SEC > 1){
+		DrawingWindow::removeText(accelerate);
+		//dau remove la text
+		display_accelerate = 0;
+		old_t2 = t;
+	}
 }
 void update_lives(){
 	player->lives--;
@@ -151,6 +185,10 @@ void update_lives(){
 		break;
 	case 0:
 		DrawingWindow::removeObject2D(life1);
+		sprintf(buffer, "GAME OVER! Score:  %0.0f", player->distanta_parcursa-player->enemy_speed/300);
+		endgame = new Text(buffer, Point2D(DrawingWindow::width / 2 - 100, DrawingWindow::height/2 ), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
+		DrawingWindow::addText(endgame);
+		game_over = 1;
 		break;
 	default:
 		break;
@@ -179,6 +217,7 @@ void update_score(){
 	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), (player->enemy_speed - 10)*1.2, 20, Color(1, 0, 0), true);
 	DrawingWindow::addObject2D(speed_in);
 }
+
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
 {
@@ -197,6 +236,7 @@ void DrawingWindow::init()
 //functia care permite animatia
 void DrawingWindow::onIdle()
 {
+	if (game_over) return;
 
 	if (right_pressed){
 		player->move_right();
@@ -223,6 +263,9 @@ void DrawingWindow::onIdle()
 	update_score();				// updatez distanta parcursa
 	remove_enemy();				// verific daca au iesit din cadru
 	
+	if (display_accelerate){
+		display_accelerate_speed();
+	}
 	
 	// afisez de 6 ori pe sec
 	if (k == 10){
@@ -294,7 +337,7 @@ void DrawingWindow::onMouse(int button,int state,int x, int y)
 
 int main(int argc, char** argv)
 {
-
+	srand(time(0));
 	//creare fereastra
 	DrawingWindow dw(argc, argv, 1280, 720, 50, 0, "Tema 2 EGC");
 	//se apeleaza functia init() - in care s-au adaugat obiecte
