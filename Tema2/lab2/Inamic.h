@@ -35,9 +35,9 @@ public:
 		if (counter < unghi)
 			counter += rotate_speed;
 		Transform3D::loadIdentityModelMatrix();
-		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
+		Transform3D::translateMatrix(0, -centruy, -centruz);
 		Transform3D::rotateMatrixOz(counter);
-		Transform3D::translateMatrix(centrux, centruy, centruz);
+		Transform3D::translateMatrix(0, centruy, centruz);
 		Transform3D::translateMatrix(tx, ty, tz);
 		Transform3D::applyTransform(body);
 	}
@@ -47,9 +47,9 @@ public:
 		if (counter > -unghi)
 			counter -= rotate_speed;
 		Transform3D::loadIdentityModelMatrix();
-		Transform3D::translateMatrix(-centrux, -centruy, -centruz);
+		Transform3D::translateMatrix(0, -centruy, -centruz);
 		Transform3D::rotateMatrixOz(counter);
-		Transform3D::translateMatrix(centrux, centruy, centruz);
+		Transform3D::translateMatrix(0, centruy, centruz);
 		Transform3D::translateMatrix(tx, ty, tz);
 		Transform3D::applyTransform(body);
 	}

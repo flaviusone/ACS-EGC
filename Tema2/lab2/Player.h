@@ -23,6 +23,7 @@ public:
 	float unghi = PI / 12;						  // unghi maxim de rotatie player
 	float raza = 70;							  // raza coliziune
 	float distanta_parcursa = 0;				  //folosit la scor
+	
 public:
 	Player(){
 		//varfurile de jos

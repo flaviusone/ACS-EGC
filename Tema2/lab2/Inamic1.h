@@ -11,7 +11,10 @@ class Inamic1 :public Inamic{
 public: 
 	int nothing;
 public:
-	Inamic1(float startX, float startY,float startZ){
+	Inamic1(float startX, float startY, float startZ, float enemy_speed){
+		// set speed
+		speed = enemy_speed;
+
 		//varfurile de jos
 		vertices.push_back(new Point3D(0, 0, 0));
 		vertices.push_back(new Point3D(n, 0, 0));
