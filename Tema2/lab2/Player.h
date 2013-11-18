@@ -1,3 +1,10 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Player.h
+Descriere: Clasa Player
+*/
+
 #pragma once
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
@@ -5,8 +12,8 @@
 #include "Inamic.h"
 #define PI 3.14159265358979323846
 #define coef_pereti 100
-class Player{
 
+class Player{
 public:
 	vector<Object3D*> parts;
 	vector <Point3D*> vertices;
@@ -85,39 +92,38 @@ public:
 		Object3D* mainpart = new Object3D(vertices, faces, Color(1, 0, 0), false);
 		parts.push_back(mainpart);
 
-				
-		
-
 		tx += DrawingWindow::width / 2 - n/2 ;
 		tz -= DrawingWindow::height / 2 - 2*n;
-		set_perspecitve();
-		Transform3D::translateMatrix(tx, ty, tz);
-		for (int i = 0; i < parts.size(); i++){
-			Transform3D::applyTransform(parts[i]);
-		}
 
+		// Setez perspectiva
+		set_perspecitve();
+
+		// Il translatez la pozitia de inceput
+		Transform3D::translateMatrix(tx, ty, tz);
+		for (int i = 0; i < parts.size(); i++)
+			Transform3D::applyTransform(parts[i]);
 	}
 
 	~Player(){};
 
+	// Seteaza perspectiva
 	void set_perspecitve(){
 		Transform3D::loadIdentityProjectionMatrix();
 		Transform3D::perspectiveProjectionMatrix(DrawingWindow::width / 2, DrawingWindow::height / 2 + 400, 600);
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			Transform3D::applyTransform(parts[i]);
-		}
 	}
 
+	// Adauga obiect la visual
 	void addPlayer3D(){
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			DrawingWindow::addObject3D(parts[i]);
-		}
 	}
 
+	// Scoate obiect de la visual
 	void removePlayer3D(){
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			DrawingWindow::removeObject3D(parts[i]);
-		}
 	}
 
 	void rotate_stanga(){
@@ -178,41 +184,42 @@ public:
 		}
 	}
 
+	// Neutilizat
+	// Muta jucatorul in susul ecranului
 	void move_up(){
 		tz -= speed;
 		Transform3D::loadIdentityModelMatrix();
 		Transform3D::translateMatrix(tx, ty, tz);
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			Transform3D::applyTransform(parts[i]);
-		}
 	}
 
+	// Neutilizat
+	// Muta jucatorul in josul ecranului
 	void move_down(){
 		tz += speed;
 		Transform3D::loadIdentityModelMatrix();
 		Transform3D::translateMatrix(tx, ty, tz);
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			Transform3D::applyTransform(parts[i]);
-		}
 	}
 
+	// Calculeaza centrul in functie de punctele initiale de spawn
 	void calc_centru(){
 		centrux = 0; centruy = 0; centruz = 0;
 		int numar_puncte = 0;
-		for (int i = 0; i < parts.size(); i++){
+		for (int i = 0; i < parts.size(); i++)
 			for (int j = 0; j < parts[i]->transf_vertices.size(); j++){
 				centrux += parts[i]->vertices[j]->x;
 				centruy += parts[i]->vertices[j]->y;
 				centruz += parts[i]->vertices[j]->z;
 				numar_puncte++;
 			}
-		}
-		centrux /= numar_puncte;
-		centruy /= numar_puncte;
-		centruz /= numar_puncte;
+		centrux /= numar_puncte; centruy /= numar_puncte; centruz /= numar_puncte;
 
 	}
 	
+	// Calculeaza distanta euclidiana si stableste daca 2 obiecte se lovesc
 	int enemy_check_collision(Inamic *inamic){
 		calc_centru();
 		inamic->calc_centru();
@@ -226,13 +233,13 @@ public:
 			pow((centrux_t - inamic_centrux_t),2) +
 			pow((centruy_t - inamic_centruy_t),2) +
 			pow((centruz_t - inamic_centruz_t),2));
-		if (distanta_euclidiana < inamic->raza + raza){
+		if (distanta_euclidiana < inamic->raza + raza)
 			return 1;
-		}
-
+		
 		return 0;
 	}
 
+	// Updateaza distanta parcursa de jucator
 	void update_socre(){
 		distanta_parcursa += enemy_speed/300;
 	}

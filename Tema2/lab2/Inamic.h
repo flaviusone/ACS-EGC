@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Inamic.h
+Descriere: Clasa Inamic principala
+*/
 #pragma once
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
@@ -12,14 +18,15 @@ public:
 	vector <Point3D*> vertices;
 	vector <Face*> faces;
 	Object3D* body;
-	float n = 100;
-	float speed = 10;
-	float tx = 0, ty = 0, tz = 0;
-	float centrux, centruy, centruz;
-	float counterL = 0, counterR = 0, counter = 0;
+	float n = 100;									// Auxiliar constructie
+	float speed = 10;								// Viteza deplasare
+	float tx = 0, ty = 0, tz = 0;					// Auxiliare translatii
+	float centrux, centruy, centruz;				// Centru obiect
+	float counterL = 0, counterR = 0, counter = 0; 	// Auxiliare rotatie
 	float unghi = PI / 12;
-	float raza = 0;
+	float raza = 0;									//Raza de coliziune
 public:
+
 	Inamic(){};
 	Inamic(float startX, float startY,float startZ);
 	~Inamic(){};
@@ -55,13 +62,10 @@ public:
 	}
 
 	void set_straight(){
-		//Transform3D::loadIdentityModelMatrix();
 		if (counter > rotate_speed)
 			rotate_dreapta();
 		else if (counter < -rotate_speed)
 			rotate_stanga();
-		//Transform3D::translateMatrix(tx, ty, tz);
-		//Transform3D::applyTransform(body);
 	}
 
 	void move_down(){

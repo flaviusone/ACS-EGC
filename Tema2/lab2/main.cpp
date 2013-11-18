@@ -1,3 +1,10 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: main.c
+Descriere: Main
+*/
+
 #include "Framework/DrawingWindow.h"
 #include "Framework/Visual2D.h"
 #include "Framework/Transform2D.h"
@@ -26,98 +33,58 @@ Visual2D *v2d1;
 Object3D *cube21,*cube22,*chenar;
 vector <Point3D*> vertices;
 vector <Face*> faces;
-vector <Inamic*> inamici;
-Player *player;
-Board *board;
-Text *score,*lifes,*speed,*endgame,*accelerate;
-Rectangle2D *speed_out, *speed_in,
+vector <Inamic*> inamici;			// vectorul de inamici
+Player *player;						// jucatorul
+Board *board;						// chenarul de pe jos
+Text *score,*lifes,*speed,*endgame,*accelerate;	
+Rectangle2D *speed_out, *speed_in,	//auxiliare pentru afisare vieti/speed
 			*life1,*life2,*life3;
-Inamic *temp;
-int game_over = 0;
-clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0;
-char buffer[20];
-float n=1,
-	  spawn_time = 1;
-bool	left_pressed = false,
+Inamic *temp;						// folosit la spawnare inamic nou
+
+clock_t t, old_t = 0, old_t2 = 0, old_t3 = 0; //variabile auxiliare time
+char 	buffer[20];				// folosit la modificare text
+
+float 	unghi = PI / 12,		// unghi rotatie maxim
+		enemy_speed=10,			// viteaza inamici initiala
+		n=1,					// aux
+		spawn_time = 1;			// spawn time initial (1 sec)
+
+bool	left_pressed = false,	// auxiliare control directie
 		right_pressed = false,
 		up_pressed = false,
 		down_pressed = false,
 		press = false;
-float unghi = PI / 12;
-int k = 0;
-int speed_counter = 1;
-int display_accelerate = 0;
-float enemy_speed=10;
 
+int 	k = 0,					// auxiliare game_over, viteza inamici etc.
+		game_over = 0,
+		speed_counter = 1,
+		display_accelerate = 0;
+
+// Roteste toti inamicii la dreapta cu un anumit counter
 void inamici_rotate_dreapta(){
-	for (int i = 0; i < inamici.size(); i++){
-		inamici[i]->rotate_dreapta();
-	}
-}
+	for (int i = 0; i < inamici.size(); i++)
+		inamici[i]->rotate_dreapta();}
 
+// Roteste toti inamicii la dreapta cu un anumit counter
 void inamici_rotate_stanga(){
-	for (int i = 0; i < inamici.size(); i++){
-		inamici[i]->rotate_stanga();
-	}
-}
+	for (int i = 0; i < inamici.size(); i++)
+		inamici[i]->rotate_stanga();}
 
+// Seteaza toti inamicii catre pozitia initiala
 void inamici_set_straight(){
-	for (int i = 0; i < inamici.size(); i++){
-		inamici[i]->set_straight();
-	}
-}
+	for (int i = 0; i < inamici.size(); i++)
+		inamici[i]->set_straight();}
 
+// Translateaza toti inamicii spre jucator
 void inamici_move_down(){
-	for (int i = 0; i < inamici.size(); i++){
-		inamici[i]->move_down();
-	}
-}
+	for (int i = 0; i < inamici.size(); i++)
+		inamici[i]->move_down();}
 
-void init_player(){
-	player = new Player();
-	player->addPlayer3D();
 
-}
-
-void init_board(){
-
-	// Initializez chenar principal de joc
-	board = new Board();
-
-	// Initializez text Scor ( distanta parcursa )
-	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200, DrawingWindow::height - 50.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
-	DrawingWindow::addText(score);
-
-	// Initializez text Shield
-	lifes = new Text("Shield: ", Point2D(10, DrawingWindow::height - 50.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
-	DrawingWindow::addText(lifes);
-
-	// Initializez indicatoare Shield
-
-	life1 = new Rectangle2D(Point2D(90, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
-	DrawingWindow::addObject2D(life1);
-	life2 = new Rectangle2D(Point2D(130, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
-	DrawingWindow::addObject2D(life2);
-	life3 = new Rectangle2D(Point2D(170, DrawingWindow::height - 60), 30, 30, Color(1, 0, 0), true);
-	DrawingWindow::addObject2D(life3);
-
-	// Initializez text speed
-	speed = new Text("Speed: ", Point2D(10, DrawingWindow::height - 100.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
-	DrawingWindow::addText(speed);
-
-	// Initializez bara ce indica speed
-	speed_out = new Rectangle2D(Point2D(90, DrawingWindow::height - 100), 150, 30, Color(1, 1, 1), false);
-	DrawingWindow::addObject2D(speed_out);
-	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 95), 140, 20, Color(1, 0, 0), true);
-	DrawingWindow::addObject2D(speed_in);
-
-	accelerate = new Text("AUTO-ACCELERATE", Point2D(DrawingWindow::width/2-100, DrawingWindow::height/2), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
-
-}
+// Verifica daca inamicii au iesit din cadru si ii elimina
 void remove_enemy(){
 	for (int i = 0; i < inamici.size(); i++)
-	if (inamici[i]->tz > 300)
-	{
+	if (inamici[i]->tz > 300){
 		inamici[i]->removeInamic3D();
 		Inamic *temp = inamici[i];
 		inamici.erase(inamici.begin() + i);
@@ -125,6 +92,7 @@ void remove_enemy(){
 		i--;
 	}
 }
+// Creste viteza globala a inamicilor
 void increase_enemy_speed(){
 	enemy_speed += 5;
 	for (int i = 0; i < inamici.size(); i++){
@@ -132,6 +100,9 @@ void increase_enemy_speed(){
 	}
 	player->enemy_speed += 5;
 }
+
+// Spawneaza inamici
+// Creste viteza si spawn time la fiecare 6 sec
 void enemy_spawn(){
 	t = clock();
 
@@ -183,6 +154,7 @@ void enemy_spawn(){
 
 }
 
+// Functie pentru afisarea textului ACCELERATE SPEED
 void display_accelerate_speed(){
 	t = clock();
 	// Daca au trecut 2 secunde de text afisat
@@ -193,6 +165,8 @@ void display_accelerate_speed(){
 		old_t2 = t;
 	}
 }
+
+// Functie pentru afisarea vietilor
 void update_lives(){
 	player->lives--;
 	switch (player->lives)
@@ -214,12 +188,12 @@ void update_lives(){
 		break;
 	}
 }
+
+// Functie pentru verificare coliziuni cu inamicii
 void enemy_check_collision(){
-	for (int i = 0; i < inamici.size(); i++){
+	for (int i = 0; i < inamici.size(); i++)
 		if (player->enemy_check_collision(inamici[i])){
 			update_lives();
-			
-
 			inamici[i]->removeInamic3D();
 			Inamic *temp = inamici[i];
 			inamici.erase(inamici.begin() + i);
@@ -228,28 +202,81 @@ void enemy_check_collision(){
 			printf("Coliziune \n");
 			return;
 		}
-	}
 }
+
+// Functie ce updateaza distanta parcursa de player
 void update_score(){
 	player->update_socre();
-
 	DrawingWindow::removeObject2D(speed_in);
-	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), (player->enemy_speed - 10)*1.2, 20, Color(1, 0, 0), true);
+	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 87), 
+					(player->enemy_speed - 10)*1.2, 20, Color(1, 0, 0), true);
 	DrawingWindow::addObject2D(speed_in);
+}
+
+// Initializeaza jucator
+void init_player(){
+	player = new Player();
+	player->addPlayer3D();
+
+}
+
+// Initializeaza chenar
+// Initializeaza texte de afisare + vieti/speed
+void init_board(){
+
+	// Initializez chenar principal de joc
+	board = new Board();
+
+	// Initializez text Scor ( distanta parcursa )
+	score = new Text("Distance: 0", Point2D(DrawingWindow::width - 200,
+		 DrawingWindow::height - 50.0f), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(score);
+
+	// Initializez text Shield
+	lifes = new Text("Shield: ", Point2D(10, DrawingWindow::height - 50.0f), 
+		Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(lifes);
+
+	// Initializez indicatoare Shield
+
+	life1 = new Rectangle2D(Point2D(90, DrawingWindow::height - 60),
+							 30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life1);
+	life2 = new Rectangle2D(Point2D(130, DrawingWindow::height - 60), 
+							 30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life2);
+	life3 = new Rectangle2D(Point2D(170, DrawingWindow::height - 60), 
+							  30, 30, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(life3);
+
+	// Initializez text speed
+	speed = new Text("Speed: ", Point2D(10, DrawingWindow::height - 100.0f), 
+							Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
+	DrawingWindow::addText(speed);
+
+	// Initializez bara ce indica speed
+	speed_out = new Rectangle2D(Point2D(90, DrawingWindow::height - 100),
+							 150, 30, Color(1, 1, 1), false);
+	DrawingWindow::addObject2D(speed_out);
+	speed_in = new Rectangle2D(Point2D(95, DrawingWindow::height - 95),
+							 140, 20, Color(1, 0, 0), true);
+	DrawingWindow::addObject2D(speed_in);
+
+	accelerate = new Text("AUTO-ACCELERATE", Point2D(DrawingWindow::width/2-100,
+			 DrawingWindow::height/2), Color(1, 1, 1), BITMAP_TIMES_ROMAN_24);
+
 }
 
 //functia care permite adaugarea de obiecte
 void DrawingWindow::init()
 {
-	
-	v2d1 = new Visual2D(0,0, DrawingWindow::width, DrawingWindow::height, 0, 0, DrawingWindow::width, DrawingWindow::height);
+	v2d1 = new Visual2D(0,0, DrawingWindow::width, DrawingWindow::height,
+						 0, 0, DrawingWindow::width, DrawingWindow::height);
 	v2d1->tipTran(true);
 	addVisual2D(v2d1);
 	
 	init_board();
 	init_player();
-
-
 }
 
 
@@ -284,10 +311,10 @@ void DrawingWindow::onIdle()
 	remove_enemy();				// verific daca au iesit din cadru
 	
 	if (display_accelerate){
-		display_accelerate_speed();
+		display_accelerate_speed(); // Se afiseaza doar 1.5 secunde
 	}
 	
-	// afisez de 6 ori pe sec
+	// afisez de 6 ori pe sec Distanta
 	if (k == 10){
 		sprintf(buffer, "Distance: %0.0f", player->distanta_parcursa);
 		DrawingWindow::removeText(score);

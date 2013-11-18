@@ -1,3 +1,9 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Board.h
+Descriere: Clasa Board pentru chenar
+*/
 #pragma once
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
@@ -10,13 +16,13 @@ public:
 	vector <Point3D*> vertices;
 	vector <Face*> faces;
 	Object3D *chenar;
-	float w, h;
-	float unghi = PI / 12;
-	float centrux, centruy, centruz;
-	float counter = 0;
-	int last_dir = 0;
+	float w, h;							// lungime latime Drawingwindow
+	float unghi = PI / 12;				// unghi maxim de rotatie
+	float centrux, centruy, centruz;	// centrul obiectului
+	float counter = 0;					// auxiliar rotatii
 public:
 	Board(){
+
 		w = DrawingWindow::width;
 		h = DrawingWindow::height;
 
@@ -43,12 +49,14 @@ public:
 		calc_centru();
 		set_perspective();
 	}
-
+	~Board(){};
+	// Seteaza perspectiva
 	void set_perspective(){
 		Transform3D::loadIdentityProjectionMatrix();
 		Transform3D::perspectiveProjectionMatrix(DrawingWindow::width / 2, DrawingWindow::height / 2 + 400, 600);
 		Transform3D::applyTransform(chenar);
 	}
+
 	void rotate_stanga(){
 		if (counter < unghi)
 			counter += 0.01;
@@ -72,6 +80,15 @@ public:
 		
 	}
 
+	void set_straight(){
+		Transform3D::loadIdentityModelMatrix();
+		if (counter > 0.01)
+			rotate_dreapta();
+		else if (counter < -0.01)
+			rotate_stanga();
+		Transform3D::applyTransform(chenar);
+	}	
+
 	void calc_centru(){
 		centrux = 0; centruy = 0; centruz = 0;
 		int numar_puncte = 0;
@@ -86,15 +103,8 @@ public:
 		centruz /= numar_puncte;	
 	}
 
-	void set_straight(){
-		Transform3D::loadIdentityModelMatrix();
-		if (counter > 0.01)
-			rotate_dreapta();
-		else if (counter < -0.01)
-			rotate_stanga();
-		Transform3D::applyTransform(chenar);
-	}
-	~Board(){};
+
+
 
 
 };

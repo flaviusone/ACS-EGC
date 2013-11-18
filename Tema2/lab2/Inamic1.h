@@ -1,15 +1,17 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Inamic1.h
+Descriere: Clasa Inamic1 Cub
+*/
 #pragma once
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
 #include "Framework\Object3D.h"
 #include "Inamic.h"
 #define PI 3.14159265358979323846
-#define stanga 1
-#define dreapta -1
 
 class Inamic1 :public Inamic{
-public: 
-	int nothing;
 public:
 	Inamic1(float startX, float startY, float startZ, float enemy_speed){
 		// set speed

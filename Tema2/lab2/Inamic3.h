@@ -1,11 +1,15 @@
+/*
+Autor: Flavius Tirnacop
+Grupa: 331CA
+Fisier: Inamic3.h
+Descriere: Clasa Inamic3 Hexagon
+*/
 #pragma once
 #include "Framework\Point3D.h"
 #include "Framework\DrawingWindow.h"
 #include "Framework\Object3D.h"
 #include "Inamic.h"
 #define PI 3.14159265358979323846
-#define stanga 1
-#define dreapta -1
 
 class Inamic3 :public Inamic{
 
