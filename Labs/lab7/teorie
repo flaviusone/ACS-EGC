@@ -1,0 +1,16 @@
+6.L,V,H,N trrebuie sa fie normalizate
+7.CULOARELUMINA = VEC3(1,1,1) lumina alba
+	(se poate astfel scoate din formulele de la difuza si speculara)
+
+8.Consideram o constanta pentru valoarea luminii ambientale si folosim in loc de Ka pe Kd
+
+FLOAT AMBIENT = 0.3
+LIGHT = Kd * (AMBIENT+DIFUZA) + Ks * SPECULARA
+
+DIFUZA = Kd * CULOARELUMINA * DOT(N,L)
+SPECULARA = Ks * CULOARELUMINA * PRIMESTELUMINA * POW(MAX(DOT(N,H),O),n)
+
+0<DOT(N,L)<1 => Kd*CULOARELUMINA*MAX(DOT(N,L),0)
+
+PRIMESTELUMINA = 1 , DACA DOT(N,L) > 0
+				 0 , IN CAZ CONTRAR

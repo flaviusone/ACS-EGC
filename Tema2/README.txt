@@ -18,6 +18,10 @@ Se cere sa se implementeze un joc intitulat Crazy Driver ce are la baza controlu
 unei masini/nave 3D pe o sosea cu scopul de a evita anumite obstacole .Se va 
 folosi framework-ul de la laboratorul 3.
 
+Nota!
+
+Am incercat sa implementez un joc asemanator exemplului 4 din enunt.
+
 2.Utilizare
 	Programul se ruleaza direct fara niciun parametru de intrare.
 
