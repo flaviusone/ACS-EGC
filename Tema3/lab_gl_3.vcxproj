@@ -14,12 +14,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cameras.hpp" />
     <ClInclude Include="lab_camera.hpp" />
     <ClInclude Include="lab_geometry.hpp" />
     <ClInclude Include="lab_glut_support.hpp" />
     <ClInclude Include="lab_mesh_loader.hpp" />
     <ClInclude Include="lab_shader_loader.hpp" />
     <ClInclude Include="lab_glut.hpp" />
+    <ClInclude Include="Object.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shadere\shader_fragment.glsl" />

@@ -55,7 +55,7 @@ namespace lab{
 			this->position = position;
 			forward = glm::normalize(center-position);
 			right = glm::cross(forward, up);
-			this->up=glm::cross(right,forward);
+			this->up = glm::cross(right,forward);
 
 			//update geometrie
 			updateGeometry();
@@ -64,6 +64,7 @@ namespace lab{
 		void translateForward(float distance){
 			//translatie
 			//TODO
+			printf("camera: %f %f %f \n", forward.x, forward.y, forward.z);
 			this->position = this->position  + glm::normalize(forward)*distance;
 
 			//update geometrie
@@ -143,7 +144,12 @@ namespace lab{
 		glm::mat4 getViewMatrix(){
 			return glm::lookAt(position,position + glm::normalize(forward), up);
 		}
-
+		glm::vec3 getforward(){
+			return this->forward;
+		}
+		glm::vec3 getright(){
+			return this->right;
+		}
 	private:
 		//creeaza geometrie pentru axele camerei
 		void createGeometry(){

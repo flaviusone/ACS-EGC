@@ -37,7 +37,7 @@ class Laborator : public lab::glut::WindowListener{
 
 //variabile
 private:
-	glm::mat4 model_matrix, projection_matrix;											//matrici 4x4 pt modelare vizualizare proiectie
+	glm::mat4 projection_matrix;											//matrici 4x4 pt modelare vizualizare proiectie
 	lab::Camera cam,cam1,cam2,cam3,cam4;
 	unsigned int gl_program_shader;														//id-ul de opengl al obiectului de tip program shader
 	unsigned int screen_width, screen_height;
@@ -61,14 +61,15 @@ public:
 
 		//Initializam pod_racer
 		player = new Object("resurse\\pod racer.obj");
-		player->scale(10, 10, 10);
+		//player->scale(2, 2, 2);
+		player->rotate(180, 0, 1, 0);
 		objects.push_back(player);
 		//Initializam stadion
 		//stadium = new Object("resurse\\Stadion.obj");
 		//objects.push_back(stadium);
 		
 		//matrici de modelare si vizualizare
-		cam1.set(glm::vec3(0,0,40), glm::vec3(0,0,0), glm::vec3(0,1,0));
+		cam1.set(glm::vec3(0,2,-4), glm::vec3(0,5,-100), glm::vec3(0,1,0));
 		cam2.set(glm::vec3(0, 0, 40), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 		cam3.set(glm::vec3(0, 0, 40), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
@@ -109,7 +110,6 @@ public:
 		cam1.drawGeometry();
 	}
 	void camera_2(Object* obj){
-		//glViewport(screen_width / 2, 0, screen_width / 2, screen_height);
 		glViewport(0, 0, screen_width, screen_height);
 
 		//foloseste shaderul
@@ -130,7 +130,6 @@ public:
 		cam1.drawGeometry();
 	}
 	void camera_3(Object* obj){
-		//glViewport(screen_width / 2, 0, screen_width / 2, screen_height);
 		glViewport(0, 0, screen_width, screen_height);
 
 		//foloseste shaderul
@@ -138,7 +137,7 @@ public:
 
 		//trimite variabile uniforme la shader
 		glUniformMatrix4fv(glGetUniformLocation(gl_program_shader, "model_matrix"), 1, false, glm::value_ptr(obj->model_matrix));
-		glm::mat4 view_matrix = glm::lookAt(glm::vec3(0, 300, 0), glm::vec3(0, 0, 0), glm::vec3(-1, 0, 0));
+		glm::mat4 view_matrix = glm::lookAt(glm::vec3(0, 170, -15), glm::vec3(0, 0, -15), glm::vec3(-1, 0, 0));
 		glUniformMatrix4fv(glGetUniformLocation(gl_program_shader, "view_matrix"), 1, false, glm::value_ptr(view_matrix));
 		glUniformMatrix4fv(glGetUniformLocation(gl_program_shader, "projection_matrix"), 1, false, glm::value_ptr(projection_matrix));
 
@@ -152,21 +151,40 @@ public:
 	}
 	//--------------------------------------------------------------------------------------------
 	//functii de cadru ---------------------------------------------------------------------------
-
+	float viteza = 0.5;
+	int enemy_state=1;
 	//functie chemata inainte de a incepe cadrul de desenare, o folosim ca sa updatam situatia scenei ( modelam/simulam scena)
 	void notifyBeginFrame(){
 		if (up_pressed){
-			player->translate(0.1, 0, 0);
+			glm::vec3 temp = glm::normalize(cam1.getforward());
+			printf("%f %f %f \n", temp.x, temp.y, temp.z);
+			//player->translate2(temp*viteza);
+			player->translate2(temp*(-viteza));
+			cam1.translateForward(viteza);
 		}
 		if (down_pressed){
-			player->translate(-0.1, 0, 0);
+			glm::vec3 temp = glm::normalize(cam1.getforward());
+			//player->translate2(temp*(-viteza));
+			player->translate2(temp*viteza);
+			cam1.translateForward(-viteza);
 		}
 		if (right_pressed){
-			player->translate(0, 0, 0.1);
+			player->rotate(-5.7f, 0, 1, 0);
+			cam1.rotateTPSoY(0.1, -4);
 		}
 		if (left_pressed){
-			player->translate(0, 0, -0.1);
+			player->rotate(5.7f, 0, 1, 0);
+			cam1.rotateTPSoY(-0.1, -4);
 		}
+
+		if (enemy_state == 1){
+			//player->translate(0, 0, viteza);
+		}
+		else{
+
+		}
+
+		//player->rotate(1.0f, 0, 1, 0);
 	}
 	//functia de afisare (lucram cu banda grafica)
 	void notifyDisplayFrame(){
